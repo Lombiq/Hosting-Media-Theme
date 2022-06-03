@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Title>Lombiq Training Demo for Orchard Core</Title>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Title>Lombiq Hosting - Media Theme for Orchard Core</Title>
+    <Authors>Lombiq Technologies</Authors>
+    <Copyright>Copyright © 2021, Lombiq Technologies Ltd.</Copyright>
+    <Description>Lombiq Hosting - Media Theme for Orchard Core: With the help of this module, you'll be able to enable a theme located in your Orchard Core Media Library.</Description>
+    <PackageIcon>NuGetIcon.png</PackageIcon>
+    <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
+    <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
+  </PropertyGroup>
+
+  <Import Project="..\..\Utilities\Lombiq.Npm.Targets\Lombiq.Npm.Targets.props" />
+  <Import Project="..\..\Utilities\Lombiq.Npm.Targets\Lombiq.Npm.Targets.targets" />
+  <Import Project="..\..\Utilities\Lombiq.Gulp.Extensions\Lombiq.Gulp.Extensions.targets" />
+
+  <ItemGroup>
+    <None Remove="node_modules\**" />
+    <None Remove="Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="OrchardCore.Users.Abstractions" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OrchardCore.Module.Targets" Version="1.3.0" />
+    <PackageReference Include="OrchardCore.ResourceManagement" Version="1.3.0" />
+    <PackageReference Include="OrchardCore.DisplayManagement" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Lombiq.HelpfulLibraries\Lombiq.HelpfulLibraries.OrchardCore\Lombiq.HelpfulLibraries.OrchardCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+</Project>
