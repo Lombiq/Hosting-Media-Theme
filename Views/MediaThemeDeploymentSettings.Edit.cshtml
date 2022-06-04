@@ -1,0 +1,7 @@
+@model Lombiq.Hosting.MediaTheme.ViewModels.MediaThemeDeploymentSettingsViewModel
+
+<fieldset class="form-group" asp-validation-class-for="ApiKey">
+    <label asp-for="ApiKey">@T["Deployment API Key"]</label>
+    <input asp-for="ApiKey" class="form-control" type="text" />
+    <span asp-validation-for="ApiKey"></span>
+</fieldset>
