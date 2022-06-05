@@ -21,7 +21,7 @@ public class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
             .Add(T["Settings"], settings => settings
                 .Add(T["Media Theme Deployment"], T["Media Theme Deployment"], mediaThemeDeployment => mediaThemeDeployment
                     .Action("Index", "Admin", new { area = "OrchardCore.Settings", groupId = EditorGroupIds.MediaThemeDeploymentSettings })
-                    .Permission(MediaThemeDeploymentSettingsPermissions.ManageMediaThemeDeploymentSettings)
+                    .Permission(MediaThemeDeploymentPermissions.ManageMediaThemeDeploymentSettings)
                     .LocalNav()
                 )));
 

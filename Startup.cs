@@ -29,7 +29,7 @@ public class Startup : StartupBase
         services.Configure<MediaThemeDeploymentSettings>(_shellConfiguration.GetSection("Lombiq_Hosting_MediaTheme_Deployment"));
         services.AddTransient<IConfigureOptions<MediaThemeDeploymentSettings>, MediaThemeDeploymentSettingsConfiguration>();
         services.AddScoped<IDisplayDriver<ISite>, MediaThemeDeploymentSettingsDisplayDriver>();
-        services.AddScoped<IPermissionProvider, MediaThemeDeploymentSettingsPermissions>();
+        services.AddScoped<IPermissionProvider, MediaThemeDeploymentPermissions>();
         services.AddScoped<INavigationProvider, MediaThemeDeploymentSettingsAdminMenu>();
     }
 }

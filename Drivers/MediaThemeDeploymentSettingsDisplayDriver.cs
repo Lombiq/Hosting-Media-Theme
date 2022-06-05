@@ -61,6 +61,6 @@ public class MediaThemeDeploymentSettingsDisplayDriver : SectionDisplayDriver<IS
         var user = _hca.HttpContext?.User;
 
         return user != null
-            && await _authorizationService.AuthorizeAsync(user, MediaThemeDeploymentSettingsPermissions.ManageMediaThemeDeploymentSettings);
+            && await _authorizationService.AuthorizeAsync(user, MediaThemeDeploymentPermissions.ManageMediaThemeDeploymentSettings);
     }
 }
