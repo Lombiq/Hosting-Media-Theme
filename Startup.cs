@@ -4,9 +4,10 @@ using Lombiq.Hosting.MediaTheme.Navigation;
 using Lombiq.Hosting.MediaTheme.Permissions;
 using Lombiq.Hosting.MediaTheme.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using OrchardCore.DisplayManagement;
 using OrchardCore.DisplayManagement.Handlers;
+using OrchardCore.DisplayManagement.Liquid;
 using OrchardCore.Environment.Shell.Configuration;
 using OrchardCore.Modules;
 using OrchardCore.Navigation;
@@ -23,13 +24,13 @@ public class Startup : StartupBase
 
     public override void ConfigureServices(IServiceCollection services)
     {
-        services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
-        services.AddScoped<IMediaTemplateService, MediaTemplateService>();
-
-        services.Configure<MediaThemeDeploymentSettings>(_shellConfiguration.GetSection("Lombiq_Hosting_MediaTheme_Deployment"));
+        services.Configure<MediaThemeDeploymentSettings>(
+            _shellConfiguration.GetSection("Lombiq_Hosting_MediaTheme_Deployment"));
         services.AddTransient<IConfigureOptions<MediaThemeDeploymentSettings>, MediaThemeDeploymentSettingsConfiguration>();
         services.AddScoped<IDisplayDriver<ISite>, MediaThemeDeploymentSettingsDisplayDriver>();
         services.AddScoped<IPermissionProvider, MediaThemeDeploymentPermissions>();
         services.AddScoped<INavigationProvider, MediaThemeDeploymentSettingsAdminMenu>();
+        services.TryAddEnumerable(
+            ServiceDescriptor.Transient<IConfigureOptions<LiquidViewOptions>, MediaThemeLiquidViewOptionsSetup>());
     }
 }
