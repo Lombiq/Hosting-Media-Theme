@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using OrchardCore.DisplayManagement.Handlers;
 using OrchardCore.DisplayManagement.Liquid;
+using OrchardCore.Environment.Extensions;
 using OrchardCore.Environment.Shell.Configuration;
 using OrchardCore.Modules;
 using OrchardCore.Navigation;
@@ -32,5 +33,7 @@ public class Startup : StartupBase
         services.AddScoped<INavigationProvider, MediaThemeDeploymentSettingsAdminMenu>();
         services.TryAddEnumerable(
             ServiceDescriptor.Transient<IConfigureOptions<LiquidViewOptions>, MediaThemeLiquidViewOptionsSetup>());
+        services.AddSingleton<IMediaThemeStateStore, MediaThemeStateStore>();
+        services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
     }
 }

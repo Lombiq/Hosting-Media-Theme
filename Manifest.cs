@@ -1,18 +1,11 @@
 using OrchardCore.DisplayManagement.Manifest;
-using OrchardCore.Modules.Manifest;
-using static Lombiq.Hosting.MediaTheme.Constants.FeatureNames;
 
-[assembly: Module(
+[assembly: Theme(
     Name = "Lombiq Hosting - Media Theme",
     Author = "Lombiq Technologies",
     Website = "https://github.com/Lombiq/Hosting-Tenants",
-    Version = "1.0.0"
-)]
-
-[assembly: Feature(
-    Id = MediaTheme,
-    Name = "Lombiq Hosting - Media Theme",
+    Version = "1.0.0",
     Description = "Ability to host a theme from the Media Library.",
     Category = "Hosting",
-    Dependencies = new[] { "OrchardCore.Media" }
+    Dependencies = new[] { "OrchardCore.Media", "OrchardCore.Users" }
 )]
