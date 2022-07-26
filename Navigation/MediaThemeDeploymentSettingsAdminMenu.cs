@@ -1,9 +1,9 @@
 using Lombiq.Hosting.MediaTheme.Constants;
-using Lombiq.Hosting.MediaTheme.Permissions;
 using Microsoft.Extensions.Localization;
 using OrchardCore.Navigation;
 using System;
 using System.Threading.Tasks;
+using static Lombiq.Hosting.MediaTheme.Permissions.MediaThemeDeploymentPermissions;
 
 namespace Lombiq.Hosting.MediaTheme.Navigation;
 
@@ -17,13 +17,13 @@ public class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
     {
         if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase)) return Task.CompletedTask;
 
-        builder.Add(T["Configuration"], configuration => configuration
-            .Add(T["Settings"], settings => settings
-                .Add(T["Media Theme Deployment"], T["Media Theme Deployment"], mediaThemeDeployment => mediaThemeDeployment
-                    .Action("Index", "Admin", new { area = "OrchardCore.Settings", groupId = EditorGroupIds.MediaThemeDeploymentSettings })
-                    .Permission(MediaThemeDeploymentPermissions.ManageMediaThemeDeploymentSettings)
-                    .LocalNav()
-                )));
+        builder
+            .Add(T["Configuration"], configuration => configuration
+                .Add(T["Media Theme"], T["Media Theme"].PrefixPosition(), entry => entry
+                    .AddClass("mediatheme").Id("mediatheme")
+                    .Action("Index", "Admin", new { area = FeatureNames.MediaTheme })
+                    .Permission(ManageMediaTheme)
+                    .LocalNav()));
 
         return Task.CompletedTask;
     }

@@ -28,6 +28,7 @@ public class MediaTemplateService : IMediaTemplateService
         return new MediaTemplate
         {
             TemplatePath = templatePath,
+            ShapeType = shapeType,
             Content = content,
         };
     }

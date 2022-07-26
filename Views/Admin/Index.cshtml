@@ -1,0 +1,49 @@
+@model MediaThemeSettingsViewModel
+
+@{
+    var availableThemesSelectList =
+        new[]
+        {
+            new SelectListItem
+            {
+                Text = T["No theme"].Value,
+                Value = string.Empty,
+                Selected = string.IsNullOrEmpty(Model.BaseThemeId),
+            }
+        }.Union(
+            Model.AvailableBaseThemes
+                .Select(theme => new SelectListItem
+                {
+                    Text = theme.Name,
+                    Value = theme.Id,
+                    Selected = theme.Id == Model.BaseThemeId,
+                })
+                .OrderBy(theme => theme.Text));
+}
+
+<zone Name="Title">
+    <h1>@RenderTitleSegments(T["Media Theme"])</h1>
+</zone>
+
+<form asp-action="Index" asp-controller="Admin" asp-area="Lombiq.Hosting.MediaTheme" method="post" class="no-multisubmit">
+    @Html.ValidationSummary()
+
+    <div class="mb-3">
+        <div class="mb-3" asp-validation-class-for="BaseThemeId">
+            <label asp-for="BaseThemeId">@T["Base Theme"]</label>
+            <select asp-for="BaseThemeId" asp-items="availableThemesSelectList" class="form-control"></select>
+            <span asp-validation-for="BaseThemeId"></span>
+            <div class="hint">@T["By updating the base theme the shape table cache will be invalidated."]</div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">@T["Submit"]</button>
+    </div>
+</form>
+
+<hr>
+
+<div>@T["By clicking the button below you can invalidate the shape table cache immediately (e.g., you made updates in the media theme templates)."]</div>
+<div class="mb-3">
+    <a asp-action="InvalidateCache" class="btn btn-primary" itemprop="UnsafeUrl">@T["Invalidate Shape Table Cache"]</a>
+</div>
