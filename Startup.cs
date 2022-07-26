@@ -6,6 +6,7 @@ using Lombiq.Hosting.MediaTheme.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using OrchardCore.DisplayManagement;
 using OrchardCore.DisplayManagement.Handlers;
 using OrchardCore.DisplayManagement.Liquid;
 using OrchardCore.Environment.Extensions;
@@ -35,5 +36,7 @@ public class Startup : StartupBase
             ServiceDescriptor.Transient<IConfigureOptions<LiquidViewOptions>, MediaThemeLiquidViewOptionsSetup>());
         services.AddSingleton<IMediaThemeStateStore, MediaThemeStateStore>();
         services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
+        services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
+        services.AddScoped<IMediaTemplateService, MediaTemplateService>();
     }
 }
