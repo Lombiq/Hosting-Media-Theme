@@ -35,6 +35,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="OrchardCore.DisplayManagement" Version="1.4.0" />
+    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.4.0" />
     <PackageReference Include="OrchardCore.ResourceManagement" Version="1.4.0" />
     <PackageReference Include="OrchardCore.Theme.Targets" Version="1.4.0" />
     <PackageReference Include="OrchardCore.Users.Abstractions" Version="1.4.0" />

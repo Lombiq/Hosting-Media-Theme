@@ -9,6 +9,8 @@ using OrchardCore.DisplayManagement;
 using OrchardCore.Environment.Extensions;
 using OrchardCore.Modules;
 using OrchardCore.Navigation;
+using OrchardCore.Recipes;
+using OrchardCore.Recipes.Services;
 using OrchardCore.Security.Permissions;
 using System;
 
@@ -24,6 +26,8 @@ public class Startup : StartupBase
         services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
         services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
         services.AddScoped<IMediaTemplateService, MediaTemplateService>();
+        services.AddScoped<IMediaThemeService, MediaThemeService>();
+        services.AddRecipeExecutionStep<MediaThemeStep>();
     }
 
     public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider) =>
