@@ -10,7 +10,7 @@
     <Title>Lombiq Hosting - Media Theme for Orchard Core</Title>
     <Authors>Lombiq Technologies</Authors>
     <Copyright>Copyright © 2021, Lombiq Technologies Ltd.</Copyright>
-    <Description>Lombiq Hosting - Media Theme for Orchard Core: With the help of this module, you'll be able to enable a theme located in your Orchard Core Media Library.</Description>
+    <Description>Lombiq Hosting - Media Theme for Orchard Core: With the help of this theme, you'll be able to host your theme templates and assets located in your Orchard Core Media Library.</Description>
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
@@ -32,29 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="1.4.0" />
-    <PackageReference Include="OrchardCore.DisplayManagement" Version="1.4.0" />
-    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.4.0" />
-    <PackageReference Include="OrchardCore.ResourceManagement" Version="1.4.0" />
     <PackageReference Include="OrchardCore.Theme.Targets" Version="1.4.0" />
-    <PackageReference Include="OrchardCore.Users.Abstractions" Version="1.4.0" />
-    <PackageReference Include="Scrutor" Version="4.2.0" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\Lombiq.HelpfulLibraries\Lombiq.HelpfulLibraries.OrchardCore\Lombiq.HelpfulLibraries.OrchardCore.csproj" />
     <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Bridge\Lombiq.Hosting.MediaTheme.Bridge.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <RazorGenerate Remove="Views\Admin\Index.cshtml" />
-    <RazorGenerate Remove="Views\Items\MediaThemeDeploymentStep.Fields.Edit.cshtml" />
-    <RazorGenerate Remove="Views\Items\MediaThemeDeploymentStep.Fields.Summary.cshtml" />
-    <RazorGenerate Remove="Views\Items\MediaThemeDeploymentStep.Fields.Thumbnail.cshtml" />
-    <RazorGenerate Remove="Views\_ViewImports.cshtml" />
   </ItemGroup>
 
 </Project>
