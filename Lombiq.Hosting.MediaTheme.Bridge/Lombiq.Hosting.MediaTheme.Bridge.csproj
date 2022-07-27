@@ -38,6 +38,7 @@
     <PackageReference Include="OrchardCore.DisplayManagement" Version="1.4.0" />
     <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.4.0" />
     <PackageReference Include="OrchardCore.ResourceManagement" Version="1.4.0" />
+    <PackageReference Include="OrchardCore.Media" Version="1.4.0" />
     <PackageReference Include="OrchardCore.Module.Targets" Version="1.4.0" />
     <PackageReference Include="OrchardCore.Users.Abstractions" Version="1.4.0" />
     <PackageReference Include="Scrutor" Version="4.2.0" />
