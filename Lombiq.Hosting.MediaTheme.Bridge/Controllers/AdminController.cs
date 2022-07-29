@@ -16,20 +16,20 @@ public class AdminController : Controller
     private readonly IMediaThemeStateStore _mediaThemeStateStore;
     private readonly IUpdateModelAccessor _updateModelAccessor;
     private readonly IStringLocalizer<AdminController> T;
-    private readonly IMediaThemeService _mediaThemeService;
+    private readonly IMediaThemeManager _mediaThemeManager;
 
     public AdminController(
         IAuthorizationService authorizationService,
         IMediaThemeStateStore mediaThemeStateStore,
         IUpdateModelAccessor updateModelAccessor,
         IStringLocalizer<AdminController> stringLocalizer,
-        IMediaThemeService mediaThemeService)
+        IMediaThemeManager mediaThemeManager)
     {
         _authorizationService = authorizationService;
         _mediaThemeStateStore = mediaThemeStateStore;
         _updateModelAccessor = updateModelAccessor;
         T = stringLocalizer;
-        _mediaThemeService = mediaThemeService;
+        _mediaThemeManager = mediaThemeManager;
     }
 
     [HttpGet]
@@ -38,7 +38,7 @@ public class AdminController : Controller
         if (!await IsAuthorizedToManageMediaThemeAsync()) return NotFound();
 
         var baseThemeId = (await _mediaThemeStateStore.GetMediaThemeStateAsync())?.BaseThemeId;
-        var availableThemes = await _mediaThemeService.GetAvailableThemesAsync();
+        var availableThemes = await _mediaThemeManager.GetAvailableBaseThemesAsync();
 
         return View(new MediaThemeSettingsViewModel
         {
@@ -56,7 +56,7 @@ public class AdminController : Controller
         var state = await _mediaThemeStateStore.LoadMediaThemeStateAsync();
         if (state.BaseThemeId == viewModel.BaseThemeId) RedirectToAction(nameof(Index));
 
-        var availableThemes = (await _mediaThemeService.GetAvailableThemesAsync()).ToList();
+        var availableThemes = (await _mediaThemeManager.GetAvailableBaseThemesAsync()).ToList();
         viewModel.AvailableBaseThemes = availableThemes;
         if (!string.IsNullOrEmpty(viewModel.BaseThemeId) &&
             availableThemes.All(theme => theme.Id != viewModel.BaseThemeId))
@@ -68,7 +68,7 @@ public class AdminController : Controller
             return View(viewModel);
         }
 
-        await _mediaThemeService.UpdateBaseThemeAsync(viewModel.BaseThemeId);
+        await _mediaThemeManager.UpdateBaseThemeAsync(viewModel.BaseThemeId);
 
         return RedirectToAction(nameof(Index));
     }

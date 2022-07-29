@@ -31,8 +31,7 @@ public class Startup : StartupBase
         services.AddSingleton<IMediaThemeStateStore, MediaThemeStateStore>();
         services.Decorate<IExtensionManager, ExtensionManagerDecorator>();
         services.AddScoped<IShapeBindingResolver, MediaTemplatesShapeBindingResolver>();
-        services.AddScoped<IMediaTemplateService, MediaTemplateService>();
-        services.AddScoped<IMediaThemeService, MediaThemeService>();
+        services.AddScoped<IMediaThemeManager, MediaThemeManager>();
         services.AddRecipeExecutionStep<MediaThemeStep>();
         services.AddTransient<IDeploymentSource, MediaThemeDeploymentSource>();
         services.AddSingleton<IDeploymentStepFactory>(new DeploymentStepFactory<MediaThemeDeploymentStep>());

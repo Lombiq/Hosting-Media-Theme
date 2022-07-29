@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using OrchardCore.DisplayManagement.Extensions;
 using System.Collections.Generic;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.ViewModels;

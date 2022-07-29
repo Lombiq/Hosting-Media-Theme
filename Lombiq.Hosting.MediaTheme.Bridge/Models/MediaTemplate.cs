@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Html;
-
-namespace Lombiq.Hosting.MediaTheme.Bridge.Models;
+﻿namespace Lombiq.Hosting.MediaTheme.Bridge.Models;
 
 public class MediaTemplate
 {

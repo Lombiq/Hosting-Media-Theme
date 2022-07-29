@@ -9,22 +9,22 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Deployment;
 
 public class MediaThemeDeploymentStepDriver : DisplayDriver<DeploymentStep, MediaThemeDeploymentStep>
 {
-    public override IDisplayResult Display(MediaThemeDeploymentStep step) =>
+    public override IDisplayResult Display(MediaThemeDeploymentStep model) =>
         Combine(
-            View($"{nameof(MediaThemeDeploymentStep)}_Fields_Summary", step).Location("Summary", "Content"),
-            View($"{nameof(MediaThemeDeploymentStep)}_Fields_Thumbnail", step).Location("Thumbnail", "Content")
+            View($"{nameof(MediaThemeDeploymentStep)}_Fields_Summary", model).Location("Summary", "Content"),
+            View($"{nameof(MediaThemeDeploymentStep)}_Fields_Thumbnail", model).Location("Thumbnail", "Content")
         );
 
-    public override IDisplayResult Edit(MediaThemeDeploymentStep step) =>
-        Initialize<MediaThemeDeploymentStepViewModel>($"{nameof(MediaThemeDeploymentStep)}_Fields_Edit", model =>
+    public override IDisplayResult Edit(MediaThemeDeploymentStep model) =>
+        Initialize<MediaThemeDeploymentStepViewModel>($"{nameof(MediaThemeDeploymentStep)}_Fields_Edit", viewModel =>
         {
-            model.ClearMediaThemeFolder = step.ClearMediaThemeFolder;
+            viewModel.ClearMediaThemeFolder = model.ClearMediaThemeFolder;
         }).Location("Content");
 
-    public override async Task<IDisplayResult> UpdateAsync(MediaThemeDeploymentStep step, IUpdateModel updater)
+    public override async Task<IDisplayResult> UpdateAsync(MediaThemeDeploymentStep model, IUpdateModel updater)
     {
-        await updater.TryUpdateModelAsync(step, Prefix, x => x.ClearMediaThemeFolder);
+        await updater.TryUpdateModelAsync(model, Prefix, x => x.ClearMediaThemeFolder);
 
-        return Edit(step);
+        return Edit(model);
     }
 }

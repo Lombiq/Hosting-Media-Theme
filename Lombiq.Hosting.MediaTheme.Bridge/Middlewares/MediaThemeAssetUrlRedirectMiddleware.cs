@@ -1,7 +1,5 @@
 ﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
 using OrchardCore.Themes.Services;
@@ -14,15 +12,8 @@ public class MediaThemeAssetUrlRedirectMiddleware
 {
     private readonly RequestDelegate _next;
 
-    private readonly PathString _assetsRequestPath;
-
-    public MediaThemeAssetUrlRedirectMiddleware(
-        RequestDelegate next,
-        IOptions<MediaOptions> mediaOptions)
-    {
+    public MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next) =>
         _next = next;
-        _assetsRequestPath = mediaOptions.Value.AssetsRequestPath;
-    }
 
     public async Task InvokeAsync(
         HttpContext context,
@@ -40,19 +31,21 @@ public class MediaThemeAssetUrlRedirectMiddleware
 
         var assetPath = context.Request.Path.Value?.Replace(
             Routes.MediaThemeAssets,
-            Paths.MediaThemeAssetsWebPath);
+            string.Empty);
         string assetUrl;
         if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(assetPath))
         {
-            assetUrl = mediaFileStore.MapPathToPublicUrl(assetPath);
+            assetUrl = mediaFileStore.MapPathToPublicUrl(Paths.MediaThemeAssetsWebPath + assetPath);
         }
         else
         {
             var activeTheme = await siteThemeService.GetSiteThemeAsync();
 
-            assetUrl = "/" + activeTheme.Id + assetPath.Replace(Paths.MediaThemeAssetsWebPath, string.Empty);
+            assetUrl = "/" + activeTheme.Id + assetPath;
         }
 
+#pragma warning disable SCS0027 // URL starts with "/mediatheme" which is checked above.
         context.Response.Redirect(assetUrl);
+#pragma warning restore SCS0027
     }
 }

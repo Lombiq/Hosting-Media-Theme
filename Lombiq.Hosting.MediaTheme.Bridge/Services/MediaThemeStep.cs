@@ -11,26 +11,26 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 public class MediaThemeStep : IRecipeStepHandler
 {
     private readonly IMediaFileStore _mediaFileStore;
-    private readonly IMediaThemeService _mediaThemeService;
+    private readonly IMediaThemeManager _mediaThemeManager;
 
     public MediaThemeStep(
         IMediaFileStore mediaFileStore,
-        IMediaThemeService mediaThemeService)
+        IMediaThemeManager mediaThemeManager)
     {
         _mediaFileStore = mediaFileStore;
-        _mediaThemeService = mediaThemeService;
+        _mediaThemeManager = mediaThemeManager;
     }
 
     public async Task ExecuteAsync(RecipeExecutionContext context)
     {
-        if (!string.Equals(context.Name, "mediatheme", StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(context.Name, RecipeStepIds.MediaTheme, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
 
         var model = context.Step.ToObject<MediaThemeStepModel>();
 
-        await _mediaThemeService.UpdateBaseThemeAsync(model.BaseThemeId);
+        await _mediaThemeManager.UpdateBaseThemeAsync(model.BaseThemeId);
 
         if (model.ClearMediaThemeFolder)
         {
@@ -38,9 +38,11 @@ public class MediaThemeStep : IRecipeStepHandler
         }
     }
 
-    private class MediaThemeStepModel
+    private sealed class MediaThemeStepModel
     {
-        public string BaseThemeId { get; set; }
-        public bool ClearMediaThemeFolder { get; set; }
+#pragma warning disable S3459 // It's being deserialized to JSON.
+        public string BaseThemeId { get; }
+        public bool ClearMediaThemeFolder { get; }
+#pragma warning restore S3459
     }
 }
