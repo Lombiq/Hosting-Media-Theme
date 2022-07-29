@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme.Bridge\Lombiq.Hosting.MediaTheme.Bridge.csproj", "{EDABA2EB-C5A7-4313-B45A-D526BD927D8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.Hosting.MediaTheme", "Lombiq.Hosting.MediaTheme\Lombiq.Hosting.MediaTheme.csproj", "{789B7156-BBB6-4613-8B5E-C72350D3D759}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDABA2EB-C5A7-4313-B45A-D526BD927D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDABA2EB-C5A7-4313-B45A-D526BD927D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDABA2EB-C5A7-4313-B45A-D526BD927D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDABA2EB-C5A7-4313-B45A-D526BD927D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
