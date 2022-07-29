@@ -29,19 +29,20 @@ public class MediaThemeAssetUrlRedirectMiddleware
             return;
         }
 
-        var assetPath = context.Request.Path.Value?.Replace(
+        var assetRelativePath = context.Request.Path.Value?.Replace(
             Routes.MediaThemeAssets,
             string.Empty);
+        var mediaPath = mediaFileStore.Combine(Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder, assetRelativePath);
         string assetUrl;
-        if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(assetPath))
+        if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(mediaPath))
         {
-            assetUrl = mediaFileStore.MapPathToPublicUrl(Paths.MediaThemeAssetsWebPath + assetPath);
+            assetUrl = mediaFileStore.MapPathToPublicUrl(mediaPath);
         }
         else
         {
             var activeTheme = await siteThemeService.GetSiteThemeAsync();
 
-            assetUrl = "/" + activeTheme.Id + assetPath;
+            assetUrl = "/" + activeTheme.Id + assetRelativePath;
         }
 
 #pragma warning disable SCS0027 // URL starts with "/mediatheme" which is checked above.
