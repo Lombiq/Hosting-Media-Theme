@@ -40,9 +40,11 @@ public class MediaThemeStep : IRecipeStepHandler
 
     private sealed class MediaThemeStepModel
     {
-#pragma warning disable S3459 // It's being deserialized to JSON.
-        public string BaseThemeId { get; }
-        public bool ClearMediaThemeFolder { get; }
+#pragma warning disable S1144 // It's being deserialized from JSON.
+#pragma warning disable S3459 // It's being deserialized from JSON.
+        public string BaseThemeId { get; set; } = string.Empty;
+        public bool ClearMediaThemeFolder { get; set; } = true;
 #pragma warning restore S3459
+#pragma warning restore S1144
     }
 }
