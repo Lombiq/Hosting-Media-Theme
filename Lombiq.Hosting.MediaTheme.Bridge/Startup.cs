@@ -1,5 +1,4 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
-using Lombiq.Hosting.MediaTheme.Bridge.Deployment;
+﻿using Lombiq.Hosting.MediaTheme.Bridge.Deployment;
 using Lombiq.Hosting.MediaTheme.Bridge.Middlewares;
 using Lombiq.Hosting.MediaTheme.Bridge.Navigation;
 using Lombiq.Hosting.MediaTheme.Bridge.Permissions;
@@ -20,8 +19,6 @@ using System;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge;
 
-// Enable any feature if the actual theme is enabled.
-[RequireFeatures(FeatureNames.MediaTheme)]
 public class Startup : StartupBase
 {
     public override void ConfigureServices(IServiceCollection services)

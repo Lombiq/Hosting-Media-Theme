@@ -8,5 +8,8 @@ public class MediaThemeSettingsViewModel
     [BindNever]
     public IEnumerable<(string Id, string Name)> AvailableBaseThemes { get; set; }
 
+    [BindNever]
+    public bool IsMediaThemeActive { get; set; }
+
     public string BaseThemeId { get; set; }
 }

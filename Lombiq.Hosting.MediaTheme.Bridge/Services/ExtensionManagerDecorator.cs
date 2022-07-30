@@ -20,32 +20,6 @@ public class ExtensionManagerDecorator : IExtensionManager
         _mediaThemeStateStore = mediaThemeStateStore;
     }
 
-    public IExtensionInfo GetExtension(string extensionId) =>
-        _decorated.GetExtension(extensionId);
-
-    public IEnumerable<IExtensionInfo> GetExtensions() =>
-        _decorated.GetExtensions();
-
-    public Task<ExtensionEntry> LoadExtensionAsync(IExtensionInfo extensionInfo) =>
-        _decorated.LoadExtensionAsync(extensionInfo);
-
-    public IEnumerable<IFeatureInfo> GetFeatures()
-    {
-        var features = _decorated.GetFeatures().ToList();
-
-        var mediaTheme = features.FirstOrDefault(feature => feature.Id == FeatureNames.MediaTheme);
-        if (mediaTheme == null) return features;
-
-        // Put the Media Theme to the end so it'll be the highest priority during shape harvesting.
-        features.Remove(mediaTheme);
-        features.Add(mediaTheme);
-
-        return features;
-    }
-
-    public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad) =>
-        _decorated.GetFeatures(featureIdsToLoad);
-
     public IEnumerable<IFeatureInfo> GetFeatureDependencies(string featureId)
     {
         var dependencies = _decorated.GetFeatureDependencies(featureId).ToList();
@@ -56,13 +30,31 @@ public class ExtensionManagerDecorator : IExtensionManager
         var baseThemeId = _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
         if (string.IsNullOrEmpty(baseThemeId)) return dependencies;
 
-        var baseTheme = GetFeatures().FirstOrDefault(feature => feature.Id == baseThemeId);
+        var allFeatures = GetFeatures().ToArray();
+        var baseTheme = allFeatures.FirstOrDefault(feature => feature.Id == baseThemeId);
+        dependencies.Add(baseTheme);
+
         var mediaTheme = dependencies.First(theme => theme.Id == FeatureNames.MediaTheme);
         dependencies.Remove(mediaTheme);
-        dependencies.Add(baseTheme);
         dependencies.Add(mediaTheme);
+
         return dependencies;
     }
+
+    public IExtensionInfo GetExtension(string extensionId) =>
+        _decorated.GetExtension(extensionId);
+
+    public IEnumerable<IExtensionInfo> GetExtensions() =>
+        _decorated.GetExtensions();
+
+    public Task<ExtensionEntry> LoadExtensionAsync(IExtensionInfo extensionInfo) =>
+        _decorated.LoadExtensionAsync(extensionInfo);
+
+    public IEnumerable<IFeatureInfo> GetFeatures() =>
+        _decorated.GetFeatures();
+
+    public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad) =>
+        _decorated.GetFeatures(featureIdsToLoad);
 
     public IEnumerable<IFeatureInfo> GetDependentFeatures(string featureId) =>
         _decorated.GetDependentFeatures(featureId);

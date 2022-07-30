@@ -6,6 +6,7 @@ using OrchardCore.Environment.Shell;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
 using OrchardCore.Modules.Manifest;
+using OrchardCore.Themes.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,17 +21,20 @@ public class MediaThemeManager : IMediaThemeManager
     private readonly IShellFeaturesManager _shellFeaturesManager;
     private readonly IMemoryCache _memoryCache;
     private readonly IMediaFileStore _mediaFileStore;
+    private readonly ISiteThemeService _siteThemeService;
 
     public MediaThemeManager(
         IMediaThemeStateStore mediaThemeStateStore,
         IShellFeaturesManager shellFeaturesManager,
         IMemoryCache memoryCache,
-        IMediaFileStore mediaFileStore)
+        IMediaFileStore mediaFileStore,
+        ISiteThemeService siteThemeService)
     {
         _mediaThemeStateStore = mediaThemeStateStore;
         _shellFeaturesManager = shellFeaturesManager;
         _memoryCache = memoryCache;
         _mediaFileStore = mediaFileStore;
+        _siteThemeService = siteThemeService;
     }
 
     public async Task UpdateBaseThemeAsync(string baseThemeId)
@@ -53,7 +57,12 @@ public class MediaThemeManager : IMediaThemeManager
         state.BaseThemeId = baseThemeId;
         await _mediaThemeStateStore.SaveMediaThemeStateAsync(state);
 
-        _memoryCache.Remove($"ShapeTable:{FeatureNames.MediaTheme}");
+        // Invalidate the cache to have the harvesters include the shapes from the base theme.
+        var currentTheme = await _siteThemeService.GetSiteThemeAsync();
+        if (currentTheme.Id == FeatureNames.MediaTheme)
+        {
+            _memoryCache.Remove($"ShapeTable:{currentTheme.Id}");
+        }
     }
 
     public async Task<IEnumerable<(string Id, string Name)>> GetAvailableBaseThemesAsync()

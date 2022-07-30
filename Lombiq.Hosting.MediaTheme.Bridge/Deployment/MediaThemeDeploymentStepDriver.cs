@@ -23,7 +23,7 @@ public class MediaThemeDeploymentStepDriver : DisplayDriver<DeploymentStep, Medi
 
     public override async Task<IDisplayResult> UpdateAsync(MediaThemeDeploymentStep model, IUpdateModel updater)
     {
-        await updater.TryUpdateModelAsync(model, Prefix, x => x.ClearMediaThemeFolder);
+        await updater.TryUpdateModelAsync(model, Prefix, viewModel => viewModel.ClearMediaThemeFolder);
 
         return Edit(model);
     }

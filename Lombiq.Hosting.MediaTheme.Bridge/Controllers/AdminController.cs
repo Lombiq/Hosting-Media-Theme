@@ -1,9 +1,11 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Services;
+﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.Hosting.MediaTheme.Bridge.Services;
 using Lombiq.Hosting.MediaTheme.Bridge.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using OrchardCore.DisplayManagement.ModelBinding;
+using OrchardCore.Themes.Services;
 using System.Linq;
 using System.Threading.Tasks;
 using static Lombiq.Hosting.MediaTheme.Bridge.Permissions.MediaThemeDeploymentPermissions;
@@ -17,19 +19,22 @@ public class AdminController : Controller
     private readonly IUpdateModelAccessor _updateModelAccessor;
     private readonly IStringLocalizer<AdminController> T;
     private readonly IMediaThemeManager _mediaThemeManager;
+    private readonly ISiteThemeService _siteThemeService;
 
     public AdminController(
         IAuthorizationService authorizationService,
         IMediaThemeStateStore mediaThemeStateStore,
         IUpdateModelAccessor updateModelAccessor,
         IStringLocalizer<AdminController> stringLocalizer,
-        IMediaThemeManager mediaThemeManager)
+        IMediaThemeManager mediaThemeManager,
+        ISiteThemeService siteThemeService)
     {
         _authorizationService = authorizationService;
         _mediaThemeStateStore = mediaThemeStateStore;
         _updateModelAccessor = updateModelAccessor;
         T = stringLocalizer;
         _mediaThemeManager = mediaThemeManager;
+        _siteThemeService = siteThemeService;
     }
 
     [HttpGet]
@@ -40,11 +45,11 @@ public class AdminController : Controller
         var baseThemeId = (await _mediaThemeStateStore.GetMediaThemeStateAsync())?.BaseThemeId;
         var availableThemes = await _mediaThemeManager.GetAvailableBaseThemesAsync();
 
-        return View(new MediaThemeSettingsViewModel
+        return View(await SetFlagIfMediaThemeIsActiveAsync(new MediaThemeSettingsViewModel
         {
             AvailableBaseThemes = availableThemes,
             BaseThemeId = baseThemeId,
-        });
+        }));
     }
 
     [HttpPost, ActionName(nameof(Index))]
@@ -65,7 +70,7 @@ public class AdminController : Controller
                 nameof(viewModel.BaseThemeId),
                 T["The selected theme is not available."]);
 
-            return View(viewModel);
+            return View(await SetFlagIfMediaThemeIsActiveAsync(viewModel));
         }
 
         await _mediaThemeManager.UpdateBaseThemeAsync(viewModel.BaseThemeId);
@@ -75,4 +80,10 @@ public class AdminController : Controller
 
     private Task<bool> IsAuthorizedToManageMediaThemeAsync() =>
         _authorizationService.AuthorizeAsync(User, ManageMediaTheme);
+
+    private async Task<MediaThemeSettingsViewModel> SetFlagIfMediaThemeIsActiveAsync(MediaThemeSettingsViewModel viewModel)
+    {
+        viewModel.IsMediaThemeActive = (await _siteThemeService.GetSiteThemeAsync())?.Id == FeatureNames.MediaTheme;
+        return viewModel;
+    }
 }

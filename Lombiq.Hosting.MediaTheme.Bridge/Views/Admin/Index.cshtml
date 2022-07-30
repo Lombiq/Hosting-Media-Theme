@@ -25,6 +25,13 @@
     <h1>@RenderTitleSegments(T["Media Theme"])</h1>
 </zone>
 
+@if (!Model.IsMediaThemeActive)
+{
+    <div class="alert alert-warning mb-3">
+        @T["The Media Theme is not the active theme currently. The below base theme won't take effect."]
+    </div>
+}
+
 <form asp-action="Index" asp-controller="Admin" asp-area="Lombiq.Hosting.MediaTheme" method="post" class="no-multisubmit">
     @Html.ValidationSummary()
 

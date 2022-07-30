@@ -6,26 +6,27 @@
 
 The Media Theme feature will allow developers to host their themes in the Orchard Core Media Library, including templates and assets.
 
+Do you want to quickly try out this project and see it in action? Check it out in our [Open-Source Orchard Core Extensions](https://github.com/Lombiq/Open-Source-Orchard-Core-Extensions) full Orchard Core solution and also see our other useful Orchard Core-related open-source projects!
+
 
 ## Documentation
 
 ### Getting started
 
 There are two Orchard Core extensions in this project:
-- `Lombiq.Hosting.MediaTheme.Bridge`: An Orchard Core module that enables the core logic required for media theme. It requires `Lombiq.Hosting.MediaTheme` theme to be enabled.
-- `Lombiq.Hosting.MediaTheme`: An Orchard Core theme that bootstraps the media theme logic using the `Lombiq.Hosting.MediaTheme.Bridge` module.
+- `Lombiq.Hosting.MediaTheme.Bridge`: An Orchard Core module that enables the core logic required for hosting your theme the Media Library.
+- `Lombiq.Hosting.MediaTheme`: An Orchard Core theme that bootstraps the media theme logic using the `Lombiq.Hosting.MediaTheme.Bridge` module. With this theme active you can dynamically change the base theme from the Admin UI or using recipes.
 
-To get started, you'll need to add `Lombiq.Hosting.MediaTheme` as a dependency to your web project and set it as the active site theme.
+To get started, you'll need to add `Lombiq.Hosting.MediaTheme` and `Lombiq.Hosting.MediaTheme.Bridge` NuGet packages to your web project. Set the `Lombiq.Hosting.MediaTheme` as the active site theme from the Admin UI or recipe.
 
 Once the theme is enabled, it'll look for templates and assets in the Media Library. Go to Media Library and create the `_MediaTheme` folder, where you can put
-shape templates inside the `Views` folder (see limitations below),
-assets inside the `wwwroot` folder.
+shape templates inside the `Views` folder (see limitations below), and assets inside the `wwwroot` folder.
 
-Note that the `.liquid` extension is not allowed in Media Library by default, which might include a few of your asset extensions. Please update the Media settings as described [here](https://docs.orchardcore.net/en/dev/docs/reference/modules/Media/#configuration).
+Note that the `.liquid` extension is not allowed in Media Library by default, which might be an issue with a few of your assets as well. Please update the Media settings as described [here](https://docs.orchardcore.net/en/dev/docs/reference/modules/Media/#configuration).
 
 ### Using a base theme
 
-Media Theme supports base themes. First, enable the theme you want to use as a base theme. Then go to the _Admin UI > Configuration > Media Theme_ page and select the one you want to use.
+Media Theme supports base themes. First, enable the theme you want to use as a base theme. Then go to the _Admin UI > Configuration > Media Theme_ page and select the one you want to use. You won't be able to update the base theme dynamically if the Media Theme is not active even if you are using the Media Theme logic provided by the `Lombiq.Hosting.MediaTheme.Bridge`.
 
 ### Limitations
 
@@ -35,11 +36,13 @@ Media Theme supports base themes. First, enable the theme you want to use as a b
 
 ### Local development
 
-If you want to build a theme that'll eventually end up in the Media Library, you can set the `Lombiq.Hosting.MediaTheme` as the base theme for your theme. You can select another base theme as mentioned above.
+If you want to build a theme that'll eventually end up in the Media Library, you can develop your theme as usual but make sure the `Lombiq.Hosting.MediaTheme.Bridge` module is enabled. You can set a base theme to your theme from `Manifest.cs`. Note that you won't be able to change the base theme dynamically from the Admin UI during local development.
 
 You can proceed with developing your base theme as you'd typically do: put the templates inside the _Views_ folder and assets inside the _wwwroot_ folder; however, keep the limitations mentioned above in mind.
 
 If you want to reference assets in your templates, you can use the `/mediatheme/` prefix. The Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when moving them to Media Library.
+
+If you are developing a theme to your (DotNest)[https://dotnest.com] site you can use the (DotNest Core SDK)[https://github.com/Lombiq/DotNest-Core-SDK] that has everything prepared for you right away.
 
 ### Import/Export
 
