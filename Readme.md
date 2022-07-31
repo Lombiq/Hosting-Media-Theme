@@ -1,6 +1,6 @@
 # Lombiq Hosting - Media Theme for Orchard Core
 
-
+[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/)
 
 ## About
 
@@ -42,7 +42,7 @@ You can proceed with developing your base theme as you'd typically do: put the t
 
 If you want to reference assets in your templates, you can use the `/mediatheme/` prefix. The Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when moving them to Media Library.
 
-If you are developing a theme to your (DotNest)[https://dotnest.com] site you can use the (DotNest Core SDK)[https://github.com/Lombiq/DotNest-Core-SDK] that has everything prepared for you right away.
+If you are developing a theme to your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
 
 ### Import/Export
 
