@@ -1,0 +1,49 @@
+@model MediaThemeSettingsViewModel
+
+@{
+    var availableThemesSelectList =
+        new[]
+        {
+            new SelectListItem
+            {
+                Text = T["No theme"].Value,
+                Value = string.Empty,
+                Selected = string.IsNullOrEmpty(Model.BaseThemeId),
+            }
+        }.Union(
+            Model.AvailableBaseThemes
+                .Select(theme => new SelectListItem
+                {
+                    Text = theme.Name,
+                    Value = theme.Id,
+                    Selected = theme.Id == Model.BaseThemeId,
+                })
+                .OrderBy(theme => theme.Text));
+}
+
+<zone Name="Title">
+    <h1>@RenderTitleSegments(T["Media Theme"])</h1>
+</zone>
+
+@if (!Model.IsMediaThemeActive)
+{
+    <div class="alert alert-warning mb-3">
+        @T["The Media Theme is not the active theme currently. The below base theme won't take effect."]
+    </div>
+}
+
+<form asp-action="Index" asp-controller="Admin" asp-area="Lombiq.Hosting.MediaTheme" method="post" class="no-multisubmit">
+    @Html.ValidationSummary()
+
+    <div class="mb-3">
+        <div class="mb-3" asp-validation-class-for="BaseThemeId">
+            <label asp-for="BaseThemeId">@T["Base Theme"]</label>
+            <select asp-for="BaseThemeId" asp-items="availableThemesSelectList" class="form-control"></select>
+            <span asp-validation-for="BaseThemeId"></span>
+            <div class="hint">@T["By updating the base theme the shape table cache will be invalidated."]</div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">@T["Submit"]</button>
+    </div>
+</form>

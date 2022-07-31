@@ -1,0 +1,14 @@
+@model MediaThemeDeploymentStepViewModel
+
+<h5>@T["Media Theme"]</h5>
+
+<div class="mb-3">
+    <div class="form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="ClearMediaThemeFolder"
+                   data-reverseToggle=".media-sel"/>
+            @T["Clear media theme files when imported."]
+        </label>
+    </div>
+    <div class="hint">@T["If enabled, make sure it happens before importing any media theme files (e.g., using the media step)."]</div>
+</div>

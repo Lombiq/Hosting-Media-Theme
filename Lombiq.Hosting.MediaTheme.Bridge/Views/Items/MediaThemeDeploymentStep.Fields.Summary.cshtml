@@ -1,0 +1,12 @@
+@model ShapeViewModel<Lombiq.Hosting.MediaTheme.Bridge.Deployment.MediaThemeDeploymentStep>
+
+<h5>@T["Media Theme"]</h5>
+
+@if (Model.Value.ClearMediaThemeFolder)
+{
+    <span class="badge bg-warning">@T["Clears the media theme folder when imported."]</span>
+}
+else
+{
+    <span class="badge bg-primary">@T["Won't clear the media theme folder when imported."]</span>
+}
