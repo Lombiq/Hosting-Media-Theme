@@ -54,7 +54,7 @@ Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/too
 
 
 ```xml
-dotnet tool run media-theme-deploy <path of your theme> <default theme id> <clear media hosting folder>
+dotnet tool run media-theme-deploy [path of your theme] [default theme id] [clear media hosting folder]
 ```
 
 A specific exapmle:
