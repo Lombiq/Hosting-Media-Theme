@@ -36,19 +36,19 @@ Media Theme supports base themes. First, enable the theme you want to use as a b
 
 ### Local development
 
-If you want to build a theme that'll eventually end up in the Media Library, you can develop your theme as usual but make sure the `Lombiq.Hosting.MediaTheme.Bridge` module is enabled. You can set a base theme to your theme from `Manifest.cs`. Note that you won't be able to change the base theme dynamically from the Admin UI during local development.
+If you want to build a theme that'll eventually end up in the Media Library, you can develop your theme as usual but make sure the `Lombiq.Hosting.MediaTheme.Bridge` module is enabled. You can set a base theme for your theme from `Manifest.cs`. Note that you won't be able to change the base theme dynamically from the Admin UI during local development.
 
 You can proceed with developing your base theme as you'd typically do: put the templates inside the _Views_ folder and assets inside the _wwwroot_ folder; however, keep the limitations mentioned above in mind.
 
 If you want to reference assets in your templates, you can use the `/mediatheme/` prefix. The Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when moving them to Media Library.
 
-If you are developing a theme to your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
+If you are developing a theme for your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
 
 ### Import/Export
 
-If you want to export your Media Theme, you need to go to the `_Admin UI > Configuration > Import/Export > Deployment Plans` page and create a Deployment Plan with the following steps:
+If you want to export your Media Theme, go to the `_Admin UI > Configuration > Import/Export > Deployment Plans` page and create a Deployment Plan with the following steps:
 
-- Add _Media Theme_ step. Here you can tick the  _Clear Media Theme folder_ checkbox; if ticked, it will delete all the files in the `_MediaTheme` folder in the Media Library during import. It can be helpful if you have a _Media_ step along with this step bringing all the Media Theme files, but be conscious of the order within the recipe; put the _Media Theme_ step first. Leave it disabled if you only want to control the base theme.
+- Add _Media Theme_ step. Here you can tick the _Clear Media Theme folder_ checkbox; if ticked, it will delete all the files in the `_MediaTheme` folder in the Media Library during import. It can be helpful if you have a _Media_ step along with this step bringing in all the Media Theme files, but be conscious of the order within the recipe; put the _Media Theme_ step first. Leave it disabled if you only want to control the base theme.
 - Optionally, add a _Media_ step where you select the whole `_MediaTheme` folder.
 
 You can use Remote Deployment to accept such exported packages to deploy your theme remotely from your local development environment or CI.
