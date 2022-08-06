@@ -19,8 +19,7 @@ There are two Orchard Core extensions in this project:
 
 To get started, you'll need to add `Lombiq.Hosting.MediaTheme` and `Lombiq.Hosting.MediaTheme.Bridge` NuGet packages to your web project. Set the `Lombiq.Hosting.MediaTheme` as the active site theme from the Admin UI or recipe.
 
-Once the theme is enabled, it'll look for templates and assets in the Media Library. Go to Media Library and create the `_MediaTheme` folder, where you can put
-shape templates inside the _Templates_ folder (see limitations below), and assets inside the _Assets_ folder.
+Once the theme is enabled, it'll look for templates and assets in the Media Library. Go to Media Library and create the `_MediaTheme` folder, where you can put shape templates inside the _Templates_ folder (see limitations below), and assets inside the _Assets_ folder.
 
 Note that the `.liquid` extension is not allowed in Media Library by default, which might be an issue with a few of your assets as well. Please update the Media settings as described [here](https://docs.orchardcore.net/en/dev/docs/reference/modules/Media/#configuration).
 
