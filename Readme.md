@@ -8,12 +8,12 @@ The Media Theme feature will allow developers to host their themes in the Orchar
 
 Do you want to quickly try out this project and see it in action? Check it out in our [Open-Source Orchard Core Extensions](https://github.com/Lombiq/Open-Source-Orchard-Core-Extensions) full Orchard Core solution and also see our other useful Orchard Core-related open-source projects!
 
-
 ## Documentation
 
 ### Getting started
 
 There are two Orchard Core extensions in this project:
+
 - `Lombiq.Hosting.MediaTheme.Bridge`: An Orchard Core module that enables the core logic required for hosting your theme the Media Library.
 - `Lombiq.Hosting.MediaTheme`: An Orchard Core theme that bootstraps the media theme logic using the `Lombiq.Hosting.MediaTheme.Bridge` module. With this theme active you can dynamically change the base theme from the Admin UI or using recipes.
 
@@ -47,11 +47,11 @@ If you are developing a theme to your [DotNest](https://dotnest.com) site you ca
 ### Import/Export
 
 If you want to export your Media Theme, you need to go to the `_Admin UI > Configuration > Import/Export > Deployment Plans` page and create a Deployment Plan with the following steps:
+
 - Add _Media Theme_ step. Here you can tick the  _Clear Media Theme folder_ checkbox; if ticked, it will delete all the files in the `_MediaTheme` folder in the Media Library during import. It can be helpful if you have a _Media_ step along with this step bringing all the Media Theme files, but be conscious of the order within the recipe; put the _Media Theme_ step first. Leave it disabled if you only want to control the base theme.
 - Optionally, add a _Media_ step where you select the whole `_MediaTheme` folder.
 
 You can use Remote Deployment to accept such exported packages to deploy your theme remotely from your local development environment or CI.
-
 
 ## Contributing and support
 
