@@ -54,16 +54,16 @@ Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/too
 
 
 ```xml
-dotnet tool run media-theme-deploy [path of your theme] [default theme id] [clear media hosting folder]
+dotnet tool run media-theme-deploy -p [path of your theme] -i [default theme id] -c [clear media hosting folder] -d [deployment path]
 ```
 
 A specific exapmle:
 
 ```xml
-dotnet tool run media-theme-deploy .\src\Themes\MyTheme TheTheme true
+dotnet tool run media-theme-deploy -p .\src\Themes\MyTheme -i TheTheme -c true -d C:\MyFolder
 ```
 
-The package will be exported to your directory root. For example `C:\MediaThemeDeployment_04Aug2022230500.zip`.
+Option `-d` is not required. Without it, the package will be exported to your directory root. For example `C:\MediaThemeDeployment_04Aug2022230500.zip`.
 
 You can use Remote Deployment to accept such exported packages to deploy your theme remotely from your local development environment or CI.
 

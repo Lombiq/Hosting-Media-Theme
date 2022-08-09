@@ -10,10 +10,10 @@ namespace Lombiq.Hosting.MediaTheme.Deployer;
 
 public class CommandLineOptions
 {
-    [Option('p', "theme", Required = true, HelpText = "Path of your theme.")]
+    [Option('p', "path", Required = true, HelpText = "Path of your theme.")]
     public string? PathOfTheTheme { get; set; }
 
-    [Option('i', "default-theme", Required = true, HelpText = "Default theme ID.")]
+    [Option('i', "default-id", Required = true, HelpText = "Default theme ID.")]
     public string? DefaultThemeId { get; set; }
 
     [Option('c', "clear", Required = true, HelpText = "Whether or not to clear media hosting folder.")]
