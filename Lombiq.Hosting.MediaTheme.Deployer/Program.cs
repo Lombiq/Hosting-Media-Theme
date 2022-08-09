@@ -52,13 +52,7 @@ internal static class Program
     private static void RunOptions(CommandLineOptions values)
     {
         // Creating directory for the deployment.
-        var deploymentPathCommandLineValue = values.DeploymentPackagePath;
-        var deploymentPath = !string.IsNullOrEmpty(deploymentPathCommandLineValue)
-            ? deploymentPathCommandLineValue
-            : Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
-
-        var newDirectoryPath = Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
-            + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);
+        var newDirectoryPath = CreateNewDirectoryPath(values);
 
         try
         {
@@ -141,25 +135,7 @@ internal static class Program
         mediaStep.name = "media";
         mediaStep.Files = files;
 
-        // Creating the recipe itself.
-        dynamic recipe = new JObject();
-        recipe.name = "MediaTheme";
-        recipe.displayName = "Media Theme";
-        recipe.description = "A recipe created with the media-theme-deployment tool.";
-        recipe.author = string.Empty;
-        recipe.website = string.Empty;
-        recipe.version = string.Empty;
-        recipe.issetuprecipe = false;
-        recipe.categories = new JArray();
-        recipe.tags = new JArray();
-        recipe.steps = new JArray(mediaThemeStep, mediaStep);
-
-        // Creating JSON file.
-        using var file = File.CreateText(Path.Join(newDirectoryPath + RecipeFile));
-        using var writer = new JsonTextWriter(file) { Formatting = Formatting.Indented };
-        recipe.WriteTo(writer);
-
-        file.Close();
+        CreateRecipeAndWriteIt(mediaThemeStep, mediaStep, newDirectoryPath);
 
         // Zipping the directory.
         var zippedDirectoryPath = newDirectoryPath + ".zip";
@@ -217,5 +193,39 @@ internal static class Program
                 CopyDirectory(subDirectory.FullName, newDestinationDir, areLiquidFiles);
             }
         }
+    }
+
+    private static string CreateNewDirectoryPath(CommandLineOptions values)
+    {
+        var deploymentPathCommandLineValue = values.DeploymentPackagePath;
+        var deploymentPath = !string.IsNullOrEmpty(deploymentPathCommandLineValue)
+            ? deploymentPathCommandLineValue
+            : Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
+
+        return Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
+            + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);
+    }
+
+    private static void CreateRecipeAndWriteIt(JObject mediaThemeStep, JObject mediaStep, string newDirectoryPath)
+    {
+        // Creating the recipe itself.
+        dynamic recipe = new JObject();
+        recipe.name = "MediaTheme";
+        recipe.displayName = "Media Theme";
+        recipe.description = "A recipe created with the media-theme-deployment tool.";
+        recipe.author = string.Empty;
+        recipe.website = string.Empty;
+        recipe.version = string.Empty;
+        recipe.issetuprecipe = false;
+        recipe.categories = new JArray();
+        recipe.tags = new JArray();
+        recipe.steps = new JArray(mediaThemeStep, mediaStep);
+
+        // Creating JSON file.
+        using var file = File.CreateText(Path.Join(newDirectoryPath + RecipeFile));
+        using var writer = new JsonTextWriter(file) { Formatting = Formatting.Indented };
+        recipe.WriteTo(writer);
+
+        file.Close();
     }
 }
