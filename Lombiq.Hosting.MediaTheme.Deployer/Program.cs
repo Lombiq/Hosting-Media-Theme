@@ -13,8 +13,8 @@ public class CommandLineOptions
     [Option('p', "path", Required = true, HelpText = "Path of your theme.")]
     public string? PathOfTheTheme { get; set; }
 
-    [Option('i', "default-id", Required = true, HelpText = "Default theme ID.")]
-    public string? DefaultThemeId { get; set; }
+    [Option('i', "base-id", Required = true, HelpText = "Default theme ID.")]
+    public string? BaseThemeId { get; set; }
 
     [Option('c', "clear", Required = true, HelpText = "Whether or not to clear media hosting folder.")]
     public bool ClearMediaHostingFolder { get; set; }
@@ -79,14 +79,14 @@ internal static class Program
         // Creating media theme step.
         dynamic mediaThemeStep = new JObject();
         mediaThemeStep.name = "mediatheme";
-        mediaThemeStep.BaseThemeId = values.DefaultThemeId;
+        mediaThemeStep.BaseThemeId = values.BaseThemeId;
         mediaThemeStep.ClearMediaThemeFolder = values.ClearMediaHostingFolder;
 
         // Creating media step.
         var files = new JArray();
 
         // Getting assets.
-        var pathToAssets = Path.Join(pathToTheme, MediaThemeWwwRootDirectory);
+        var pathToAssets = Path.Join(pathToTheme, LocalThemeWwwRootDirectory);
 
         var allAssetsPaths = Directory.EnumerateFiles(pathToAssets, "*", SearchOption.AllDirectories);
 
@@ -108,7 +108,7 @@ internal static class Program
             areLiquidFiles: false);
 
         // Getting templates.
-        var pathToTemplates = Path.Join(pathToTheme, MediaThemeViewsDirectory);
+        var pathToTemplates = Path.Join(pathToTheme, LocalThemeViewsDirectory);
 
         var allTemplatesPaths = Directory
             .EnumerateFiles(pathToTemplates, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
