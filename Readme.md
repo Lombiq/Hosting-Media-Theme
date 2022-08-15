@@ -57,7 +57,7 @@ Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/too
 dotnet tool run media-theme-deploy -p [path of your theme] -i [default theme id] -c [clear media hosting folder] -d [deployment path]
 ```
 
-A specific exapmle:
+A specific example:
 
 ```xml
 dotnet tool run media-theme-deploy -p .\src\Themes\MyTheme -i TheTheme -c true -d C:\MyFolder
