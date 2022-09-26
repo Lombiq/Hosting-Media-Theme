@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Title>Lombiq Hosting - Media Theme Bridge for Orchard Core</Title>
     <Authors>Lombiq Technologies</Authors>
-    <Copyright>Copyright © 2021, Lombiq Technologies Ltd.</Copyright>
+    <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
     <Description>Lombiq Hosting - Media Theme Bridge for Orchard Core: Provides the processing logic for the Media Theme.</Description>
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Module</PackageTags>
