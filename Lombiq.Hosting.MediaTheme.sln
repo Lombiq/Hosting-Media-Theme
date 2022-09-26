@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.Hosting.MediaTheme.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.Hosting.MediaTheme", "Lombiq.Hosting.MediaTheme\Lombiq.Hosting.MediaTheme.csproj", "{789B7156-BBB6-4613-8B5E-C72350D3D759}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.Hosting.MediaTheme.Deployer", "Lombiq.Hosting.MediaTheme.Deployer\Lombiq.Hosting.MediaTheme.Deployer.csproj", "{9F7CD368-D473-476D-A786-21BBC5459243}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lombiq.Hosting.MediaTheme.Tests.UI", "Lombiq.Hosting.MediaTheme.Tests.UI\Lombiq.Hosting.MediaTheme.Tests.UI.csproj", "{ADE58EDB-99EE-4371-B4EA-1B19129FE452}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{789B7156-BBB6-4613-8B5E-C72350D3D759}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F7CD368-D473-476D-A786-21BBC5459243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F7CD368-D473-476D-A786-21BBC5459243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F7CD368-D473-476D-A786-21BBC5459243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F7CD368-D473-476D-A786-21BBC5459243}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE58EDB-99EE-4371-B4EA-1B19129FE452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE58EDB-99EE-4371-B4EA-1B19129FE452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE58EDB-99EE-4371-B4EA-1B19129FE452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE58EDB-99EE-4371-B4EA-1B19129FE452}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
