@@ -1,6 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Title>Lombiq Hosting - Media Theme Deployer for Orchard Core</Title>
+    <Authors>Lombiq Technologies</Authors>
+    <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
+    <Description>Lombiq Hosting - Media Theme Deployer for Orchard Core: A tool to easily export Media Themes.</Description>    
+    <PackageIcon>NuGetIcon.png</PackageIcon>
+    <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
+    <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -13,6 +21,10 @@
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
