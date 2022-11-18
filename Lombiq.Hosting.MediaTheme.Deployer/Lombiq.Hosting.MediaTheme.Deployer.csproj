@@ -9,6 +9,7 @@
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -27,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="License.md" Pack="true" PackagePath="" />
     <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
