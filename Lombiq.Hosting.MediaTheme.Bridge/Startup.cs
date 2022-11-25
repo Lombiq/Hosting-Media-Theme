@@ -37,6 +37,7 @@ public class Startup : StartupBase
         services.AddSingleton<IDeploymentStepFactory>(new DeploymentStepFactory<MediaThemeDeploymentStep>());
         services.AddScoped<IDisplayDriver<DeploymentStep>, MediaThemeDeploymentStepDriver>();
         services.AddScoped<IAuthorizationHandler, ManageMediaThemeFolderAuthorizationHandler>();
+        services.AddScoped<IMediaThemeCachingService, MediaThemeCachingService>();
     }
 
     public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
