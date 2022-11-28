@@ -13,18 +13,18 @@ public class MediaTemplatesShapeBindingResolver : IShapeBindingResolver
     private readonly ILiquidTemplateManager _liquidTemplateManager;
     private readonly IHttpContextAccessor _hca;
     private readonly HtmlEncoder _htmlEncoder;
-    private readonly IMediaThemeManager _mediaThemeManager;
+    private readonly IMediaThemeCachingService _mediaThemeCachingService;
 
     public MediaTemplatesShapeBindingResolver(
         ILiquidTemplateManager liquidTemplateManager,
         IHttpContextAccessor hca,
         HtmlEncoder htmlEncoder,
-        IMediaThemeManager mediaThemeManager)
+        IMediaThemeCachingService mediaThemeCachingService)
     {
         _liquidTemplateManager = liquidTemplateManager;
         _hca = hca;
         _htmlEncoder = htmlEncoder;
-        _mediaThemeManager = mediaThemeManager;
+        _mediaThemeCachingService = mediaThemeCachingService;
     }
 
     public async Task<ShapeBinding> GetShapeBindingAsync(string shapeType)
@@ -34,7 +34,7 @@ public class MediaTemplatesShapeBindingResolver : IShapeBindingResolver
             return null;
         }
 
-        return await _mediaThemeManager.GetMediaTemplateByShapeTypeAsync(shapeType) is not { } mediaTemplate
+        return await _mediaThemeCachingService.GetMemoryCachedMediaTemplateAsync(shapeType) is not { } mediaTemplate
             ? null
             : BuildShapeBinding(shapeType, mediaTemplate.Content);
     }

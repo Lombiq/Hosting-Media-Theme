@@ -1,10 +1,13 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+﻿using Lombiq.HelpfulLibraries.OrchardCore.DependencyInjection;
+using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Lombiq.Hosting.MediaTheme.Bridge.Services;
 using Lombiq.Hosting.MediaTheme.Bridge.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using OrchardCore.DisplayManagement.ModelBinding;
+using OrchardCore.DisplayManagement.Notify;
 using OrchardCore.Themes.Services;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,23 +21,30 @@ public class AdminController : Controller
     private readonly IMediaThemeStateStore _mediaThemeStateStore;
     private readonly IUpdateModelAccessor _updateModelAccessor;
     private readonly IStringLocalizer<AdminController> T;
+    private readonly IHtmlLocalizer<AdminController> H;
     private readonly IMediaThemeManager _mediaThemeManager;
     private readonly ISiteThemeService _siteThemeService;
+    private readonly IMediaThemeCachingService _mediaThemeCachingService;
+    private readonly INotifier _notifier;
 
     public AdminController(
-        IAuthorizationService authorizationService,
+        IOrchardServices<AdminController> orchardServices,
         IMediaThemeStateStore mediaThemeStateStore,
         IUpdateModelAccessor updateModelAccessor,
-        IStringLocalizer<AdminController> stringLocalizer,
         IMediaThemeManager mediaThemeManager,
-        ISiteThemeService siteThemeService)
+        ISiteThemeService siteThemeService,
+        IMediaThemeCachingService mediaThemeCachingService,
+        INotifier notifier)
     {
-        _authorizationService = authorizationService;
+        _authorizationService = orchardServices.AuthorizationService.Value;
         _mediaThemeStateStore = mediaThemeStateStore;
         _updateModelAccessor = updateModelAccessor;
-        T = stringLocalizer;
+        T = orchardServices.StringLocalizer.Value;
         _mediaThemeManager = mediaThemeManager;
         _siteThemeService = siteThemeService;
+        _mediaThemeCachingService = mediaThemeCachingService;
+        _notifier = notifier;
+        H = orchardServices.HtmlLocalizer.Value;
     }
 
     [HttpGet]
@@ -75,6 +85,17 @@ public class AdminController : Controller
 
         await _mediaThemeManager.UpdateBaseThemeAsync(viewModel.BaseThemeId);
 
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> DeleteMediaThemeTemplateCache()
+    {
+        if (!await IsAuthorizedToManageMediaThemeAsync()) return NotFound();
+
+        await _mediaThemeCachingService.InvalidateCachedMediaThemeTemplatesAsync();
+        await _notifier.SuccessAsync(H["Media Theme template cache was invalidated successfully!"]);
         return RedirectToAction(nameof(Index));
     }
 
