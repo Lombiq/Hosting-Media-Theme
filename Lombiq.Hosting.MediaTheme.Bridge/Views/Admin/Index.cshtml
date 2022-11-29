@@ -47,3 +47,10 @@
         <button type="submit" class="btn btn-primary">@T["Submit"]</button>
     </div>
 </form>
+
+<form asp-action="DeleteMediaThemeTemplateCache" asp-controller="Admin" asp-area="Lombiq.Hosting.MediaTheme.Bridge" method="post" class="no-multisubmit">
+    @Html.ValidationSummary()
+    <div class="mb-3">
+        <button type="submit" class="btn btn-danger">@T["Invalidate Media Theme templates cache."]</button>
+    </div>
+</form>
