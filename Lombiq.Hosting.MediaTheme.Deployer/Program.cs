@@ -203,7 +203,7 @@ internal static class Program
             : Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
 
         return Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
-            + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);
+            + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
     }
 
     private static void CreateRecipeAndWriteIt(JObject mediaThemeStep, JObject mediaStep, string newDirectoryPath)
