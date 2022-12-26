@@ -50,15 +50,21 @@ If you want to export your Media Theme, go to the Admin UI → Configuration →
 - Add _Media Theme_ step. Here you can tick the _Clear Media Theme folder_ checkbox; if ticked, it will delete all the files in the `_MediaTheme` folder in the Media Library during import. It can be helpful if you have a _Media_ step along with this step bringing in all the Media Theme files, but be conscious of the order within the recipe; put the _Media Theme_ step first. Leave it disabled if you only want to control the base theme.
 - Optionally, add a _Media_ step where you select the whole `_MediaTheme` folder.
 
-Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool in your root project. Then you can use the tool:
+Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool in your root project:
 
-```xml
+```ps
+dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
+```
+
+Then you can use the tool:
+
+```ps
 dotnet tool run media-theme-deploy -p [path of your theme] -i [base theme id] -c [clear media hosting folder] -d [deployment path]
 ```
 
 A specific example:
 
-```xml
+```ps
 dotnet tool run media-theme-deploy -p .\src\Themes\MyTheme -i TheTheme -c true -d C:\MyFolder
 ```
 
