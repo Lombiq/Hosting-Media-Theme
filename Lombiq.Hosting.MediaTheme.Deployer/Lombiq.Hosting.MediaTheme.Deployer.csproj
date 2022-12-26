@@ -8,7 +8,7 @@
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme</PackageProjectUrl>
     <PackageLicenseFile>License.md</PackageLicenseFile>
   </PropertyGroup>
 
