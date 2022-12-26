@@ -25,7 +25,7 @@ Note that the `.liquid` extension is not allowed in Media Library by default, wh
 
 ### Using a base theme
 
-Media Theme supports base themes. First, enable the theme you want to use as a base theme. Then go to the _Admin UI > Configuration > Media Theme_ page and select the one you want to use. You won't be able to update the base theme dynamically if the Media Theme is not active even if you are using the Media Theme logic provided by the `Lombiq.Hosting.MediaTheme.Bridge`.
+Media Theme supports base themes. First, enable the theme you want to use as a base theme. Then go to the Admin UI → Configuration → Media Theme_ page and select the one you want to use. You won't be able to update the base theme dynamically if the Media Theme is not active even if you are using the Media Theme logic provided by the `Lombiq.Hosting.MediaTheme.Bridge`.
 
 ### Limitations
 
@@ -45,7 +45,7 @@ If you are developing a theme for your [DotNest](https://dotnest.com) site you c
 
 ### Import/Export
 
-If you want to export your Media Theme, go to the `_Admin UI > Configuration > Import/Export > Deployment Plans` page and create a Deployment Plan with the following steps:
+If you want to export your Media Theme, go to the Admin UI → Configuration → Import/Export → Deployment Plans page and create a Deployment Plan with the following steps:
 
 - Add _Media Theme_ step. Here you can tick the _Clear Media Theme folder_ checkbox; if ticked, it will delete all the files in the `_MediaTheme` folder in the Media Library during import. It can be helpful if you have a _Media_ step along with this step bringing in all the Media Theme files, but be conscious of the order within the recipe; put the _Media Theme_ step first. Leave it disabled if you only want to control the base theme.
 - Optionally, add a _Media_ step where you select the whole `_MediaTheme` folder.
