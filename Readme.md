@@ -52,19 +52,19 @@ If you want to export your Media Theme, go to the Admin UI → Configuration →
 
 Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool in your root project:
 
-```ps
+```pwsh
 dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
 ```
 
 Then you can use the tool:
 
-```ps
+```pwsh
 dotnet tool run media-theme-deploy -p [path of your theme] -i [base theme id] -c [clear media hosting folder] -d [deployment path]
 ```
 
 A specific example:
 
-```ps
+```pwsh
 dotnet tool run media-theme-deploy -p .\src\Themes\MyTheme -i TheTheme -c true -d C:\MyFolder
 ```
 
