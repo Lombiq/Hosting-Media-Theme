@@ -50,7 +50,7 @@ If you want to export your Media Theme, go to the Admin UI → Configuration →
 - Add _Media Theme_ step. Here you can tick the _Clear Media Theme folder_ checkbox; if ticked, it will delete all the files in the `_MediaTheme` folder in the Media Library during import. It can be helpful if you have a _Media_ step along with this step bringing in all the Media Theme files, but be conscious of the order within the recipe; put the _Media Theme_ step first. Leave it disabled if you only want to control the base theme.
 - Optionally, add a _Media_ step where you select the whole `_MediaTheme` folder.
 
-Alternatively you can [install](https://docs.microsoft.com/en-us/dotnet/core/tools/local-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool in your root project:
+Alternatively you can [install](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool in your root project:
 
 ```pwsh
 dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
@@ -59,16 +59,18 @@ dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
 Then you can use the tool:
 
 ```pwsh
-dotnet tool run media-theme-deploy -p [path of your theme] -i [base theme id] -c [clear media hosting folder] -d [deployment path]
+media-theme-deploy --path [path of your theme] --base-id [base theme id] --clear [clear media hosting folder] --deployment-path [deployment path]
 ```
 
 A specific example:
 
 ```pwsh
-dotnet tool run media-theme-deploy -p .\src\Themes\MyTheme -i TheTheme -c true -d C:\MyFolder
+media-theme-deploy --path .\src\Themes\MyTheme --base-id TheTheme --clear true --deployment-path C:\MyFolder
 ```
 
-Option `-d` is not required. Without it, the package will be exported to your directory root. For example `C:\MediaThemeDeployment_04Aug2022230500.zip`.
+Option `--deployment-path` is not required. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_.
+
+The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
 
 You can use Remote Deployment to accept such exported packages to deploy your theme remotely from your local development environment or CI.
 
