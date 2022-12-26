@@ -86,5 +86,5 @@ If you want to publish `Lombiq.Hosting.MediaTheme.Deployer` to test it during lo
 
 1. Pack it into a NuGet package by running `dotnet pack` in the project's folder.
 2. Uninstall the tool if you have it installed already: `dotnet tool uninstall --global Lombiq.Hosting.MediaTheme.Deployer`.
-3. Install the local version (note that without a version specified, it'll be published as v1.0.0): `dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --add-source .\nupkg --version 1.0.0`.
+3. Install the local version (note that without a version specified, it'll be published as v1.0.0): `dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --add-source .\nupkg --version 1.0.0`.<!-- #spell-check-ignore-line -->
 4. Now `media-theme-deploy` will use the development version.
