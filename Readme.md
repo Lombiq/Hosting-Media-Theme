@@ -30,7 +30,7 @@ Media Theme supports base themes. First, enable the theme you want to use as a b
 ### Limitations
 
 - Shape templates must be _.liquid_ files.
-- Shape template file names must be valid shape types, i.e., instead of `.` and `-`, use `_` and `__` characters.
+- Shape template file names must be valid template, not template file names, i.e., may not contain `.` and `-` characters (but use the `_` and `__` notation instead). Note that these don't just differ in the interchangeable characters but may also differ in the order of sections. E.g. `[Stereotype]_[DisplayType]__[PartType]__[PartName]__[DisplayMode]_Display` is "Widget_Summary__ServicePart__Services__CustomMode_Display" as template name but "Widget-ServicePart-Services-CustomMode.Display.Summary.liquid" as a file name (note e.g. "Summary" being in a different location). See [the docs](https://docs.orchardcore.net/en/latest/docs/reference/modules/Templates/) for details.
 - Folders within the shape templates are not supported. It also means that MVC views can't be overridden or custom shape harvesters can't be used.
 
 ### Local development
@@ -79,3 +79,12 @@ You can use Remote Deployment to accept such exported packages to deploy your th
 Bug reports, feature requests, comments, questions, code contributions and love letters are warmly welcome. You can send them to us via GitHub issues and pull requests. Please adhere to our [open-source guidelines](https://lombiq.com/open-source-guidelines) while doing so.
 
 This project is developed by [Lombiq Technologies](https://lombiq.com/). Commercial-grade support is available through Lombiq.
+
+### Publishing and using a version of the Deployer during local development
+
+If you want to publish `Lombiq.Hosting.MediaTheme.Deployer` to test it during local development, then do the following:
+
+1. Pack it into a NuGet package by running `dotnet pack` in the project's folder.
+2. Uninstall the tool if you have it installed already: `dotnet tool uninstall --global Lombiq.Hosting.MediaTheme.Deployer`.
+3. Install the local version (note that without a version specified, it'll be published as v1.0.0): `dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --add-source .\nupkg --version 1.0.0`.
+4. Now `media-theme-deploy` will use the development version.
