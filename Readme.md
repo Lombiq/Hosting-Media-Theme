@@ -39,7 +39,7 @@ If you want to build a theme that'll eventually end up in the Media Library, you
 
 You can proceed with developing your base theme as you'd typically do: put the templates inside the _Views_ folder and assets inside the _wwwroot_ folder; however, keep the limitations mentioned above in mind.
 
-If you want to reference assets in your templates, you can use the `/mediatheme/` prefix. The Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when moving them to Media Library.
+If you want to reference assets in your templates, you can use the `/mediatheme/` prefix in URLs, like `<link rel="icon" type="image/png" sizes="32x32" href="/mediatheme/favicon-32x32.png">`. Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when moving them to Media Library.
 
 If you are developing a theme for your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
 
