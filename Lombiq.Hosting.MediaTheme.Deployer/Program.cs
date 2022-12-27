@@ -16,8 +16,8 @@ public class CommandLineOptions
     [Option('i', "base-id", Required = false, HelpText = "ID of the base theme, if any.")]
     public string? BaseThemeId { get; set; }
 
-    [Option('c', "clear", Required = true, HelpText = "Whether or not to clear the Media Theme media folder of all files.")]
-    public bool ClearMediaHostingFolder { get; set; }
+    [Option('c', "clear", Required = false, HelpText = "Whether or not to clear the Media Theme media folder of all files.")]
+    public bool ClearMediaHostingFolder { get; set; } = true;
 
     [Option('d', "deployment-path", Required = false, HelpText = "The path where you want the deployment package to be written to.")]
     public string? DeploymentPackagePath { get; set; }
