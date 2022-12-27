@@ -10,16 +10,16 @@ namespace Lombiq.Hosting.MediaTheme.Deployer;
 
 public class CommandLineOptions
 {
-    [Option('p', "path", Required = true, HelpText = "Path of your theme.")]
+    [Option('p', "path", Required = true, HelpText = "Path of your theme project.")]
     public string? PathOfTheTheme { get; set; }
 
-    [Option('i', "base-id", Required = true, HelpText = "Default theme ID.")]
+    [Option('i', "base-id", Required = false, HelpText = "ID of the base theme, if any.")]
     public string? BaseThemeId { get; set; }
 
-    [Option('c', "clear", Required = true, HelpText = "Whether or not to clear media hosting folder.")]
+    [Option('c', "clear", Required = true, HelpText = "Whether or not to clear the Media Theme media folder of all files.")]
     public bool ClearMediaHostingFolder { get; set; }
 
-    [Option('d', "deployment-path", Required = false, HelpText = "The path where you want the deployment package copied.")]
+    [Option('d', "deployment-path", Required = false, HelpText = "The path where you want the deployment package to be written to.")]
     public string? DeploymentPackagePath { get; set; }
 }
 
