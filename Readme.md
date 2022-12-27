@@ -21,7 +21,7 @@ To get started, you'll need to add `Lombiq.Hosting.MediaTheme` and `Lombiq.Hosti
 
 Once the theme is enabled, it'll look for templates and assets in the Media Library. Go to Media Library and create the `_MediaTheme` folder, where you can put shape templates inside the _Templates_ folder (see limitations below), and assets inside the _Assets_ folder.
 
-Note that the `.liquid` extension is not allowed in Media Library by default, which might be an issue with a few of your assets as well. Please update the Media settings as described [here](https://docs.orchardcore.net/en/dev/docs/reference/modules/Media/#configuration).
+Note that the `.liquid` extension is not allowed in Media Library by default, which might be an issue with a few of your assets as well. Please update the Media settings as described [here](https://docs.orchardcore.net/en/latest/docs/reference/modules/Media/#configuration).
 
 ### Using a base theme
 
