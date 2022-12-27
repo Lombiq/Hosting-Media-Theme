@@ -47,7 +47,7 @@ public class MediaThemeAssetUrlRedirectMiddleware
 
         // URL starts with "/mediatheme" which is checked above.
 #pragma warning disable SCS0027 // Potential Open Redirect vulnerability.
-        context.Response.Redirect(assetUrl, true);
+        context.Response.Redirect(assetUrl, permanent: true);
 #pragma warning restore SCS0027 // Potential Open Redirect vulnerability.
     }
 }
