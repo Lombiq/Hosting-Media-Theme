@@ -1,0 +1,28 @@
+name: Deploy Media Theme
+description: Deploys an Orchard Core Media Theme to an Orchard site via Remote Deployment.
+
+inputs:
+  theme-path:
+    required: false
+    default: "."
+    description: Path to the theme project.
+  base-theme-id:
+    required: false
+    description: ID of the base theme of the theme project, if any.
+  clear-media-folder:
+    required: false
+    default: "true"
+    description: When set to "true", will clear the Media folder of the Media Theme before deployment.
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Lombiq.Hosting.MediaTheme.Deployer
+      shell: pwsh
+      run: |
+        dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
+
+    - name: Deploy Media Theme
+      shell: pwsh
+      run: |
+        media-theme-deploy --path ${{ inputs.theme-path }} --base-id ${{ inputs.base-theme-id }} --clear ${{ inputs.clear-media-folder }} --client-name ${{ env.CLIENT_NAME }} --client-api-key ${{ env.CLIENT_API_KEY }}

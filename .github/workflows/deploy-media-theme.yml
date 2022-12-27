@@ -1,0 +1,41 @@
+name: Deploy Media Theme
+
+on:
+  workflow_call:
+    secrets:
+      CLIENT_NAME:
+        required: true
+        description: The "Client Name" part of the Remote Deployment client's credentials.
+      CLIENT_API_KEY:
+        required: true
+        description: The "Client API Key" part of the Remote Deployment client's credentials.
+    inputs:
+      theme-path:
+        required: false
+        type: string
+        default: "."
+        description: Path to the theme project.
+      base-theme-id:
+        required: false
+        type: string
+        description: ID of the base theme of the theme project, if any.
+      clear-media-folder:
+        required: false
+        type: string
+        default: "true"
+        description: When set to "true", will clear the Media folder of the Media Theme before deployment.
+
+jobs:
+  deploy-media-theme:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Deploy Media Theme
+      if: github.event.pull_request != ''
+      uses: Lombiq/Hosting-Media-Theme/.github/workflows/deploy-media-theme.yml@issue/OSOE-514
+      env:
+        CLIENT_NAME: ${{ secrets.CLIENT_NAME }}
+        CLIENT_API_KEY: ${{ secrets.CLIENT_API_KEY }}
+      with:
+        theme-path: ${{ inputs.theme-path }}
+        base-theme-id: ${{ inputs.base-theme-id }}
+        clear-media-folder: ${{ inputs.clear-media-folder }}
