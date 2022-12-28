@@ -166,8 +166,7 @@ internal static class Program
         ZipFile.CreateFromDirectory(newDirectoryPath, zipFilePath);
 
         // Getting rid of the original directory.
-        // Not deleting only for debugging.
-        ////Directory.Delete(newDirectoryPath, recursive: true);
+        Directory.Delete(newDirectoryPath, recursive: true);
 
         WriteLine("{0} was created successfully. ", zipFilePath);
 

@@ -52,11 +52,3 @@ jobs:
         theme-path: ${{ inputs.theme-path }}
         base-theme-id: ${{ inputs.base-theme-id }}
         clear-media-folder: ${{ inputs.clear-media-folder }}
-
-    - name: Upload Deployment Package
-      uses: actions/upload-artifact@v3.1.1
-      if: (success() || failure())
-      with:
-        name: deployment-package
-        path: ${{ inputs.theme-path }}/Deployment
-        if-no-files-found: ignore
