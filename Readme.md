@@ -51,7 +51,7 @@ If you want to reference assets in your templates, you can use the `/mediatheme/
 {% style src:stylesPath %}
 ```
 
-These use Orchard's resource manager and thus will also include a browser/proxy cache busting `v` parameter that updates when the you deploy a new version of your theme. This will ensure that everybody sees the current version of your site's styling.
+These use Orchard's resource manager and thus will also include a browser/proxy cache busting `v` parameter that updates when the you deploy a new version of your theme. This will ensure that everybody sees the current version of your site's styling. Note that while the Liquid `style` and `script` tags do this by default, for `link` you have to add `append_version` like above too.
 
 Media Theme will translate this special path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
 
