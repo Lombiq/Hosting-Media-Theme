@@ -36,7 +36,7 @@ runs:
 
         media-theme-deploy @switches
 
-        if (!$?)
+        if ($LastExitCode -ne 0)
         {
-            exit 1
+            Write-Error "Deployment failed, see the errors above."
         }
