@@ -87,7 +87,8 @@ A specific example when run in the folder of your theme project:
 media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path .\Deployment
 ```
 
-`--deployment-path` is not required. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
+- `--base-id` is optional. If not provided, the tool will try to get it from the Manifest file, and if it's not defined there either, no base theme will be used.
+- `--deployment-path` is optional. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
 
 You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import.
 
@@ -120,7 +121,8 @@ jobs:
       CLIENT_API_KEY: ${{ secrets.MY_THEME_DEPLOYMENT_CLIENT_API_KEY }}
     with:
       theme-path: "src/Themes/My.Theme"
-      base-theme-id: "TheBlogTheme"
+      # You can leave out base-theme-id to get it from the Manifest, or to not use a base theme at all.
+      #base-theme-id: "TheBlogTheme"
 ```
 
 ## Contributing and support

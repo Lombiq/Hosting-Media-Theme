@@ -1,8 +1,10 @@
 using CommandLine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 using static Lombiq.Hosting.MediaTheme.Deployer.Constants.PathConstants;
 using static System.Console;
 
@@ -11,15 +13,27 @@ namespace Lombiq.Hosting.MediaTheme.Deployer;
 public class CommandLineOptions
 {
     [Option('p', "path", Required = true, HelpText = "Path of your theme project.")]
-    public string? PathOfTheTheme { get; set; }
+    public string? ThemePath { get; set; }
 
-    [Option('i', "base-id", Required = false, HelpText = "ID of the base theme, if any.")]
+    [Option(
+        'i',
+        "base-id",
+        Required = false,
+        HelpText = "ID of the base theme, if any. If left empty, will attempt to get the value from the theme's Manifest.")]
     public string? BaseThemeId { get; set; }
 
-    [Option('c', "clear", Required = false, HelpText = "Whether or not to clear the Media Theme media folder of all files before deployment.")]
+    [Option(
+        'c',
+        "clear",
+        Required = false,
+        HelpText = "Whether or not to clear the Media Theme media folder of all files before deployment.")]
     public bool ClearMediaHostingFolder { get; set; } = true;
 
-    [Option('d', "deployment-path", Required = false, HelpText = "The path where you want the deployment package to be written to.")]
+    [Option(
+        'd',
+        "deployment-path",
+        Required = false,
+        HelpText = "The path where you want the deployment package to be written to.")]
     public string? DeploymentPackagePath { get; set; }
 
     [Option(
@@ -79,6 +93,10 @@ internal static class Program
         }
     }
 
+    [SuppressMessage(
+        "Major Code Smell",
+        "S4457:Parameter validation in \"sync\"/\"await\" methods should be wrapped",
+        Justification = "RunOptionsAsync() needs to use await as well to be able to set the exit code on exception.")]
     private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
@@ -98,28 +116,49 @@ internal static class Program
             throw;
         }
 
-        var pathToTheme = options.PathOfTheTheme;
+        var themePath = options.ThemePath;
+
+        if (string.IsNullOrEmpty(themePath))
+        {
+            throw new ArgumentException("The theme's path should be provided.");
+        }
 
         // Creating media theme step.
         dynamic mediaThemeStep = new JObject();
         mediaThemeStep.name = "mediatheme";
-        mediaThemeStep.BaseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
         mediaThemeStep.ClearMediaThemeFolder = options.ClearMediaHostingFolder;
+
+        var baseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
+
+        if (baseThemeId == null)
+        {
+            var manifestPath = Path.Combine(themePath, "Manifest.cs");
+            var manifestContent = await File.ReadAllTextAsync(manifestPath);
+            var basteThemeMatch = Regex.Match(
+                manifestContent, @"BaseTheme\s*=\s*""(?<baseThemeId>.*)""", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
+
+            if (basteThemeMatch.Success)
+            {
+                baseThemeId = basteThemeMatch.Groups["baseThemeId"].Value;
+            }
+        }
+
+        mediaThemeStep.BaseThemeId = baseThemeId;
 
         // Creating media step.
         var files = new JArray();
 
         // Getting assets.
-        var pathToAssets = Path.Join(pathToTheme, LocalThemeWwwRootDirectory);
+        var assetsPath = Path.Join(themePath, LocalThemeWwwRootDirectory);
 
-        var allAssetsPaths = Directory.EnumerateFiles(pathToAssets, "*", SearchOption.AllDirectories);
+        var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
 
         foreach (var assetPath in allAssetsPaths)
         {
             dynamic assetJObject = new JObject();
             assetJObject.SourcePath = Path.Join(
                 MediaThemeAssetsWebPath,
-                assetPath[pathToAssets.Length..].Replace("\\", "/"));
+                assetPath[assetsPath.Length..].Replace("\\", "/"));
             assetJObject.TargetPath = assetJObject.SourcePath;
 
             files.Add(assetJObject);
@@ -127,22 +166,22 @@ internal static class Program
 
         // Copying assets to deployment directory.
         CopyDirectory(
-            pathToAssets,
+            assetsPath,
             Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
             areLiquidFiles: false);
 
         // Getting templates.
-        var pathToTemplates = Path.Join(pathToTheme, LocalThemeViewsDirectory);
+        var templatesPath = Path.Join(themePath, LocalThemeViewsDirectory);
 
         var allTemplatesPaths = Directory
-            .EnumerateFiles(pathToTemplates, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
+            .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
 
         foreach (var templatePath in allTemplatesPaths)
         {
             dynamic templateJObject = new JObject();
             templateJObject.SourcePath = Path.Join(
                 MediaThemeTemplatesWebPath,
-                templatePath[pathToTemplates.Length..].Replace("\\", "/"));
+                templatePath[templatesPath.Length..].Replace("\\", "/"));
             templateJObject.TargetPath = templateJObject.SourcePath;
 
             files.Add(templateJObject);
@@ -150,7 +189,7 @@ internal static class Program
 
         // Copying templates to deployment directory.
         CopyDirectory(
-            pathToTemplates,
+            templatesPath,
             Path.Join(newDirectoryPath, MediaThemeTemplatesCopyDirectoryPath),
             areLiquidFiles: true,
             recursive: false);
@@ -190,7 +229,9 @@ internal static class Program
 
         // Check if the source directory exists.
         if (!directory.Exists)
+        {
             throw new DirectoryNotFoundException($"Source directory not found: {directory.FullName}");
+        }
 
         // Cache directories before we start copying.
         var directories = directory.GetDirectories();
