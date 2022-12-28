@@ -6,6 +6,7 @@ using Lombiq.Hosting.MediaTheme.Bridge.Permissions;
 using Lombiq.Hosting.MediaTheme.Bridge.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.Deployment;
@@ -40,6 +41,7 @@ public class Startup : StartupBase
         services.AddScoped<IAuthorizationHandler, ManageMediaThemeFolderAuthorizationHandler>();
         services.AddScoped<IMediaThemeCachingService, MediaThemeCachingService>();
         services.AddOrchardServices();
+        services.Decorate<IFileVersionProvider, FileVersionProviderDecorator>();
     }
 
     public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)

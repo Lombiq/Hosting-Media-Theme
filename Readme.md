@@ -43,18 +43,17 @@ You can proceed with developing your theme as you'd typically do: put the templa
 
 If you want to reference assets in your templates, you can use the `/mediatheme/` prefix in URLs, like below:
 
-```html
-<link rel="icon" type="image/png" sizes="32x32" href="/mediatheme/favicon-32x32.png">
-```
-
-Be sure to use Orchard's resource manager for scripts and stylesheets:
-
 ```liquid
+{% assign 32pxIconUrl = "~/mediatheme/images/favicon-32x32.png" | href %}
+{% link type:"image/png", rel:"icon", sizes:"32x32", href:32pxIconUrl, append_version:"true" %}
+
 {% assign stylesPath = "~/mediatheme/styles/site.css" | href %}
 {% style src:stylesPath %}
 ```
 
-Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
+These use Orchard's resource manager and thus will also include a browser/proxy cache busting `v` parameter that updates when the you deploy a new version of your theme. This will ensure that everybody sees the current version of your site's styling.
+
+Media Theme will translate this special path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
 
 If you are developing a theme for your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
 
