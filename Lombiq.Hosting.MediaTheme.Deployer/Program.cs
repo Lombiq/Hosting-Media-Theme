@@ -27,21 +27,21 @@ public class CommandLineOptions
         "remote-deployment-url",
         Required = false,
         HelpText = "The URL to use for Remote Deployment, as indicated on the Orchard Core admin.")]
-    public string? RemoteDeploymenUrl { get; set; }
+    public string? RemoteDeploymentUrl { get; set; }
 
     [Option(
         'n',
         "remote-deployment-client-name",
         Required = false,
         HelpText = "The \"Client Name\" part of the Remote Deployment client's credentials.")]
-    public string? RemoteDeploymenClientName { get; set; }
+    public string? RemoteDeploymentClientName { get; set; }
 
     [Option(
         'k',
         "remote-deployment-client-api-key",
         Required = false,
         HelpText = "The \"Client API Key\" part of the Remote Deployment client's credentials.")]
-    public string? RemoteDeploymenClientApiKey { get; set; }
+    public string? RemoteDeploymentClientApiKey { get; set; }
 }
 
 internal static class Program
@@ -170,7 +170,7 @@ internal static class Program
 
         WriteLine("{0} was created successfully. ", zipFilePath);
 
-        if (string.IsNullOrEmpty(options.RemoteDeploymenUrl))
+        if (string.IsNullOrEmpty(options.RemoteDeploymentUrl))
         {
             return;
         }

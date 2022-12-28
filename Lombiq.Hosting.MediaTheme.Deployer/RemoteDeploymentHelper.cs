@@ -6,7 +6,7 @@ internal static class RemoteDeploymentHelper
 
     public static async Task DeployAsync(CommandLineOptions options, string deploymentPackagePath)
     {
-        if (string.IsNullOrEmpty(options.RemoteDeploymenClientName) || string.IsNullOrEmpty(options.RemoteDeploymenClientApiKey))
+        if (string.IsNullOrEmpty(options.RemoteDeploymentClientName) || string.IsNullOrEmpty(options.RemoteDeploymentClientApiKey))
         {
             throw new InvalidOperationException(
                 "When doing a Remote Deployment, both the Client Name and Client API Key should be provided.");
@@ -34,21 +34,21 @@ internal static class RemoteDeploymentHelper
                     "Content",
                     Path.GetFileName(deploymentPackagePath)
                 },
-                { new StringContent(options.RemoteDeploymenClientName), "ClientName" },
-                { new StringContent(options.RemoteDeploymenClientApiKey), "ApiKey" },
+                { new StringContent(options.RemoteDeploymentClientName), "ClientName" },
+                { new StringContent(options.RemoteDeploymentClientApiKey), "ApiKey" },
             };
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
-            response = await _httpClient.PostAsync(options.RemoteDeploymenUrl, requestContent);
+            response = await _httpClient.PostAsync(options.RemoteDeploymentUrl, requestContent);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                Console.WriteLine("Remote deployment to {0} succeeded.", options.RemoteDeploymenUrl);
+                Console.WriteLine("Remote deployment to {0} succeeded.", options.RemoteDeploymentUrl);
             }
             else
             {
                 throw new HttpRequestException(
-                    $"Remote deployment to {options.RemoteDeploymenUrl} failed with the HTTP code " +
+                    $"Remote deployment to {options.RemoteDeploymentUrl} failed with the HTTP code " +
                     $"{response.StatusCode} and message \"{response.RequestMessage}\".");
             }
         }
