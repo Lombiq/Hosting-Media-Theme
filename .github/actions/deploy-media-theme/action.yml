@@ -29,6 +29,7 @@ runs:
             '--path', '${{ inputs.theme-path }}'
             '--base-id', '${{ inputs.base-theme-id }}'
             '--clear', '${{ inputs.clear-media-folder }}'
+            '--deployment-path', '${{ inputs.theme-path }}'
             '--remote-deployment-url', '${{ env.URL }}'
             '--remote-deployment-client-name', '${{ env.CLIENT_NAME }}'
             '--remote-deployment-client-api-key', '${{ env.CLIENT_API_KEY }}'
