@@ -120,7 +120,7 @@ internal static class Program
 
         if (string.IsNullOrEmpty(themePath))
         {
-            throw new ArgumentException("The theme's path should be provided.");
+            throw new ArgumentException("The theme's path must be provided.");
         }
 
         var recipeSteps = new JArray();
