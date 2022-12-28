@@ -35,3 +35,8 @@ runs:
         )
 
         media-theme-deploy @switches
+
+        if (-not $?)
+        {
+            exit 1
+        }
