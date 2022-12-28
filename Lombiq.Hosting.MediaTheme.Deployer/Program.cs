@@ -262,7 +262,7 @@ internal static class Program
         recipe.steps = new JArray(mediaThemeStep, mediaStep);
 
         // Creating JSON file.
-        using var file = File.CreateText(Path.Join(newDirectoryPath + RecipeFile));
+        using var file = File.CreateText(Path.Join(newDirectoryPath, RecipeFile));
         using var writer = new JsonTextWriter(file) { Formatting = Formatting.Indented };
         recipe.WriteTo(writer);
 
