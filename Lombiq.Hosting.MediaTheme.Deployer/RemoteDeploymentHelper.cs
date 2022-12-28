@@ -54,7 +54,8 @@ internal static class RemoteDeploymentHelper
         }
         finally
         {
-            File.Delete(deploymentPackagePath);
+            // Not deleting only for debugging.
+            ////File.Delete(deploymentPackagePath);
         }
     }
 }
