@@ -68,27 +68,34 @@ internal static class Program
 
     private static async Task RunOptionsAsync(CommandLineOptions options)
     {
+        try
+        {
+            await RunOptionsInnerAsync(options);
+        }
+        catch (Exception ex)
+        {
+            WriteLine("Deployment failed with the following exception: {0}", ex.ToString());
+            Environment.ExitCode = 1;
+        }
+    }
+
+    private static async Task RunOptionsInnerAsync(CommandLineOptions options)
+    {
         // Creating directory for the deployment.
         var newDirectoryPath = CreateNewDirectoryPath(options);
 
         try
         {
-            // Determine whether the directory exists.
-            if (Directory.Exists(newDirectoryPath))
-            {
-                WriteLine("That directory already exists.");
-                return;
-            }
+            if (Directory.Exists(newDirectoryPath)) Directory.Delete(newDirectoryPath, recursive: true);
 
-            // Try to create the directory.
             Directory.CreateDirectory(newDirectoryPath);
 
             WriteLine("The directory was created successfully. {0}", newDirectoryPath);
         }
-        catch (Exception exception)
+        catch (Exception)
         {
-            WriteLine("The directory creation failed: {0}", exception.ToString());
-            return;
+            WriteLine("Creating the directory {0} failed.", newDirectoryPath);
+            throw;
         }
 
         var pathToTheme = options.PathOfTheTheme;
