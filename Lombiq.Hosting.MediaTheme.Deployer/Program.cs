@@ -16,23 +16,40 @@ public class CommandLineOptions
     [Option('i', "base-id", Required = false, HelpText = "ID of the base theme, if any.")]
     public string? BaseThemeId { get; set; }
 
-    [Option('c', "clear", Required = false, HelpText = "Whether or not to clear the Media Theme media folder of all files.")]
+    [Option('c', "clear", Required = false, HelpText = "Whether or not to clear the Media Theme media folder of all files before deployment.")]
     public bool ClearMediaHostingFolder { get; set; } = true;
 
     [Option('d', "deployment-path", Required = false, HelpText = "The path where you want the deployment package to be written to.")]
     public string? DeploymentPackagePath { get; set; }
+
+    [Option(
+        'u',
+        "remote-deployment-url",
+        Required = false,
+        HelpText = "The URL to use for Remote Deployment, as indicated on the Orchard Core admin.")]
+    public string? RemoteDeploymenUrl { get; set; }
+
+    [Option(
+        'n',
+        "remote-deployment-client-name",
+        Required = false,
+        HelpText = "The \"Client Name\" part of the Remote Deployment client's credentials.")]
+    public string? RemoteDeploymenClientName { get; set; }
+
+    [Option(
+        'k',
+        "remote-deployment-client-api-key",
+        Required = false,
+        HelpText = "The \"Client API Key\" part of the Remote Deployment client's credentials.")]
+    public string? RemoteDeploymenClientApiKey { get; set; }
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage(
-    "Globalization",
-    "CA1303:Do not pass literals as localized parameters",
-    Justification = "It's a console application, it doesn't need localization.")]
 internal static class Program
 {
-    public static void Main(string[] args) =>
+    public static Task Main(string[] args) =>
         Parser.Default.ParseArguments<CommandLineOptions>(args)
-            .WithParsed(options => RunOptions(options))
-            .WithNotParsed(HandleParseError);
+            .WithNotParsed(HandleParseError)
+            .WithParsedAsync(options => RunOptionsAsync(options));
 
     private static void HandleParseError(IEnumerable<Error> errors)
     {
@@ -49,10 +66,10 @@ internal static class Program
         }
     }
 
-    private static void RunOptions(CommandLineOptions values)
+    private static async Task RunOptionsAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
-        var newDirectoryPath = CreateNewDirectoryPath(values);
+        var newDirectoryPath = CreateNewDirectoryPath(options);
 
         try
         {
@@ -74,13 +91,13 @@ internal static class Program
             return;
         }
 
-        var pathToTheme = values.PathOfTheTheme;
+        var pathToTheme = options.PathOfTheTheme;
 
         // Creating media theme step.
         dynamic mediaThemeStep = new JObject();
         mediaThemeStep.name = "mediatheme";
-        mediaThemeStep.BaseThemeId = values.BaseThemeId;
-        mediaThemeStep.ClearMediaThemeFolder = values.ClearMediaHostingFolder;
+        mediaThemeStep.BaseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
+        mediaThemeStep.ClearMediaThemeFolder = options.ClearMediaHostingFolder;
 
         // Creating media step.
         var files = new JArray();
@@ -138,13 +155,21 @@ internal static class Program
         CreateRecipeAndWriteIt(mediaThemeStep, mediaStep, newDirectoryPath);
 
         // Zipping the directory.
-        var zippedDirectoryPath = newDirectoryPath + ".zip";
-        ZipFile.CreateFromDirectory(newDirectoryPath, zippedDirectoryPath);
+        var zipFilePath = newDirectoryPath + ".zip";
+        ZipFile.CreateFromDirectory(newDirectoryPath, zipFilePath);
 
         // Getting rid of the original directory.
         Directory.Delete(newDirectoryPath, recursive: true);
 
-        WriteLine("{0} was created successfully. ", zippedDirectoryPath);
+        WriteLine("{0} was created successfully. ", zipFilePath);
+
+        if (string.IsNullOrEmpty(options.RemoteDeploymenUrl))
+        {
+            return;
+        }
+
+        // This is a remote deployment.
+        await RemoteDeploymentHelper.DeployAsync(options, zipFilePath);
     }
 
     private static void CopyDirectory(
