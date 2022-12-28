@@ -90,7 +90,7 @@ internal static class Program
 
             Directory.CreateDirectory(newDirectoryPath);
 
-            WriteLine("The directory was created successfully. {0}", newDirectoryPath);
+            WriteLine("The \"{0}\" directory was created successfully.", newDirectoryPath);
         }
         catch (Exception)
         {
