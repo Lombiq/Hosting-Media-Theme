@@ -60,16 +60,9 @@ If you are developing a theme for your [DotNest](https://dotnest.com) site you c
 
 ### Deployment (import/export)
 
-#### Manual deployment
+#### Importing a deployment package created by the Deployer tool
 
-If you want to export your Media Theme, go to the Admin UI → Configuration → Import/Export → Deployment Plans page and create a Deployment Plan with the following steps:
-
-- Add the "Media Theme" step. Here you can tick the "Clear Media Theme folder" checkbox; if ticked, it will delete all the files in the __MediaTheme_ folder in the Media Library during import. This can be helpful if you have a "Media" step along with this step bringing in all the Media Theme files, but be conscious of the order within the recipe: put the "Media Theme" step first. Leave it disabled if you only want to control the base theme.
-- Optionally, add a "Media" step where you select the whole __MediaTheme_ folder.
-
-#### Deployment with the Deployer tool
-
-Instead of manual deployment you can [install](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool:
+Instead of manually uploading files to the Media Library, [install](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool:
 
 ```pwsh
 dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
@@ -90,15 +83,15 @@ media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path .\
 - `--base-id` is optional. If not provided, the tool will try to get it from the Manifest file, and if it's not defined there either, no base theme will be used.
 - `--deployment-path` is optional. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
 
-You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import.
+You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import. Everything necessary will be configured by the package. If you don't see this menu item then first enable the "Deployment" feature under Configuration → Features.
 
 #### Remote deployment with the Deployer tool
 
-You can use [Remote Deployment](https://docs.orchardcore.net/en/latest/docs/reference/modules/Deployment.Remote/) to accept packages created with the above-explained Deployer too via the internet. You can use this to deploy your theme remotely from your local development environment or CI workflow too.
+You can use [Remote Deployment](https://docs.orchardcore.net/en/latest/docs/reference/modules/Deployment.Remote/) to accept packages created with the above-explained Deployer too via the internet, without manually uploading the ZIP file. You can use this to deploy your theme remotely from your local development environment or CI workflow too, for which we provide a ready to use [GitHub Actions workflow](https://github.com/features/actions).
 
-For this, do the following:
+Do the following to set up automated GitHub Actions deployments:
 
-1. Create a Remote Client on the Orchard admin UI → Configuration → Import/Export → Remote Clients. Use a suitable name and a strong, unique API key.
+1. Create a Remote Client on the Orchard admin UI → Configuration → Import/Export → Remote Clients. Use a suitable name and a strong, unique API key. If you don't see this menu item then first enable the "Remote Deployment" feature under Configuration → Features.
 2. Configure the Client API Key as a [repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). While not strictly necessary, we recommend also storing the Client Name and Remote Deployment URL as secrets too.
 3. Add a workflow to the _.github/workflows_ folder of your repository that executes the `deploy-media-theme` reusable workflow with some suitable configuration:
 
@@ -123,6 +116,19 @@ jobs:
       theme-path: "src/Themes/My.Theme"
       # You can leave out base-theme-id to get it from the Manifest, or to not use a base theme at all.
       #base-theme-id: "TheBlogTheme"
+```
+
+If you want to use a different CI system or would like to run remote deployment from the command line otherwise, use the `--remote-deployment-url`, `--remote-deployment-client-name`, and `--remote-deployment-client-api-key` parameters. See this PowerShell script for an example:
+
+```pwsh
+$switches = @(
+    '--path', '.'
+    '--remote-deployment-url', 'https://localhost:44335/OrchardCore.Deployment.Remote/ImportRemoteInstance/Import'
+    '--remote-deployment-client-name', 'demo'
+    '--remote-deployment-client-api-key', 'Password1!'
+)
+
+media-theme-deploy @switches
 ```
 
 ## Contributing and support
