@@ -25,14 +25,15 @@ runs:
     - name: Deploy Media Theme
       shell: pwsh
       run: |
+        # Putting --base-id as last, so if it's empty, then the other parameters will still be parsed correct.
         $switches = @(
             '--path', '${{ inputs.theme-path }}'
-            '--base-id', '${{ inputs.base-theme-id }}'
             '--clear', '${{ inputs.clear-media-folder }}'
             '--deployment-path', '${{ inputs.theme-path }}/Deployment'
             '--remote-deployment-url', '${{ env.URL }}'
             '--remote-deployment-client-name', '${{ env.CLIENT_NAME }}'
             '--remote-deployment-client-api-key', '${{ env.CLIENT_API_KEY }}'
+            '--base-id', '${{ inputs.base-theme-id }}'
         )
 
         media-theme-deploy @switches
