@@ -9,15 +9,16 @@ public static class PathConstants
     public const string MediaThemeTemplatesDirectory = "Templates";
     public const string MediaThemeAssetsDirectory = "Assets";
 
-    // This needs to use slashes on every platform.
+    // These need to use slashes on every platform.
     public const string MediaThemeAssetsWebPath = MediaThemeRootDirectory + "/" + MediaThemeAssetsDirectory;
-
     public const string MediaThemeTemplatesWebPath = MediaThemeRootDirectory + "/" + MediaThemeTemplatesDirectory;
-    public const string MediaThemeTemplatesCopyDirectoryPath = "\\" + MediaThemeRootDirectory + "\\" + MediaThemeTemplatesDirectory;
 
     public const string RecipeFile = "Recipe.json";
     public const string LiquidFileExtension = ".liquid";
 
     public static readonly string MediaThemeAssetsCopyDirectoryPath =
-        Path.DirectorySeparatorChar + MediaThemeRootDirectory + Path.DirectorySeparatorChar + MediaThemeAssetsDirectory;
+        Path.Combine(MediaThemeRootDirectory, MediaThemeAssetsDirectory);
+
+    public static readonly string MediaThemeTemplatesCopyDirectoryPath =
+        Path.Combine(MediaThemeRootDirectory, MediaThemeTemplatesDirectory);
 }
