@@ -3,6 +3,11 @@ name: Deploy Media Theme
 on:
   workflow_call:
     secrets:
+      CHECKOUT_TOKEN:
+        required: false
+        description: >
+          The GitHub token to authenticate checkout. Pass in a GitHub personal access token if authenticated submodules
+          are used.
       URL:
         required: true
         description: The URL to use for Remote Deployment, as indicated on the Orchard Core admin.
@@ -32,6 +37,11 @@ jobs:
   deploy-media-theme:
     runs-on: ubuntu-22.04
     steps:
+    - name: Checkout
+      uses: Lombiq/GitHub-Actions/.github/actions/checkout@dev
+      with:
+        token: ${{ secrets.CHECKOUT_TOKEN }}
+
     - name: Deploy Media Theme
       uses: Lombiq/Hosting-Media-Theme/.github/actions/deploy-media-theme@issue/OSOE-514
       env:
