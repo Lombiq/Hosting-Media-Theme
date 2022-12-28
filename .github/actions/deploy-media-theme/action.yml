@@ -20,7 +20,7 @@ runs:
     - name: Install Lombiq.Hosting.MediaTheme.Deployer
       shell: pwsh
       run: |
-        dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --version 2.0.1-alpha.1.osoe-514
+        dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --version 2.0.1-alpha.2.osoe-514
 
     - name: Deploy Media Theme
       shell: pwsh
