@@ -91,7 +91,37 @@ media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path .\
 
 You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import.
 
-You can use Remote Deployment to accept such exported packages to deploy your theme remotely from your local development environment or CI too.
+#### Remote deployment with the Deployer tool
+
+You can use [Remote Deployment](https://docs.orchardcore.net/en/latest/docs/reference/modules/Deployment.Remote/) to accept packages created with the above-explained Deployer too via the internet. You can use this to deploy your theme remotely from your local development environment or CI workflow too.
+
+For this, do the following:
+
+1. Create a Remote Client on the Orchard admin UI → Configuration → Import/Export → Remote Clients. Use a suitable name and a strong, unique API key.
+2. Configure the Client API Key as a [repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). While not strictly necessary, we recommend also storing the Client Name and Remote Deployment URL as secrets too.
+3. Add a workflow to the _.github/workflows_ folder of your repository that executes the `deploy-media-theme` reusable workflow with some suitable configuration:
+
+```yaml
+name: Deploy Media Theme to DotNest
+
+on:
+  push:
+    branches:
+      - my-dev
+    paths:
+      - 'src/Themes/My.Theme/**'
+
+jobs:
+  deploy-media-theme:
+    uses: Lombiq/Hosting-Media-Theme/.github/workflows/deploy-media-theme.yml@dev
+    secrets:
+      URL: ${{ secrets.MY_THEME_DEPLOYMENT_URL }}
+      CLIENT_NAME: ${{ secrets.MY_THEME_DEPLOYMENT_CLIENT_NAME }}
+      CLIENT_API_KEY: ${{ secrets.MY_THEME_DEPLOYMENT_CLIENT_API_KEY }}
+    with:
+      theme-path: "src/Themes/My.Theme"
+      base-theme-id: "TheBlogTheme"
+```
 
 ## Contributing and support
 
