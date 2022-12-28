@@ -123,10 +123,25 @@ internal static class Program
             throw new ArgumentException("The theme's path should be provided.");
         }
 
+        var recipeSteps = new JArray();
+
+        // Creating Feature step to enable the Media Theme theme and Bridge module.
+        dynamic featureStep = new JObject();
+        featureStep.name = "Feature";
+        featureStep.enable = new JArray("Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme");
+        recipeSteps.Add(featureStep);
+
+        // Creating Themes step to set Media Theme as the site theme.
+        dynamic themesStep = new JObject();
+        themesStep.name = "Themes";
+        themesStep.Site = "Lombiq.Hosting.MediaTheme";
+        recipeSteps.Add(themesStep);
+
         // Creating media theme step.
         dynamic mediaThemeStep = new JObject();
         mediaThemeStep.name = "mediatheme";
         mediaThemeStep.ClearMediaThemeFolder = options.ClearMediaHostingFolder;
+        recipeSteps.Add(mediaThemeStep);
 
         var baseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
 
@@ -197,8 +212,9 @@ internal static class Program
         dynamic mediaStep = new JObject();
         mediaStep.name = "media";
         mediaStep.Files = files;
+        recipeSteps.Add(mediaStep);
 
-        CreateRecipeAndWriteIt(mediaThemeStep, mediaStep, newDirectoryPath);
+        CreateRecipeAndWriteIt(recipeSteps, newDirectoryPath);
 
         // Zipping the directory.
         var zipFilePath = newDirectoryPath + ".zip";
@@ -287,7 +303,7 @@ internal static class Program
             + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
     }
 
-    private static void CreateRecipeAndWriteIt(JObject mediaThemeStep, JObject mediaStep, string newDirectoryPath)
+    private static void CreateRecipeAndWriteIt(JArray steps, string newDirectoryPath)
     {
         // Creating the recipe itself.
         dynamic recipe = new JObject();
@@ -300,7 +316,7 @@ internal static class Program
         recipe.issetuprecipe = false;
         recipe.categories = new JArray();
         recipe.tags = new JArray();
-        recipe.steps = new JArray(mediaThemeStep, mediaStep);
+        recipe.steps = steps;
 
         // Creating JSON file.
         using var file = File.CreateText(Path.Join(newDirectoryPath, RecipeFile));
