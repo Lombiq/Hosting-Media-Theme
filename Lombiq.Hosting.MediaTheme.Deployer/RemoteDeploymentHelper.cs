@@ -47,11 +47,9 @@ internal static class RemoteDeploymentHelper
             }
             else
             {
-                Console.WriteLine(
-                    "Remote deployment to {0} failed with the HTTP code {1} and message \"{2}\".",
-                    options.RemoteDeploymenUrl,
-                    response.StatusCode,
-                    response.RequestMessage);
+                throw new HttpRequestException(
+                    $"Remote deployment to {options.RemoteDeploymenUrl} failed with the HTTP code " +
+                    $"{response.StatusCode} and message \"{response.RequestMessage}\".");
             }
         }
         finally
