@@ -26,7 +26,7 @@ public class CommandLineOptions
 [System.Diagnostics.CodeAnalysis.SuppressMessage(
     "Globalization",
     "CA1303:Do not pass literals as localized parameters",
-    Justification = "It's a console application it doesn't need localization.")]
+    Justification = "It's a console application, it doesn't need localization.")]
 internal static class Program
 {
     public static void Main(string[] args) =>
@@ -171,13 +171,21 @@ internal static class Program
         {
             var fileName = file.Name;
 
-            if (areLiquidFiles)
+            // Files should follow the template name convention (with underscores only), not the template file name
+            // convention (with dots and hyphens). Note that these don't just differ in the interchangeable characters
+            // but may also differ in the order of sections. E.g.
+            // [Stereotype]_[DisplayType]__[PartType]__[PartName]__[DisplayMode]_Display is
+            // "Widget_Summary__ServicePart__Services__CustomMode_Display" as template name but
+            // "Widget-ServicePart-Services-CustomMode.Display.Summary.liquid" as a file name (note e.g. "Summary" being
+            // in a different location).
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            if (areLiquidFiles && (fileNameWithoutExtension.Contains('.') || fileNameWithoutExtension.Contains('-')))
             {
-                var fileNameWithoutExtension = fileName[..fileName.LastIndexOf(
-                    LiquidFileExtension,
-                    StringComparison.InvariantCulture)];
-
-                fileName = fileNameWithoutExtension.Replace('.', '_').Replace("_", "__") + LiquidFileExtension;
+                throw new InvalidOperationException(
+                    "Liquid templates must follow the template name, not template *file* name conventions, i.e. they " +
+                    " should only contain underscores, not dots and hyphens. See the docs for details: " +
+                    "https://docs.orchardcore.net/en/latest/docs/reference/modules/Templates/. Offending file: " +
+                    fileName);
             }
 
             string targetFilePath = Path.Combine(destinationDirectory, fileName);
