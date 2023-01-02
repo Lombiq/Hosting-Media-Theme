@@ -1,4 +1,4 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
@@ -45,8 +45,9 @@ public class MediaThemeAssetUrlRedirectMiddleware
             assetUrl = "/" + activeTheme.Id + assetRelativePath;
         }
 
-#pragma warning disable SCS0027 // URL starts with "/mediatheme" which is checked above.
-        context.Response.Redirect(assetUrl);
-#pragma warning restore SCS0027
+        // URL starts with "/mediatheme" which is checked above.
+#pragma warning disable SCS0027 // Potential Open Redirect vulnerability.
+        context.Response.Redirect(assetUrl, permanent: true);
+#pragma warning restore SCS0027 // Potential Open Redirect vulnerability.
     }
 }
