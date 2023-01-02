@@ -51,9 +51,9 @@ If you want to reference assets in your templates, you can use the `/mediatheme/
 {% style src:stylesPath %}
 ```
 
-These use Orchard's resource manager and thus will also include a browser/proxy cache busting `v` parameter that updates when the you deploy a new version of your theme. This will ensure that everybody sees the current version of your site's styling. Note that while the Liquid `style` and `script` tags do this by default, for `link` you have to add `append_version` like above too.
+These use Orchard's resource manager and thus will also include a browser/proxy cache busting `v` parameter that updates when you deploy a new version of your theme. This will ensure that everybody sees the current version of your site's styling. Note that while the Liquid `style` and `script` tags do this by default, for `link` you have to add `append_version` like above too.
 
-Media Theme will translate this special path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
+Media Theme will translate this special _~/mediatheme_ path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
 
 If you are developing a theme for your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
 
@@ -86,7 +86,7 @@ You can then take the resulting ZIP file and import it on your site from the Adm
 
 #### Remote deployment with the Deployer tool
 
-You can use [Remote Deployment](https://docs.orchardcore.net/en/latest/docs/reference/modules/Deployment.Remote/) to accept packages created with the above-explained Deployer too via the internet, without manually uploading the ZIP file. You can use this to deploy your theme remotely from your local development environment or CI workflow too, for which we provide a ready to use [GitHub Actions workflow](https://github.com/features/actions).
+You can use [Remote Deployment](https://docs.orchardcore.net/en/latest/docs/reference/modules/Deployment.Remote/) to accept packages created with the above-explained Deployer too via the internet, without manually uploading the ZIP file. You can use this to deploy your theme remotely from your local development environment or CI workflow too, for which we provide a ready-to-use [GitHub Actions workflow](https://github.com/features/actions).
 
 Do the following to set up automated GitHub Actions deployments:
 

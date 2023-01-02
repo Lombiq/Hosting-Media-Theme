@@ -15,6 +15,8 @@ public class CommandLineOptions
     [Option('p', "path", Required = true, HelpText = "Path of your theme project.")]
     public string? ThemePath { get; set; }
 
+    // This parameter can still be useful if the base theme can't be parsed out of the Manifest easily, like if it uses
+    // consts for the ID instead of string literals.
     [Option(
         'i',
         "base-id",

@@ -15,10 +15,8 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 /// </summary>
 /// <remarks>
 /// <para>
-/// The default <see cref="IFileVersionProvider"/>, <see cref="ShellFileVersionProvider"/>, caches the version keys
-/// until tenant restart (and in a second level, until app restart). While that's fine for local files that are part of
-/// the app's source code, like CSS files in themes, it won't work for Media Theme files that can be updated any time
-/// without app restart.
+/// The default <see cref="IFileVersionProvider"/>, <see cref="ShellFileVersionProvider"/>, works just fine, but we need
+/// to translate /mediatheme URLs.
 /// </para>
 /// </remarks>
 internal class FileVersionProviderDecorator : IFileVersionProvider

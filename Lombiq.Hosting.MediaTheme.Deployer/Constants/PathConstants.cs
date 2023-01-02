@@ -9,7 +9,7 @@ public static class PathConstants
     public const string MediaThemeTemplatesDirectory = "Templates";
     public const string MediaThemeAssetsDirectory = "Assets";
 
-    // These need to use slashes on every platform.
+    // These need to use forward slashes on every platform.
     public const string MediaThemeAssetsWebPath = MediaThemeRootDirectory + "/" + MediaThemeAssetsDirectory;
     public const string MediaThemeTemplatesWebPath = MediaThemeRootDirectory + "/" + MediaThemeTemplatesDirectory;
 
