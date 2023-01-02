@@ -25,7 +25,7 @@ runs:
     - name: Deploy Media Theme
       shell: pwsh
       run: |
-        # Putting --base-id as last, so if it's empty, then the other parameters will still be parsed correct.
+        # Putting --base-id as last, so if it's empty, then the other parameters will still be parsed correctly.
         $switches = @(
             '--path', '${{ inputs.theme-path }}'
             '--clear', '${{ inputs.clear-media-folder }}'
