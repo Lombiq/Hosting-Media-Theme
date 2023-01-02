@@ -16,7 +16,7 @@ public class CommandLineOptions
     public string? ThemePath { get; set; }
 
     // This parameter can still be useful if the base theme can't be parsed out of the Manifest easily, like if it uses
-    // consts for the ID instead of string literals.
+    // constants for the ID instead of string literals.
     [Option(
         'i',
         "base-id",
