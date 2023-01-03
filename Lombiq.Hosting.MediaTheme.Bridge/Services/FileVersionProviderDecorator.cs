@@ -47,10 +47,10 @@ internal class FileVersionProviderDecorator : IFileVersionProvider
             path = path.Replace(Routes.MediaThemeAssets, assetsSubPath);
         }
 
-        // Note that if this will work all the time for local files. When a remote storage implementation is used to
-        // store Media files though (like Azure Blob Storage) then Media Cache will mirror the files locally. Since this
-        // only happens on the first request to the file, until then in the HTML output you'll see a URL without the
-        // cache busting parameter.
+        // Note that this will work all the time for local files. When a remote storage implementation is used to store
+        // Media files though (like Azure Blob Storage) then Media Cache will mirror the files locally. Since this only
+        // happens on the first request to the file, until then in the HTML output you'll see a URL without the cache
+        // busting parameter.
         // This isn't an issue for real-life scenarios, just be mindful during development.
         return _decorated.AddFileVersionToPath(requestPathBase, path);
     }
