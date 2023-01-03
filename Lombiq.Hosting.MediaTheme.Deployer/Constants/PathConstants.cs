@@ -9,10 +9,6 @@ public static class PathConstants
     public const string MediaThemeTemplatesDirectory = "Templates";
     public const string MediaThemeAssetsDirectory = "Assets";
 
-    // These need to use forward slashes on every platform.
-    public const string MediaThemeAssetsWebPath = MediaThemeRootDirectory + "/" + MediaThemeAssetsDirectory;
-    public const string MediaThemeTemplatesWebPath = MediaThemeRootDirectory + "/" + MediaThemeTemplatesDirectory;
-
     public const string RecipeFile = "Recipe.json";
     public const string LiquidFileExtension = ".liquid";
 

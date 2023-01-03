@@ -166,16 +166,17 @@ internal static class Program
         var files = new JArray();
 
         // Getting assets.
-        var assetsPath = Path.Join(themePath, LocalThemeWwwRootDirectory);
+        var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
 
         var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
 
         foreach (var assetPath in allAssetsPaths)
         {
             dynamic assetJObject = new JObject();
-            assetJObject.SourcePath = Path.Join(
-                MediaThemeAssetsWebPath,
-                assetPath[assetsPath.Length..].Replace("\\", "/"));
+            // These need to use forward slashes on every platform due to Orchard's import logic.
+            assetJObject.SourcePath =
+                Path.Combine(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..])
+                .Replace("\\", "/");
             assetJObject.TargetPath = assetJObject.SourcePath;
 
             files.Add(assetJObject);
@@ -188,7 +189,7 @@ internal static class Program
             areLiquidFiles: false);
 
         // Getting templates.
-        var templatesPath = Path.Join(themePath, LocalThemeViewsDirectory);
+        var templatesPath = Path.Combine(themePath, LocalThemeViewsDirectory);
 
         var allTemplatesPaths = Directory
             .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
@@ -196,9 +197,10 @@ internal static class Program
         foreach (var templatePath in allTemplatesPaths)
         {
             dynamic templateJObject = new JObject();
-            templateJObject.SourcePath = Path.Join(
-                MediaThemeTemplatesWebPath,
-                templatePath[templatesPath.Length..].Replace("\\", "/"));
+            // These need to use forward slashes on every platform due to Orchard's import logic.
+            templateJObject.SourcePath =
+                Path.Combine(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..])
+                .Replace("\\", "/");
             templateJObject.TargetPath = templateJObject.SourcePath;
 
             files.Add(templateJObject);
