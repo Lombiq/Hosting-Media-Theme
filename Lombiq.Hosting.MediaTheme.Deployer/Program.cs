@@ -90,7 +90,7 @@ internal static class Program
         }
         catch (Exception ex)
         {
-            WriteLine("Deployment failed with the following exception: {0}", ex.ToString());
+            WriteLine("Deployment failed with the following exception: {0}", ex);
             Environment.ExitCode = 1;
         }
     }
