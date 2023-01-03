@@ -128,22 +128,20 @@ internal static class Program
         var recipeSteps = new JArray();
 
         // Creating Feature step to enable the Media Theme theme and Bridge module.
-        dynamic featureStep = new JObject();
-        featureStep.name = "Feature";
-        featureStep.enable = new JArray("Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme");
+        var featureStep = JObject.FromObject(new
+        {
+            name = "Feature",
+            enable = new[] { "Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme" },
+        });
         recipeSteps.Add(featureStep);
 
         // Creating Themes step to set Media Theme as the site theme.
-        dynamic themesStep = new JObject();
-        themesStep.name = "Themes";
-        themesStep.Site = "Lombiq.Hosting.MediaTheme";
+        var themesStep = JObject.FromObject(new
+        {
+            name = "Themes",
+            Site = "Lombiq.Hosting.MediaTheme",
+        });
         recipeSteps.Add(themesStep);
-
-        // Creating media theme step.
-        dynamic mediaThemeStep = new JObject();
-        mediaThemeStep.name = "mediatheme";
-        mediaThemeStep.ClearMediaThemeFolder = options.ClearMediaHostingFolder;
-        recipeSteps.Add(mediaThemeStep);
 
         var baseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
 
@@ -160,7 +158,14 @@ internal static class Program
             }
         }
 
-        mediaThemeStep.BaseThemeId = baseThemeId;
+        // Creating media theme step.
+        var mediaThemeStep = JObject.FromObject(new
+        {
+            name = "mediatheme",
+            ClearMediaThemeFolder = options.ClearMediaHostingFolder,
+            BaseThemeId = baseThemeId,
+        });
+        recipeSteps.Add(mediaThemeStep);
 
         // Creating media step.
         var files = new JArray();
@@ -172,12 +177,14 @@ internal static class Program
 
         foreach (var assetPath in allAssetsPaths)
         {
-            dynamic assetJObject = new JObject();
             // These need to use forward slashes on every platform due to Orchard's import logic.
-            assetJObject.SourcePath =
-                Path.Combine(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..])
+            var importPath = Path.Combine(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..])
                 .Replace("\\", "/");
-            assetJObject.TargetPath = assetJObject.SourcePath;
+            var assetJObject = JObject.FromObject(new
+            {
+                SourcePath = importPath,
+                TargetPath = importPath,
+            });
 
             files.Add(assetJObject);
         }
@@ -196,12 +203,15 @@ internal static class Program
 
         foreach (var templatePath in allTemplatesPaths)
         {
-            dynamic templateJObject = new JObject();
             // These need to use forward slashes on every platform due to Orchard's import logic.
-            templateJObject.SourcePath =
+            var importPath =
                 Path.Combine(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..])
                 .Replace("\\", "/");
-            templateJObject.TargetPath = templateJObject.SourcePath;
+            var templateJObject = JObject.FromObject(new
+            {
+                SourcePath = importPath,
+                TargetPath = importPath,
+            });
 
             files.Add(templateJObject);
         }
@@ -213,9 +223,11 @@ internal static class Program
             areLiquidFiles: true,
             recursive: false);
 
-        dynamic mediaStep = new JObject();
-        mediaStep.name = "media";
-        mediaStep.Files = files;
+        var mediaStep = JObject.FromObject(new
+        {
+            name = "media",
+            Files = files,
+        });
         recipeSteps.Add(mediaStep);
 
         CreateRecipeAndWriteIt(recipeSteps, newDirectoryPath);
@@ -310,17 +322,19 @@ internal static class Program
     private static void CreateRecipeAndWriteIt(JArray steps, string newDirectoryPath)
     {
         // Creating the recipe itself.
-        dynamic recipe = new JObject();
-        recipe.name = "MediaTheme";
-        recipe.displayName = "Media Theme";
-        recipe.description = "A recipe created with the media-theme-deployment tool.";
-        recipe.author = string.Empty;
-        recipe.website = string.Empty;
-        recipe.version = string.Empty;
-        recipe.issetuprecipe = false;
-        recipe.categories = new JArray();
-        recipe.tags = new JArray();
-        recipe.steps = steps;
+        var recipe = JObject.FromObject(new
+        {
+            name = "MediaTheme",
+            displayName = "Media Theme",
+            description = "A recipe created with the media-theme-deployment tool.",
+            author = string.Empty,
+            website = string.Empty,
+            version = string.Empty,
+            issetuprecipe = false,
+            categories = new JArray(),
+            tags = new JArray(),
+            steps = steps,
+        });
 
         // Creating JSON file.
         using var file = File.CreateText(Path.Join(newDirectoryPath, RecipeFile));
