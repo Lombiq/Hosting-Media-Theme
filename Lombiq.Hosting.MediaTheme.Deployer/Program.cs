@@ -322,7 +322,7 @@ internal static class Program
             issetuprecipe = false,
             categories = new JArray(),
             tags = new JArray(),
-            steps = steps,
+            steps,
         });
 
         // Creating JSON file.
