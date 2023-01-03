@@ -233,13 +233,10 @@ internal static class Program
 
         WriteLine("{0} was created successfully. ", zipFilePath);
 
-        if (string.IsNullOrEmpty(options.RemoteDeploymentUrl))
+        if (!string.IsNullOrEmpty(options.RemoteDeploymentUrl))
         {
-            return;
+            await RemoteDeploymentHelper.DeployAsync(options, zipFilePath);
         }
-
-        // This is a remote deployment.
-        await RemoteDeploymentHelper.DeployAsync(options, zipFilePath);
     }
 
     private static void CopyDirectory(
