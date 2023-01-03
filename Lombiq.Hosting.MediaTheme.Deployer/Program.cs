@@ -170,23 +170,26 @@ internal static class Program
         // Creating media step.
         var files = new JArray();
 
-        // Getting assets.
-        var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
-
-        var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
-
-        foreach (var assetPath in allAssetsPaths)
+        void AddFile(string rootPath, string filePath)
         {
             // These need to use forward slashes on every platform due to Orchard's import logic.
-            var importPath = Path.Combine(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..])
-                .Replace("\\", "/");
-            var assetJObject = JObject.FromObject(new
+            var importPath = Path.Combine(rootPath, filePath).Replace("\\", "/");
+            var templateJObject = JObject.FromObject(new
             {
                 SourcePath = importPath,
                 TargetPath = importPath,
             });
 
-            files.Add(assetJObject);
+            files.Add(templateJObject);
+        }
+
+        // Getting assets.
+        var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
+        var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
+
+        foreach (var assetPath in allAssetsPaths)
+        {
+            AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
         }
 
         // Copying assets to deployment directory.
@@ -197,23 +200,12 @@ internal static class Program
 
         // Getting templates.
         var templatesPath = Path.Combine(themePath, LocalThemeViewsDirectory);
-
         var allTemplatesPaths = Directory
             .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
 
         foreach (var templatePath in allTemplatesPaths)
         {
-            // These need to use forward slashes on every platform due to Orchard's import logic.
-            var importPath =
-                Path.Combine(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..])
-                .Replace("\\", "/");
-            var templateJObject = JObject.FromObject(new
-            {
-                SourcePath = importPath,
-                TargetPath = importPath,
-            });
-
-            files.Add(templateJObject);
+            AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
         }
 
         // Copying templates to deployment directory.
