@@ -1,6 +1,8 @@
+using Lombiq.HelpfulLibraries.Common.Utilities;
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
@@ -24,6 +26,7 @@ internal class FileVersionProviderDecorator : IFileVersionProvider
     private readonly IFileVersionProvider _decorated;
     private readonly IMediaFileStore _mediaFileStore;
     private readonly IOptions<MediaOptions> _mediaOption;
+    private readonly NonSecurityRandomizer _randomizer = new();
 
     public FileVersionProviderDecorator(
         IFileVersionProvider decorated,
@@ -40,18 +43,31 @@ internal class FileVersionProviderDecorator : IFileVersionProvider
         var isMediaThemePath = path.StartsWithOrdinalIgnoreCase(Routes.MediaThemeAssets) ||
             path.ContainsOrdinalIgnoreCase(Routes.MediaThemeAssets + "/");
 
-        if (isMediaThemePath)
+        if (!isMediaThemePath)
         {
-            var assetsSubPath = _mediaFileStore.Combine(
-                _mediaOption.Value.AssetsRequestPath, Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder);
-            path = path.Replace(Routes.MediaThemeAssets, assetsSubPath);
+            return _decorated.AddFileVersionToPath(requestPathBase, path);
         }
+
+        var assetsSubPath = _mediaFileStore.Combine(
+            _mediaOption.Value.AssetsRequestPath, Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder);
+        path = path.Replace(Routes.MediaThemeAssets, assetsSubPath);
 
         // Note that this will work all the time for local files. When a remote storage implementation is used to store
         // Media files though (like Azure Blob Storage) then Media Cache will mirror the files locally. Since this only
         // happens on the first request to the file, until then in the HTML output you'll see a URL without the cache
         // busting parameter.
-        // This isn't an issue for real-life scenarios, just be mindful during development.
-        return _decorated.AddFileVersionToPath(requestPathBase, path);
+        // This is an issue because if the browser of a reverse proxy caches the URL without the cache busting parameter
+        // then the original file will get stuck, and no cache busting parameter will be added until the new file is
+        // accessed with some other cache busting parameter. So, before the actual cache busting parameter can be added,
+        // we need to add a random parameter.
+        var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path);
+
+        // This check could be more sophisticated with UriBuilder, but let's keep it simple, since it'll run frequently.
+        if (!cacheBustedPath.Contains("?v="))
+        {
+            return QueryHelpers.AddQueryString(path, "mediatheme", _randomizer.Get().ToTechnicalString());
+        }
+
+        return cacheBustedPath;
     }
 }
