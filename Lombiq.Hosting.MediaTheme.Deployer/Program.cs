@@ -1,8 +1,10 @@
 using CommandLine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 using static Lombiq.Hosting.MediaTheme.Deployer.Constants.PathConstants;
 using static System.Console;
 
@@ -10,29 +12,60 @@ namespace Lombiq.Hosting.MediaTheme.Deployer;
 
 public class CommandLineOptions
 {
-    [Option('p', "path", Required = true, HelpText = "Path of your theme.")]
-    public string? PathOfTheTheme { get; set; }
+    [Option('p', "path", Required = true, HelpText = "Path of your theme project.")]
+    public string? ThemePath { get; set; }
 
-    [Option('i', "base-id", Required = true, HelpText = "Default theme ID.")]
+    // This parameter can still be useful if the base theme can't be parsed out of the Manifest easily, like if it uses
+    // constants for the ID instead of string literals.
+    [Option(
+        'i',
+        "base-id",
+        Required = false,
+        HelpText = "ID of the base theme, if any. If left empty, will attempt to get the value from the theme's Manifest.")]
     public string? BaseThemeId { get; set; }
 
-    [Option('c', "clear", Required = true, HelpText = "Whether or not to clear media hosting folder.")]
-    public bool ClearMediaHostingFolder { get; set; }
+    [Option(
+        'c',
+        "clear",
+        Required = false,
+        HelpText = "Whether or not to clear the Media Theme media folder of all files before deployment.")]
+    public bool ClearMediaHostingFolder { get; set; } = true;
 
-    [Option('d', "deployment-path", Required = false, HelpText = "The path where you want the deployment package copied.")]
+    [Option(
+        'd',
+        "deployment-path",
+        Required = false,
+        HelpText = "The path where you want the deployment package to be written to.")]
     public string? DeploymentPackagePath { get; set; }
+
+    [Option(
+        'u',
+        "remote-deployment-url",
+        Required = false,
+        HelpText = "The URL to use for Remote Deployment, as indicated on the Orchard Core admin.")]
+    public string? RemoteDeploymentUrl { get; set; }
+
+    [Option(
+        'n',
+        "remote-deployment-client-name",
+        Required = false,
+        HelpText = "The \"Client Name\" part of the Remote Deployment client's credentials.")]
+    public string? RemoteDeploymentClientName { get; set; }
+
+    [Option(
+        'k',
+        "remote-deployment-client-api-key",
+        Required = false,
+        HelpText = "The \"Client API Key\" part of the Remote Deployment client's credentials.")]
+    public string? RemoteDeploymentClientApiKey { get; set; }
 }
 
-[System.Diagnostics.CodeAnalysis.SuppressMessage(
-    "Globalization",
-    "CA1303:Do not pass literals as localized parameters",
-    Justification = "It's a console application, it doesn't need localization.")]
 internal static class Program
 {
-    public static void Main(string[] args) =>
+    public static Task Main(string[] args) =>
         Parser.Default.ParseArguments<CommandLineOptions>(args)
-            .WithParsed(options => RunOptions(options))
-            .WithNotParsed(HandleParseError);
+            .WithNotParsed(HandleParseError)
+            .WithParsedAsync(options => RunOptionsAsync(options));
 
     private static void HandleParseError(IEnumerable<Error> errors)
     {
@@ -49,102 +82,161 @@ internal static class Program
         }
     }
 
-    private static void RunOptions(CommandLineOptions values)
+    private static async Task RunOptionsAsync(CommandLineOptions options)
+    {
+        try
+        {
+            await RunOptionsInnerAsync(options);
+        }
+        catch (Exception ex)
+        {
+            WriteLine("Deployment failed with the following exception: {0}", ex);
+            Environment.ExitCode = 1;
+        }
+    }
+
+    [SuppressMessage(
+        "Major Code Smell",
+        "S4457:Parameter validation in \"sync\"/\"await\" methods should be wrapped",
+        Justification = "RunOptionsAsync() needs to use await as well to be able to set the exit code on exception.")]
+    private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
-        var newDirectoryPath = CreateNewDirectoryPath(values);
+        var newDirectoryPath = CreateNewDirectoryPath(options);
 
         try
         {
-            // Determine whether the directory exists.
-            if (Directory.Exists(newDirectoryPath))
-            {
-                WriteLine("That directory already exists.");
-                return;
-            }
+            if (Directory.Exists(newDirectoryPath)) Directory.Delete(newDirectoryPath, recursive: true);
 
-            // Try to create the directory.
             Directory.CreateDirectory(newDirectoryPath);
 
-            WriteLine("The directory was created successfully. {0}", newDirectoryPath);
+            WriteLine("The \"{0}\" directory was created successfully.", newDirectoryPath);
         }
-        catch (Exception exception)
+        catch (Exception)
         {
-            WriteLine("The directory creation failed: {0}", exception.ToString());
-            return;
+            WriteLine("Creating the directory {0} failed.", newDirectoryPath);
+            throw;
         }
 
-        var pathToTheme = values.PathOfTheTheme;
+        var themePath = options.ThemePath;
+
+        if (string.IsNullOrEmpty(themePath))
+        {
+            throw new ArgumentException("The theme's path must be provided.");
+        }
+
+        var recipeSteps = new JArray();
+
+        // Creating Feature step to enable the Media Theme theme and Bridge module.
+        var featureStep = JObject.FromObject(new
+        {
+            name = "Feature",
+            enable = new[] { "Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme" },
+        });
+        recipeSteps.Add(featureStep);
+
+        // Creating Themes step to set Media Theme as the site theme.
+        var themesStep = JObject.FromObject(new
+        {
+            name = "Themes",
+            Site = "Lombiq.Hosting.MediaTheme",
+        });
+        recipeSteps.Add(themesStep);
+
+        var baseThemeId = string.IsNullOrEmpty(options.BaseThemeId) ? null : options.BaseThemeId;
+
+        if (baseThemeId == null)
+        {
+            var manifestPath = Path.Combine(themePath, "Manifest.cs");
+            var manifestContent = await File.ReadAllTextAsync(manifestPath);
+            var basteThemeMatch = Regex.Match(
+                manifestContent, @"BaseTheme\s*=\s*""(?<baseThemeId>.*)""", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
+
+            if (basteThemeMatch.Success)
+            {
+                baseThemeId = basteThemeMatch.Groups["baseThemeId"].Value;
+            }
+        }
 
         // Creating media theme step.
-        dynamic mediaThemeStep = new JObject();
-        mediaThemeStep.name = "mediatheme";
-        mediaThemeStep.BaseThemeId = values.BaseThemeId;
-        mediaThemeStep.ClearMediaThemeFolder = values.ClearMediaHostingFolder;
+        var mediaThemeStep = JObject.FromObject(new
+        {
+            name = "mediatheme",
+            ClearMediaThemeFolder = options.ClearMediaHostingFolder,
+            BaseThemeId = baseThemeId,
+        });
+        recipeSteps.Add(mediaThemeStep);
 
         // Creating media step.
         var files = new JArray();
 
-        // Getting assets.
-        var pathToAssets = Path.Join(pathToTheme, LocalThemeWwwRootDirectory);
-
-        var allAssetsPaths = Directory.EnumerateFiles(pathToAssets, "*", SearchOption.AllDirectories);
-
-        foreach (var assetPath in allAssetsPaths)
+        void AddFile(string rootPath, string filePath)
         {
-            dynamic assetJObject = new JObject();
-            assetJObject.SourcePath = Path.Join(
-                MediaThemeAssetsWebPath,
-                assetPath[pathToAssets.Length..].Replace("\\", "/"));
-            assetJObject.TargetPath = assetJObject.SourcePath;
-
-            files.Add(assetJObject);
-        }
-
-        // Copying assets to deployment directory.
-        CopyDirectory(
-            pathToAssets,
-            Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
-            areLiquidFiles: false);
-
-        // Getting templates.
-        var pathToTemplates = Path.Join(pathToTheme, LocalThemeViewsDirectory);
-
-        var allTemplatesPaths = Directory
-            .EnumerateFiles(pathToTemplates, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
-
-        foreach (var templatePath in allTemplatesPaths)
-        {
-            dynamic templateJObject = new JObject();
-            templateJObject.SourcePath = Path.Join(
-                MediaThemeTemplatesWebPath,
-                templatePath[pathToTemplates.Length..].Replace("\\", "/"));
-            templateJObject.TargetPath = templateJObject.SourcePath;
+            // These need to use forward slashes on every platform due to Orchard's import logic.
+            var importPath = Path.Combine(rootPath, filePath).Replace("\\", "/");
+            var templateJObject = JObject.FromObject(new
+            {
+                SourcePath = importPath,
+                TargetPath = importPath,
+            });
 
             files.Add(templateJObject);
         }
 
+        // Getting assets.
+        var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
+        var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
+
+        foreach (var assetPath in allAssetsPaths)
+        {
+            AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
+        }
+
+        // Copying assets to deployment directory.
+        CopyDirectory(
+            assetsPath,
+            Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
+            areLiquidFiles: false);
+
+        // Getting templates.
+        var templatesPath = Path.Combine(themePath, LocalThemeViewsDirectory);
+        var allTemplatesPaths = Directory
+            .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
+
+        foreach (var templatePath in allTemplatesPaths)
+        {
+            AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
+        }
+
         // Copying templates to deployment directory.
         CopyDirectory(
-            pathToTemplates,
+            templatesPath,
             Path.Join(newDirectoryPath, MediaThemeTemplatesCopyDirectoryPath),
             areLiquidFiles: true,
             recursive: false);
 
-        dynamic mediaStep = new JObject();
-        mediaStep.name = "media";
-        mediaStep.Files = files;
+        var mediaStep = JObject.FromObject(new
+        {
+            name = "media",
+            Files = files,
+        });
+        recipeSteps.Add(mediaStep);
 
-        CreateRecipeAndWriteIt(mediaThemeStep, mediaStep, newDirectoryPath);
+        CreateRecipeAndWriteIt(recipeSteps, newDirectoryPath);
 
         // Zipping the directory.
-        var zippedDirectoryPath = newDirectoryPath + ".zip";
-        ZipFile.CreateFromDirectory(newDirectoryPath, zippedDirectoryPath);
+        var zipFilePath = newDirectoryPath + ".zip";
+        ZipFile.CreateFromDirectory(newDirectoryPath, zipFilePath);
 
         // Getting rid of the original directory.
         Directory.Delete(newDirectoryPath, recursive: true);
 
-        WriteLine("{0} was created successfully. ", zippedDirectoryPath);
+        WriteLine("{0} was created successfully. ", zipFilePath);
+
+        if (!string.IsNullOrEmpty(options.RemoteDeploymentUrl))
+        {
+            await RemoteDeploymentHelper.DeployAsync(options, zipFilePath);
+        }
     }
 
     private static void CopyDirectory(
@@ -158,7 +250,9 @@ internal static class Program
 
         // Check if the source directory exists.
         if (!directory.Exists)
+        {
             throw new DirectoryNotFoundException($"Source directory not found: {directory.FullName}");
+        }
 
         // Cache directories before we start copying.
         var directories = directory.GetDirectories();
@@ -214,23 +308,25 @@ internal static class Program
             + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
     }
 
-    private static void CreateRecipeAndWriteIt(JObject mediaThemeStep, JObject mediaStep, string newDirectoryPath)
+    private static void CreateRecipeAndWriteIt(JArray steps, string newDirectoryPath)
     {
         // Creating the recipe itself.
-        dynamic recipe = new JObject();
-        recipe.name = "MediaTheme";
-        recipe.displayName = "Media Theme";
-        recipe.description = "A recipe created with the media-theme-deployment tool.";
-        recipe.author = string.Empty;
-        recipe.website = string.Empty;
-        recipe.version = string.Empty;
-        recipe.issetuprecipe = false;
-        recipe.categories = new JArray();
-        recipe.tags = new JArray();
-        recipe.steps = new JArray(mediaThemeStep, mediaStep);
+        var recipe = JObject.FromObject(new
+        {
+            name = "MediaTheme",
+            displayName = "Media Theme",
+            description = "A recipe created with the media-theme-deployment tool.",
+            author = string.Empty,
+            website = string.Empty,
+            version = string.Empty,
+            issetuprecipe = false,
+            categories = new JArray(),
+            tags = new JArray(),
+            steps,
+        });
 
         // Creating JSON file.
-        using var file = File.CreateText(Path.Join(newDirectoryPath + RecipeFile));
+        using var file = File.CreateText(Path.Join(newDirectoryPath, RecipeFile));
         using var writer = new JsonTextWriter(file) { Formatting = Formatting.Indented };
         recipe.WriteTo(writer);
 

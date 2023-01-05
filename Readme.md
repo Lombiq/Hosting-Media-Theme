@@ -43,33 +43,25 @@ You can proceed with developing your theme as you'd typically do: put the templa
 
 If you want to reference assets in your templates, you can use the `/mediatheme/` prefix in URLs, like below:
 
-```html
-<link rel="icon" type="image/png" sizes="32x32" href="/mediatheme/favicon-32x32.png">
-```
-
-Be sure to use Orchard's resource manager for scripts and stylesheets:
-
 ```liquid
+{% assign 32pxIconUrl = "~/mediatheme/images/favicon-32x32.png" | href %}
+{% link type:"image/png", rel:"icon", sizes:"32x32", href:32pxIconUrl, append_version:"true" %}
+
 {% assign stylesPath = "~/mediatheme/styles/site.css" | href %}
 {% style src:stylesPath %}
 ```
 
-Media Theme will translate this path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
+These use Orchard's resource manager and thus will also include a browser/proxy cache busting `v` parameter that updates when you deploy a new version of your theme. This will ensure that everybody sees the current version of your site's styling. Note that while the Liquid `style` and `script` tags do this by default, for `link` you have to add `append_version` like above too.
+
+Media Theme will translate this special _~/mediatheme_ path to either your local theme asset path or Media Library if the file exists. This way, you don't need to update your asset URLs in your templates one-by-one when deploying them. The `~` notation of virtual paths also comes in handy if you want to work with multiple tenants using URL prefixes locally, i.e. develop multiple Media Themes for multiple sites from the same solution.
 
 If you are developing a theme for your [DotNest](https://dotnest.com) site you can use the [DotNest Core SDK](https://github.com/Lombiq/DotNest-Core-SDK) that has everything prepared for you right away.
 
 ### Deployment (import/export)
 
-#### Manual deployment
+#### Importing a deployment package created by the Deployer tool
 
-If you want to export your Media Theme, go to the Admin UI → Configuration → Import/Export → Deployment Plans page and create a Deployment Plan with the following steps:
-
-- Add the "Media Theme" step. Here you can tick the "Clear Media Theme folder" checkbox; if ticked, it will delete all the files in the __MediaTheme_ folder in the Media Library during import. This can be helpful if you have a "Media" step along with this step bringing in all the Media Theme files, but be conscious of the order within the recipe: put the "Media Theme" step first. Leave it disabled if you only want to control the base theme.
-- Optionally, add a "Media" step where you select the whole __MediaTheme_ folder.
-
-#### Deployment with the Deployer tool
-
-Instead of manual deployment you can [install](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool:
+Instead of manually uploading files to the Media Library, [install](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-use) the `Lombiq.Hosting.MediaTheme.Deployer` dotnet tool:
 
 ```pwsh
 dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
@@ -87,11 +79,56 @@ A specific example when run in the folder of your theme project:
 media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path .\Deployment
 ```
 
-`--deployment-path` is not required. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
+- `--base-id` is optional. If not provided, the tool will try to get it from the Manifest file, and if it's not defined there either, no base theme will be used.
+- `--deployment-path` is optional. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
 
-You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import.
+You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import. Everything necessary will be configured by the package. If you don't see this menu item then first enable the "Deployment" feature under Configuration → Features.
 
-You can use Remote Deployment to accept such exported packages to deploy your theme remotely from your local development environment or CI too.
+#### Remote deployment with the Deployer tool
+
+You can use [Remote Deployment](https://docs.orchardcore.net/en/latest/docs/reference/modules/Deployment.Remote/) to accept packages created with the above-explained Deployer too via the internet, without manually uploading the ZIP file. You can use this to deploy your theme remotely from your local development environment or CI workflow too, for which we provide a ready-to-use [GitHub Actions workflow](https://github.com/features/actions).
+
+Do the following to set up automated GitHub Actions deployments:
+
+1. Create a Remote Client on the Orchard admin UI → Configuration → Import/Export → Remote Clients. Use a suitable name and a strong, unique API key. If you don't see this menu item then first enable the "Remote Deployment" feature under Configuration → Features.
+2. Configure the Client API Key as a [repository secret](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository). While not strictly necessary, we recommend also storing the Client Name and Remote Deployment URL as secrets too.
+3. Add a workflow to the _.github/workflows_ folder of your repository that executes the `deploy-media-theme` reusable workflow with some suitable configuration:
+
+```yaml
+name: Deploy Media Theme to DotNest
+
+on:
+  push:
+    branches:
+      - my-dev
+    paths:
+      - 'src/Themes/My.Theme/**'
+
+jobs:
+  deploy-media-theme:
+    uses: Lombiq/Hosting-Media-Theme/.github/workflows/deploy-media-theme.yml@dev
+    secrets:
+      URL: ${{ secrets.MY_THEME_DEPLOYMENT_URL }}
+      CLIENT_NAME: ${{ secrets.MY_THEME_DEPLOYMENT_CLIENT_NAME }}
+      CLIENT_API_KEY: ${{ secrets.MY_THEME_DEPLOYMENT_CLIENT_API_KEY }}
+    with:
+      theme-path: "src/Themes/My.Theme"
+      # You can leave out base-theme-id to get it from the Manifest, or to not use a base theme at all.
+      #base-theme-id: "TheBlogTheme"
+```
+
+If you want to use a different CI system or would like to run remote deployment from the command line otherwise, use the `--remote-deployment-url`, `--remote-deployment-client-name`, and `--remote-deployment-client-api-key` parameters. See this PowerShell script for an example:
+
+```pwsh
+$switches = @(
+    '--path', '.'
+    '--remote-deployment-url', 'https://localhost:44335/OrchardCore.Deployment.Remote/ImportRemoteInstance/Import'
+    '--remote-deployment-client-name', 'demo'
+    '--remote-deployment-client-api-key', 'Password1!'
+)
+
+media-theme-deploy @switches
+```
 
 ## Contributing and support
 
