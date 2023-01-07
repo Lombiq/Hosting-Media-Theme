@@ -1,0 +1,54 @@
+name: Deploy Media Theme
+
+on:
+  workflow_call:
+    secrets:
+      CHECKOUT_TOKEN:
+        required: false
+        description: >
+          The GitHub token to authenticate checkout. Pass in a GitHub personal access token if authenticated submodules
+          are used.
+      URL:
+        required: true
+        description: The URL to use for Remote Deployment, as indicated on the Orchard Core admin.
+      CLIENT_NAME:
+        required: true
+        description: The "Client Name" part of the Remote Deployment client's credentials.
+      CLIENT_API_KEY:
+        required: true
+        description: The "Client API Key" part of the Remote Deployment client's credentials.
+    inputs:
+      theme-path:
+        required: false
+        type: string
+        default: "."
+        description: Path to the theme project.
+      base-theme-id:
+        required: false
+        type: string
+        description: ID of the base theme of the theme project, if any.
+      clear-media-folder:
+        required: false
+        type: string
+        default: "true"
+        description: When set to "true", will clear the Media folder of the Media Theme before deployment.
+
+jobs:
+  deploy-media-theme:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: Lombiq/GitHub-Actions/.github/actions/checkout@dev
+      with:
+        token: ${{ secrets.CHECKOUT_TOKEN }}
+
+    - name: Deploy Media Theme
+      uses: Lombiq/Hosting-Media-Theme/.github/actions/deploy-media-theme@dev
+      env:
+        URL: ${{ secrets.URL }}
+        CLIENT_NAME: ${{ secrets.CLIENT_NAME }}
+        CLIENT_API_KEY: ${{ secrets.CLIENT_API_KEY }}
+      with:
+        theme-path: ${{ inputs.theme-path }}
+        base-theme-id: ${{ inputs.base-theme-id }}
+        clear-media-folder: ${{ inputs.clear-media-folder }}

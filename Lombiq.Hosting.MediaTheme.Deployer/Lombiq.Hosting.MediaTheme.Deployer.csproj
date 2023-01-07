@@ -23,11 +23,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.7.82" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\.github\actions\deploy-media-theme\action.yml" Link=".github\action.yml" />
+    <None Include="..\.github\workflows\deploy-media-theme.yml" Link=".github\deploy-media-theme.yml" />
     <None Include="License.md" Pack="true" PackagePath="" />
     <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
   </ItemGroup>

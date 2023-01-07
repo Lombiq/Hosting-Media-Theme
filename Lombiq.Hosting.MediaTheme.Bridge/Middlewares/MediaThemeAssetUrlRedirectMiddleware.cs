@@ -12,8 +12,7 @@ public class MediaThemeAssetUrlRedirectMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next) =>
-        _next = next;
+    public MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next) => _next = next;
 
     public async Task InvokeAsync(
         HttpContext context,
