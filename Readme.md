@@ -1,6 +1,9 @@
 # Lombiq Hosting - Media Theme for Orchard Core
 
-[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/) [![Lombiq.Hosting.MediaTheme.Bridge NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Bridge?label=Lombiq.Hosting.MediaTheme.Bridge)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Bridge/) [![Lombiq.Hosting.MediaTheme.Deployer NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Deployer?label=Lombiq.Hosting.MediaTheme.Deployer)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Deployer/)
+[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/)
+[![Lombiq.Hosting.MediaTheme.Bridge NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Bridge?label=Lombiq.Hosting.MediaTheme.Bridge)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Bridge/)
+[![Lombiq.Hosting.MediaTheme.Deployer NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Deployer?label=Lombiq.Hosting.MediaTheme.Deployer)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Deployer/)
+[![Lombiq.Hosting.MediaTheme.Tests.UI NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Tests.UI?label=Lombiq.Hosting.MediaTheme.Tests.UI)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Tests.UI/)
 
 ## About
 
