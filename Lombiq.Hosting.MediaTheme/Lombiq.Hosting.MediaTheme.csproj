@@ -10,7 +10,7 @@
     <Title>Lombiq Hosting - Media Theme for Orchard Core</Title>
     <Authors>Lombiq Technologies</Authors>
     <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
-    <Description>Lombiq Hosting - Media Theme for Orchard Core: With the help of this theme, you'll be able to host your theme templates and assets located in your Orchard Core Media Library.</Description>
+    <Description>Lombiq Hosting - Media Theme for Orchard Core: With the help of this theme, you'll be able to host your theme templates and assets located in your Orchard Core Media Library. See the project website for detailed documentation.</Description>
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
