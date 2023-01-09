@@ -4,7 +4,7 @@
     <Title>Lombiq Hosting - Media Theme Deployer for Orchard Core</Title>
     <Authors>Lombiq Technologies</Authors>
     <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
-    <Description>Lombiq Hosting - Media Theme Deployer for Orchard Core: A tool to easily export Media Themes.</Description>    
+    <Description>Lombiq Hosting - Media Theme Deployer for Orchard Core: A tool to easily export Media Themes. See the project website for detailed documentation.</Description>    
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
