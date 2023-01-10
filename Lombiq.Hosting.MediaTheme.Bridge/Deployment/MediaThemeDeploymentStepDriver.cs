@@ -16,10 +16,10 @@ public class MediaThemeDeploymentStepDriver : DisplayDriver<DeploymentStep, Medi
         );
 
     public override IDisplayResult Edit(MediaThemeDeploymentStep model) =>
-        Initialize<MediaThemeDeploymentStepViewModel>($"{nameof(MediaThemeDeploymentStep)}_Fields_Edit", viewModel =>
-        {
-            viewModel.ClearMediaThemeFolder = model.ClearMediaThemeFolder;
-        }).Location("Content");
+        Initialize<MediaThemeDeploymentStepViewModel>(
+            $"{nameof(MediaThemeDeploymentStep)}_Fields_Edit",
+            viewModel => viewModel.ClearMediaThemeFolder = model.ClearMediaThemeFolder)
+        .Location("Content");
 
     public override async Task<IDisplayResult> UpdateAsync(MediaThemeDeploymentStep model, IUpdateModel updater)
     {

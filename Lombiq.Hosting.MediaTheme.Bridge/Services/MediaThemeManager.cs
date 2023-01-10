@@ -9,6 +9,7 @@ using OrchardCore.Modules.Manifest;
 using OrchardCore.Themes.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,10 @@ public class MediaThemeManager : IMediaThemeManager
         _siteThemeService = siteThemeService;
     }
 
+    [SuppressMessage(
+        "Major Code Smell",
+        "S4457:Parameter validation in \"async\"/\"await\" methods should be wrapped",
+        Justification = "Part of the validation needs to call async code.")]
     public async Task UpdateBaseThemeAsync(string baseThemeId)
     {
         ThrowIfBaseThemeIdIsInvalid(baseThemeId);
