@@ -1,9 +1,6 @@
 # Lombiq Hosting - Media Theme for Orchard Core
 
-[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/)
-[![Lombiq.Hosting.MediaTheme.Bridge NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Bridge?label=Lombiq.Hosting.MediaTheme.Bridge)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Bridge/)
-[![Lombiq.Hosting.MediaTheme.Deployer NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Deployer?label=Lombiq.Hosting.MediaTheme.Deployer)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Deployer/)
-[![Lombiq.Hosting.MediaTheme.Tests.UI NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Tests.UI?label=Lombiq.Hosting.MediaTheme.Tests.UI)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Tests.UI/)
+[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/) [![Lombiq.Hosting.MediaTheme.Bridge NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Bridge?label=Lombiq.Hosting.MediaTheme.Bridge)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Bridge/) [![Lombiq.Hosting.MediaTheme.Deployer NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Deployer?label=Lombiq.Hosting.MediaTheme.Deployer)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Deployer/) [![Lombiq.Hosting.MediaTheme.Tests.UI NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Tests.UI?label=Lombiq.Hosting.MediaTheme.Tests.UI)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Tests.UI/)
 
 ## About
 
@@ -83,7 +80,7 @@ media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path .\
 ```
 
 - `--base-id` is optional. If not provided, the tool will try to get it from the Manifest file, and if it's not defined there either, no base theme will be used.
-- `--deployment-path` is optional. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions, `-p`, `-i`, `-c`, `-d`, respectively.
+- `--deployment-path` is optional. Without it, the package will be exported to your directory root, for example _C:\MediaThemeDeployment_04Aug2022230500.zip_. The parameters also have shorthand versions: `-p`, `-i`, `-c`, `-d`, respectively.
 
 You can then take the resulting ZIP file and import it on your site from the Admin UI → Configuration → Import/Export → Package Import. Everything necessary will be configured by the package. If you don't see this menu item then first enable the "Deployment" feature under Configuration → Features.
 
