@@ -69,9 +69,10 @@ internal static class Program
 
     private static void HandleParseError(IEnumerable<Error> errors)
     {
-        if (errors.Any())
+        var errorsList = errors.ToList();
+        if (errorsList.Any())
         {
-            foreach (var error in errors)
+            foreach (var error in errorsList)
             {
                 WriteLine(error);
             }
