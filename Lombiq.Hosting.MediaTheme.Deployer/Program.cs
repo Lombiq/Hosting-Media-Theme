@@ -42,7 +42,7 @@ public class CommandLineOptions
         'f',
         "deployment-file-name",
         Required = false,
-        HelpText = "The file name of the deployment package zip.")]
+        HelpText = "The file name of the deployment package zip and the value for the recipe name property.")]
     public string? DeploymentFileName { get; set; }
 
     [Option(
@@ -230,7 +230,7 @@ internal static class Program
         });
         recipeSteps.Add(mediaStep);
 
-        CreateRecipeAndWriteIt(recipeSteps, newDirectoryPath);
+        CreateRecipeAndWriteIt(options, recipeSteps, newDirectoryPath);
 
         // Zipping the directory.
         var zipFilePath = newDirectoryPath + ".zip";
@@ -318,12 +318,12 @@ internal static class Program
               + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);// #spell-check-ignore-line
     }
 
-    private static void CreateRecipeAndWriteIt(JArray steps, string newDirectoryPath)
+    private static void CreateRecipeAndWriteIt(CommandLineOptions options, JArray steps, string newDirectoryPath)
     {
         // Creating the recipe itself.
         var recipe = JObject.FromObject(new
         {
-            name = "MediaTheme",
+            name = options.DeploymentFileName ?? "MediaTheme",
             displayName = "Media Theme",
             description = "A recipe created with the media-theme-deployment tool.",
             author = string.Empty,
