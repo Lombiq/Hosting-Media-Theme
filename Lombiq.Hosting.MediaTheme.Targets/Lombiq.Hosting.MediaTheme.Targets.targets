@@ -11,8 +11,8 @@
   </Target>
 
   <Target Name="RunMediaThemeDeployer" BeforeTargets="Build">
-    <Exec Command="dotnet media-theme-deploy --path . --deployment-path $(DeploymentFolder) --deployment-file-name $(RecipeFileName)"
-          WorkingDirectory="$(ProjectDir)" />
+    <Exec Command="dotnet media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(RecipeFileName)"
+          WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
 
   <Target Name="UnzipMediaTheme" BeforeTargets="Build">
@@ -23,14 +23,14 @@
     <Message Text="Moving Files $(RecipeToMove)" />
     <Move SourceFiles="$(RecipeToMove)"
           OverwriteReadOnlyFiles="true"
-          DestinationFiles="$(ProjectDir)Recipes\DotNest.Core.SDK.MediaTheme.recipe.json" />
+          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\DotNest.Core.SDK.MediaTheme.recipe.json" />
   </Target>
 
   <Target Name="CopyFilesRecursive" BeforeTargets="Build">
     <ItemGroup>
-      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*" />
+      <MySourceFiles Include="$(MSBuildProjectDirectory)\Deployment\_MediaTheme\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)"
-          DestinationFiles="$(ProjectDir)Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)" />
+          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)" />
   </Target>
 </Project>
