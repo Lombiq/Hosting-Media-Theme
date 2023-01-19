@@ -39,6 +39,13 @@ public class CommandLineOptions
     public string? DeploymentPackagePath { get; set; }
 
     [Option(
+        'f',
+        "deployment-file-name",
+        Required = false,
+        HelpText = "The file name of the deployment package zip.")]
+    public string? DeploymentFileName { get; set; }
+
+    [Option(
         'u',
         "remote-deployment-url",
         Required = false,
@@ -305,8 +312,10 @@ internal static class Program
             ? deploymentPathCommandLineValue
             : Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
 
-        return Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
-            + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
+        return values.DeploymentFileName != null
+            ? Path.Join(deploymentPath, values.DeploymentFileName)
+            : Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
+              + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);// #spell-check-ignore-line
     }
 
     private static void CreateRecipeAndWriteIt(JArray steps, string newDirectoryPath)
