@@ -14,13 +14,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <PackageType>DotNetCliTool</PackageType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>media-theme-deploy</ToolCommandName>
-    <AssemblyName>dotnet-media-theme-deploy</AssemblyName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
