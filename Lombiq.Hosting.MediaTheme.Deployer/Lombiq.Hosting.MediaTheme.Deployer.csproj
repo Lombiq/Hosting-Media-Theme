@@ -20,6 +20,7 @@
     <Nullable>enable</Nullable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>media-theme-deploy</ToolCommandName>
+    <AssemblyName>dotnet-media-theme-deploy</AssemblyName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
