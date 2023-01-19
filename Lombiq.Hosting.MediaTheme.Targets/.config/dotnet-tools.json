@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "lombiq.hosting.mediatheme.deployer": {
+      "version": "2.1.2-alpha.0.nest-407-3",
+      "commands": [
+        "media-theme-deploy"
+      ]
+    }
+  }
+}
