@@ -1,36 +1,46 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <Target Name="CopyDotnetTools" BeforeTargets="RestoreDotnetTool">
+    <Message Text="Copy dotnet-tools.json to project directory."/>
+    <Copy SourceFiles="$(MSBuildThisFileDirectory).config\dotnet-tools.json"
+          DestinationFolder="$(MSBuildProjectDirectory)\.config" SkipUnchangedFiles="true"/>
+  </Target>
+
+  <Target Name="RestoreDotnetTool" BeforeTargets="DeleteTempMediaThemeFolderBefore">
+    <Exec Command="dotnet tool restore"/>
+  </Target>
+
   <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="RunMediaThemeDeployer">
-    <Message Text="Deleting $(DeploymentFolder) folder." />
-    <RemoveDir Directories="$(DeploymentFolder)" />
+    <Message Text="Deleting already existing $(DeploymentFolder) folder."/>
+    <RemoveDir Directories="$(DeploymentFolder)"/>
+  </Target>
+
+  <Target Name="RunMediaThemeDeployer" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
+  </Target>
+
+  <Target Name="UnzipMediaTheme" BeforeTargets="BeforeBuild">
+    <Unzip SourceFiles="$(DeploymentFolder)\$(MediaThemeRecipeFileName).zip"
+           DestinationFolder="$(DeploymentFolder)" />
+  </Target>
+
+  <Target Name="MoveAndRenameRecipe" BeforeTargets="BeforeBuild">
+    <Message Text="Moving Files $(RecipeToMove)"/>
+    <Move SourceFiles="$(RecipeToMove)"
+          OverwriteReadOnlyFiles="true"
+          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
+  </Target>
+
+  <Target Name="CopyMediaThemeFiles" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <MySourceFiles Include="$(MSBuildProjectDirectory)\Deployment\_MediaTheme\**\*.*"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(MySourceFiles)"
+          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
   </Target>
 
   <Target Name="DeleteTempMediaThemeFolderAfter" AfterTargets="CopyFilesRecursive">
-    <Message Text="Deleting $(DeploymentFolder) folder." />
-    <RemoveDir Directories="$(DeploymentFolder)" />
-  </Target>
-
-  <Target Name="RunMediaThemeDeployer" BeforeTargets="Build">
-    <Exec Command="dotnet media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(RecipeFileName)"
-          WorkingDirectory="$(MSBuildProjectDirectory)" />
-  </Target>
-
-  <Target Name="UnzipMediaTheme" BeforeTargets="Build">
-    <Unzip SourceFiles="$(MoveFileName)" DestinationFolder="$(DeploymentFolder)" OverwriteReadOnlyFiles="true" />
-  </Target>
-
-  <Target Name="MoveFiles" BeforeTargets="Build">
-    <Message Text="Moving Files $(RecipeToMove)" />
-    <Move SourceFiles="$(RecipeToMove)"
-          OverwriteReadOnlyFiles="true"
-          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\DotNest.Core.SDK.MediaTheme.recipe.json" />
-  </Target>
-
-  <Target Name="CopyFilesRecursive" BeforeTargets="Build">
-    <ItemGroup>
-      <MySourceFiles Include="$(MSBuildProjectDirectory)\Deployment\_MediaTheme\**\*.*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(MySourceFiles)"
-          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Message Text="Deleting leftover $(DeploymentFolder) folder."/>
+    <RemoveDir Directories="$(DeploymentFolder)"/>
   </Target>
 </Project>
