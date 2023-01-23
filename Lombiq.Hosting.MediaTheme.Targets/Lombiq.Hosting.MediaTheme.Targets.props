@@ -2,7 +2,6 @@
   <PropertyGroup>
     <MediaThemeRecipeFileName>DotNest.Core.SDK.MediaTheme</MediaThemeRecipeFileName>
     <DeploymentFolder>$(MSBuildProjectDirectory)\Deployment</DeploymentFolder>
-    <MoveFileName>$(DeploymentFolder)\$(RecipeFileName).zip</MoveFileName>
     <RecipeToMove>$(DeploymentFolder)\Recipe.json</RecipeToMove>
   </PropertyGroup>
 </Project>
