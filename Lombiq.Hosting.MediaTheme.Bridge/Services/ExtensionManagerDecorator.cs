@@ -54,8 +54,17 @@ public class ExtensionManagerDecorator : IExtensionManager
     public IEnumerable<IFeatureInfo> GetFeatures() =>
         _decorated.GetFeatures();
 
-    public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad) =>
-        _decorated.GetFeatures(featureIdsToLoad);
+    public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad)
+    {
+        if (featureIdsToLoad.Contains(FeatureNames.MediaTheme))
+        {
+            // As stated above, it'll be retrieved from cache so it's not an issue.
+            var baseThemeId = _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
+            if (!string.IsNullOrEmpty(baseThemeId)) featureIdsToLoad = featureIdsToLoad.Append(baseThemeId).ToArray();
+        }
+
+        return _decorated.GetFeatures(featureIdsToLoad);
+    }
 
     public IEnumerable<IFeatureInfo> GetDependentFeatures(string featureId) =>
         _decorated.GetDependentFeatures(featureId);
