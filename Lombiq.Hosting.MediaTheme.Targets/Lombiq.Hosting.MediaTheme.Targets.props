@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <RecipeFileName>DotNest.Core.SDK.MediaTheme</RecipeFileName>
+    <MediaThemeRecipeFileName>DotNest.Core.SDK.MediaTheme</MediaThemeRecipeFileName>
     <DeploymentFolder>$(MSBuildProjectDirectory)\Deployment</DeploymentFolder>
     <MoveFileName>$(DeploymentFolder)\$(RecipeFileName).zip</MoveFileName>
     <RecipeToMove>$(DeploymentFolder)\Recipe.json</RecipeToMove>
