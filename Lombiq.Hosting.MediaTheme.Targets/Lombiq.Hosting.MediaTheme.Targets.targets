@@ -1,16 +1,16 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <Target Name="CopyDotnetTools" BeforeTargets="RestoreDotnetTool">
+  <Target Name="CopyDotnetTools" BeforeTargets="BeforeBuild">
     <Message Text="Copy dotnet-tools.json to project directory."/>
     <Copy SourceFiles="$(MSBuildThisFileDirectory).config\dotnet-tools.json"
-          DestinationFolder="$(MSBuildProjectDirectory)\.config" SkipUnchangedFiles="true"/>
+          DestinationFolder=".config" SkipUnchangedFiles="true"/>
   </Target>
 
-  <Target Name="RestoreDotnetTool" BeforeTargets="DeleteTempMediaThemeFolderBefore">
+  <Target Name="RestoreDotnetTool" BeforeTargets="BeforeBuild">
     <Exec Command="dotnet tool restore"/>
   </Target>
 
-  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="RunMediaThemeDeployer">
+  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="BeforeBuild">
     <Message Text="Deleting already existing $(DeploymentFolder) folder."/>
     <RemoveDir Directories="$(DeploymentFolder)"/>
   </Target>
@@ -28,18 +28,18 @@
     <Message Text="Moving Files $(RecipeToMove)"/>
     <Move SourceFiles="$(RecipeToMove)"
           OverwriteReadOnlyFiles="true"
-          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
+          DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
   </Target>
 
   <Target Name="CopyMediaThemeFiles" BeforeTargets="BeforeBuild">
     <ItemGroup>
-      <MySourceFiles Include="$(MSBuildProjectDirectory)\Deployment\_MediaTheme\**\*.*"/>
+      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*"/>
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)"
-          DestinationFiles="$(MSBuildProjectDirectory)\Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
+          DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
   </Target>
 
-  <Target Name="DeleteTempMediaThemeFolderAfter" AfterTargets="CopyFilesRecursive">
+  <Target Name="DeleteTempMediaThemeFolderAfter" BeforeTargets="BeforeBuild">
     <Message Text="Deleting leftover $(DeploymentFolder) folder."/>
     <RemoveDir Directories="$(DeploymentFolder)"/>
   </Target>
