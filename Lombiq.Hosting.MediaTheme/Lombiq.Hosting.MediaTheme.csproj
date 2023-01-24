@@ -40,4 +40,11 @@
     <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Bridge\Lombiq.Hosting.MediaTheme.Bridge.csproj" />
   </ItemGroup>
 
+  <Import Project="../../Lombiq.Hosting.MediaTheme/Lombiq.Hosting.MediaTheme.Targets/Lombiq.Hosting.MediaTheme.Targets.props" />
+  <Import Project="../../Lombiq.Hosting.MediaTheme/Lombiq.Hosting.MediaTheme.Targets/Lombiq.Hosting.MediaTheme.Targets.targets" />
+
+  <PropertyGroup>
+    <MediaThemeRecipeFileName>Lombiq.Hosting.MediaTheme</MediaThemeRecipeFileName>
+  </PropertyGroup>
+
 </Project>
