@@ -29,6 +29,10 @@
       "name": "media",
       "Files": [
         {
+          "SourcePath": "_MediaTheme/Assets/example.png",
+          "TargetPath": "_MediaTheme/Assets/example.png"
+        },
+        {
           "SourcePath": "_MediaTheme/Assets/Theme.png",
           "TargetPath": "_MediaTheme/Assets/Theme.png"
         },
