@@ -193,35 +193,41 @@ internal static class Program
 
         // Getting assets.
         var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
-        var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
-
-        foreach (var assetPath in allAssetsPaths)
+        if (Directory.Exists(assetsPath))
         {
-            AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
-        }
+            var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
 
-        // Copying assets to deployment directory.
-        CopyDirectory(
-            assetsPath,
-            Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
-            areLiquidFiles: false);
+            foreach (var assetPath in allAssetsPaths)
+            {
+                AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
+            }
+
+            // Copying assets to deployment directory.
+            CopyDirectory(
+                assetsPath,
+                Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
+                areLiquidFiles: false);
+        }
 
         // Getting templates.
         var templatesPath = Path.Combine(themePath, LocalThemeViewsDirectory);
-        var allTemplatesPaths = Directory
-            .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
-
-        foreach (var templatePath in allTemplatesPaths)
+        if (Directory.Exists(templatesPath))
         {
-            AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
-        }
+            var allTemplatesPaths = Directory
+                .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
 
-        // Copying templates to deployment directory.
-        CopyDirectory(
-            templatesPath,
-            Path.Join(newDirectoryPath, MediaThemeTemplatesCopyDirectoryPath),
-            areLiquidFiles: true,
-            recursive: false);
+            foreach (var templatePath in allTemplatesPaths)
+            {
+                AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
+            }
+
+            // Copying templates to deployment directory.
+            CopyDirectory(
+                templatesPath,
+                Path.Join(newDirectoryPath, MediaThemeTemplatesCopyDirectoryPath),
+                areLiquidFiles: true,
+                recursive: false);
+        }
 
         var mediaStep = JObject.FromObject(new
         {
