@@ -48,6 +48,7 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <!-- This must be defined after the Lombiq.Hosting.MediaTheme.Targets import to override property. -->
     <MediaThemeRecipeFileName>Lombiq.Hosting.MediaTheme</MediaThemeRecipeFileName>
   </PropertyGroup>
 
