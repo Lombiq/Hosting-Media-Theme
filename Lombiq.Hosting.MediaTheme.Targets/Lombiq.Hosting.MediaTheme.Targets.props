@@ -3,5 +3,6 @@
     <MediaThemeRecipeFileName>DotNest.Core.SDK.MediaTheme</MediaThemeRecipeFileName>
     <DeploymentFolder>$(MSBuildProjectDirectory)\Deployment</DeploymentFolder>
     <RecipeToMove>$(DeploymentFolder)\Recipe.json</RecipeToMove>
+    <MediaThemeBaseId>TheTheme</MediaThemeBaseId>
   </PropertyGroup>
 </Project>

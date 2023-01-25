@@ -16,7 +16,7 @@
   </Target>
 
   <Target Name="RunMediaThemeDeployer" BeforeTargets="BeforeBuild">
-    <Exec Command="dotnet media-theme-deploy --path . --base-id TheTheme --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
+    <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
   </Target>
 
   <Target Name="UnzipMediaTheme" BeforeTargets="BeforeBuild">
