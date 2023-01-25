@@ -44,7 +44,7 @@
   <Import Condition="'$(NuGetBuild)' != 'true'" Project="..\..\Lombiq.Hosting.MediaTheme\Lombiq.Hosting.MediaTheme.Targets\Lombiq.Hosting.MediaTheme.Targets.targets" />
 
   <ItemGroup Condition="'$(NuGetBuild)' == 'true'">
-    <PackageReference Include="Lombiq.Hosting.MediaTheme.Targets" Version="2.1.2-alpha.0.nest-407-6" />
+    <PackageReference Include="Lombiq.Hosting.MediaTheme.Targets" Version="2.1.2-alpha.0.nest-407-7" />
   </ItemGroup>
 
   <PropertyGroup>
