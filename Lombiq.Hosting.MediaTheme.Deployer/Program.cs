@@ -321,7 +321,7 @@ internal static class Program
         return values.DeploymentFileName != null
             ? Path.Join(deploymentPath, values.DeploymentFileName)
             : Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
-              + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);// #spell-check-ignore-line
+              + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
     }
 
     private static void CreateRecipeAndWriteIt(CommandLineOptions options, JArray steps, string newDirectoryPath)
