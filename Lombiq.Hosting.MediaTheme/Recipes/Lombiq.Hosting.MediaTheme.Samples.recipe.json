@@ -25,11 +25,15 @@
       ]
     },
     {
-      "name": "recipes",
-      "Values": [
+      "name": "media",
+      "Files": [
         {
-          "executionid": "DotNest.Core.SDK.Web",
-          "name": "Lombiq.Hosting.MediaTheme"
+          "SourcePath": "_MediaTheme/Assets/example.png",
+          "TargetPath": "_MediaTheme/Assets/example.png"
+        },
+        {
+          "SourcePath": "_MediaTheme/Templates/Example.liquid",
+          "TargetPath": "_MediaTheme/Templates/Example.liquid"
         }
       ]
     },
