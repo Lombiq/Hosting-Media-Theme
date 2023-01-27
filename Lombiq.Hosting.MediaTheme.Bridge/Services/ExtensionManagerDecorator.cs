@@ -26,8 +26,7 @@ public class ExtensionManagerDecorator : IExtensionManager
 
         if (featureId != FeatureNames.MediaTheme) return dependencies;
 
-        // It'll be retrieved from cache so it's not an issue.
-        var baseThemeId = _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
+        var baseThemeId = GetBaseThemeId();
         if (string.IsNullOrEmpty(baseThemeId)) return dependencies;
 
         var allFeatures = GetFeatures().ToArray();
@@ -54,8 +53,16 @@ public class ExtensionManagerDecorator : IExtensionManager
     public IEnumerable<IFeatureInfo> GetFeatures() =>
         _decorated.GetFeatures();
 
-    public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad) =>
-        _decorated.GetFeatures(featureIdsToLoad);
+    public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad)
+    {
+        if (featureIdsToLoad.Contains(FeatureNames.MediaTheme))
+        {
+            var baseThemeId = GetBaseThemeId();
+            if (!string.IsNullOrEmpty(baseThemeId)) featureIdsToLoad = featureIdsToLoad.Append(baseThemeId).ToArray();
+        }
+
+        return _decorated.GetFeatures(featureIdsToLoad);
+    }
 
     public IEnumerable<IFeatureInfo> GetDependentFeatures(string featureId) =>
         _decorated.GetDependentFeatures(featureId);
@@ -65,4 +72,8 @@ public class ExtensionManagerDecorator : IExtensionManager
 
     public Task<IEnumerable<FeatureEntry>> LoadFeaturesAsync(string[] featureIdsToLoad) =>
         _decorated.LoadFeaturesAsync(featureIdsToLoad);
+
+    private string GetBaseThemeId() =>
+        // It'll be retrieved from cache so it's not an issue.
+        _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
 }
