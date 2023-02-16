@@ -320,7 +320,7 @@ internal static class Program
             author = string.Empty,
             website = string.Empty,
             version = string.Empty,
-            issetuprecipe = false,
+            issetuprecipe = false, // #spell-check-ignore-line
             categories = new JArray(),
             tags = new JArray(),
             steps,
