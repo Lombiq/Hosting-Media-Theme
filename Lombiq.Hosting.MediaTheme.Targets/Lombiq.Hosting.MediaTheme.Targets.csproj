@@ -12,7 +12,7 @@
     <Copyright>Copyright © 2023, Lombiq Technologies Ltd.</Copyright>
     <Description>Lombiq Hosting - Media Theme Targets: Provides automatic media theme recipe and tempalte updating. See the project website for detailed documentation.</Description>
     <PackageIcon>NuGetIcon.png</PackageIcon>
-    <PackageTags>Lombiq;MediaTheme;MSBuild</PackageTags>
+    <PackageTags>OrchardCore;Lombiq;AspNetCore;MSBuild,Media;Targets</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme</PackageProjectUrl>
     <PackageLicenseFile>License.md</PackageLicenseFile>
