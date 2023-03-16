@@ -5,7 +5,7 @@
 ## About
 
 Provides automatic media theme package creation in the project. This way you don't have to manage changes in your media theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool will be automatically installed locally to the project, then it will create the deployment zip file. Please read the [Lombiq.Hosting.MediaTheme Readme](https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md) for more information about this deployer tool.
-When the zip is ready it is unzipped and its files are moved to the project relative _Recipe/_MediaTheme/_ path. The Recipe is moved directly to the project relative _Recipe_ folder.
+When the zip is ready it is unzipped and its files are moved to the project relative _Recipe/\_MediaTheme/_ path. The Recipe is moved directly to the project relative _Recipe_ folder.
 
 Note, that these operations are optimized by running them only if the corresponding files have been changed.
 
@@ -20,12 +20,14 @@ Install the [NuGet package](https://www.nuget.org/packages/Lombiq.Hosting.MediaT
     <Import Project="path/to/Lombiq.Hosting.MediaTheme.Targets/Lombiq.Hosting.MediaTheme.Targets.targets" />
 ```
 
-Override the `MediaThemeRecipeFileName` property to modify the Recipe file name and the name property in the recipe. 
+Override the `MediaThemeRecipeFileName` property to modify the Recipe file name and the name property in the recipe.
+
 ```xml
 <PropertyGroup>
     <MediaThemeRecipeFileName>Sample.MediaTheme</MediaThemeRecipeFileName>
 </PropertyGroup>
 ```
+
 To have a successful run you must follow the required shape templates name convention as it is also required for the [Media Theme Deployer](https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md#limitations).
 
 ## Contributing and support
