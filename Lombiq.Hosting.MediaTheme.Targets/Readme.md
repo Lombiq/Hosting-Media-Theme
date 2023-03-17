@@ -1,7 +1,7 @@
 # Lombiq Hosting - MediaTheme MSBuild Targets
-
+<!-- markdownlint-disable -->
 [![Lombiq.Hosting.MediaTheme.Targets NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Targets?label=Lombiq.Hosting.MediaTheme.Targets)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Targets/)
-
+<!-- markdownlint-restore -->
 ## About
 
 Provides automatic media theme package creation in the project. This way you don't have to manage changes in your media theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool will be automatically installed locally to the project, then it will create the deployment zip file. Please read the [Lombiq.Hosting.MediaTheme Readme](https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md) for more information about this deployer tool.
