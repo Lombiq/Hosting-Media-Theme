@@ -1,10 +1,11 @@
 # Lombiq Hosting - MediaTheme MSBuild Targets
 
-[![Lombiq.Hosting.MediaTheme.Targets NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Targets?label=Lombiq.Hosting.MediaTheme.Targets)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Targets/)<!-- #spell-check-ignore-line -->
+[![Lombiq.Hosting.MediaTheme.Targets NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Targets?label=Lombiq.Hosting.MediaTheme.Targets)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Targets/)
 
 ## About
 
-Provides automatic media theme package creation in the project. This way you don't have to manage changes in your media theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool will be automatically installed locally to the project, then it will create the deployment zip file. Please read the [Lombiq.Hosting.MediaTheme Readme](https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md) for more information about this deployer tool.<!-- #spell-check-ignore-line -->
+Provides automatic media theme package creation in the project. This way you don't have to manage changes in your media theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool will be automatically installed locally to the project, then it will create the deployment zip file. Please read the [Lombiq.Hosting.MediaTheme Readme](https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md) for more information about this deployer tool.
+
 When the zip is ready it is unzipped and its files are moved to the project relative _Recipe/\_MediaTheme/_ path. The Recipe is moved directly to the project relative _Recipe_ folder.
 
 Note, that these operations are optimized by running them only if the corresponding files have been changed.
