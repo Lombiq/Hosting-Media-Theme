@@ -31,6 +31,22 @@ Override the `MediaThemeRecipeFileName` property to modify the Recipe file name 
 </PropertyGroup>
 ```
 
+Add a dotnet-tools.json file into the .config folder in your module:
+```json
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "lombiq.hosting.mediatheme.deployer": {
+      "version": "3.0.1",
+      "commands": [
+        "media-theme-deploy"
+      ]
+    }
+  }
+}
+```
+
 To have a successful run you must follow the required shape templates name convention as it is also required for the [Media Theme Deployer](https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md#limitations).
 
 ## Contributing and support
