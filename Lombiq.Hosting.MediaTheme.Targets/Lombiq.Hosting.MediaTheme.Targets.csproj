@@ -27,11 +27,4 @@
     <None Include="*.targets" Pack="true" PackagePath="" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include=".config\dotnet-tools.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-    </Content>
-  </ItemGroup>
-
 </Project>
