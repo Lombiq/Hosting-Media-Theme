@@ -30,6 +30,7 @@ Override the `MediaThemeRecipeFileName` property to modify the Recipe file name 
 ```
 
 Add a dotnet-tools.json file into the .config folder in your module:
+
 ```json
 {
   "version": 1,
