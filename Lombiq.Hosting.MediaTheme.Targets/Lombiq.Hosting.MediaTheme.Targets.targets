@@ -1,10 +1,9 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <Target Name="CheckFile" BeforeTargets="BeforeBuild">
-    <Error Condition="!Exists('$(MSBuildThisFileDirectory).config\dotnet-tools.json')"
+    <Error Condition="Exists('$(MSBuildThisFileDirectory)\.config\dotnet-tools.json')"
            Text="A dotnet-tools.json file should exists, read the documentation for more information." />
   </Target>
-
 
   <Target Name="RestoreDotnetTool" BeforeTargets="BeforeBuild">
     <Exec Command="dotnet tool restore"/>
