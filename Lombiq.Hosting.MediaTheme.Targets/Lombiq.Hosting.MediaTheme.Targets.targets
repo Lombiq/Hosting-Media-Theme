@@ -1,0 +1,45 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="CheckFile" BeforeTargets="BeforeBuild">
+    <Error Condition="Exists('$(MSBuildThisFileDirectory)\.config\dotnet-tools.json')"
+           Text="A dotnet-tools.json file should exists, read the documentation for more information." />
+  </Target>
+
+  <Target Name="RestoreDotnetTool" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet tool restore"/>
+  </Target>
+
+  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="BeforeBuild">
+    <Message Text="Deleting already existing $(DeploymentFolder) folder."/>
+    <RemoveDir Directories="$(DeploymentFolder)"/>
+  </Target>
+
+  <Target Name="RunMediaThemeDeployer" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
+  </Target>
+
+  <Target Name="UnzipMediaTheme" BeforeTargets="BeforeBuild">
+    <Unzip SourceFiles="$(DeploymentFolder)\$(MediaThemeRecipeFileName).zip"
+           DestinationFolder="$(DeploymentFolder)" />
+  </Target>
+
+  <Target Name="MoveAndRenameRecipe" BeforeTargets="BeforeBuild">
+    <Message Text="Moving Files $(RecipeToMove)"/>
+    <Move SourceFiles="$(RecipeToMove)"
+          OverwriteReadOnlyFiles="true"
+          DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
+  </Target>
+
+  <Target Name="CopyMediaThemeFiles" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(MySourceFiles)"
+          DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
+  </Target>
+
+  <Target Name="DeleteTempMediaThemeFolderAfter" BeforeTargets="BeforeBuild">
+    <Message Text="Deleting leftover $(DeploymentFolder) folder."/>
+    <RemoveDir Directories="$(DeploymentFolder)"/>
+  </Target>
+</Project>

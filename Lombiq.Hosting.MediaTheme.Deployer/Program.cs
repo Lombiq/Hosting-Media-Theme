@@ -39,6 +39,13 @@ public class CommandLineOptions
     public string? DeploymentPackagePath { get; set; }
 
     [Option(
+        'f',
+        "deployment-file-name",
+        Required = false,
+        HelpText = "The file name of the deployment package zip and the value for the recipe name property.")]
+    public string? DeploymentFileName { get; set; }
+
+    [Option(
         'u',
         "remote-deployment-url",
         Required = false,
@@ -186,35 +193,41 @@ internal static class Program
 
         // Getting assets.
         var assetsPath = Path.Combine(themePath, LocalThemeWwwRootDirectory);
-        var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
-
-        foreach (var assetPath in allAssetsPaths)
+        if (Directory.Exists(assetsPath))
         {
-            AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
-        }
+            var allAssetsPaths = Directory.EnumerateFiles(assetsPath, "*", SearchOption.AllDirectories);
 
-        // Copying assets to deployment directory.
-        CopyDirectory(
-            assetsPath,
-            Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
-            areLiquidFiles: false);
+            foreach (var assetPath in allAssetsPaths)
+            {
+                AddFile(MediaThemeAssetsCopyDirectoryPath, assetPath[(assetsPath.Length + 1)..]);
+            }
+
+            // Copying assets to deployment directory.
+            CopyDirectory(
+                assetsPath,
+                Path.Join(newDirectoryPath, MediaThemeAssetsCopyDirectoryPath),
+                areLiquidFiles: false);
+        }
 
         // Getting templates.
         var templatesPath = Path.Combine(themePath, LocalThemeViewsDirectory);
-        var allTemplatesPaths = Directory
-            .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
-
-        foreach (var templatePath in allTemplatesPaths)
+        if (Directory.Exists(templatesPath))
         {
-            AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
-        }
+            var allTemplatesPaths = Directory
+                .EnumerateFiles(templatesPath, "*" + LiquidFileExtension, SearchOption.TopDirectoryOnly);
 
-        // Copying templates to deployment directory.
-        CopyDirectory(
-            templatesPath,
-            Path.Join(newDirectoryPath, MediaThemeTemplatesCopyDirectoryPath),
-            areLiquidFiles: true,
-            recursive: false);
+            foreach (var templatePath in allTemplatesPaths)
+            {
+                AddFile(MediaThemeTemplatesCopyDirectoryPath, templatePath[(templatesPath.Length + 1)..]);
+            }
+
+            // Copying templates to deployment directory.
+            CopyDirectory(
+                templatesPath,
+                Path.Join(newDirectoryPath, MediaThemeTemplatesCopyDirectoryPath),
+                areLiquidFiles: true,
+                recursive: false);
+        }
 
         var mediaStep = JObject.FromObject(new
         {
@@ -223,7 +236,7 @@ internal static class Program
         });
         recipeSteps.Add(mediaStep);
 
-        CreateRecipeAndWriteIt(recipeSteps, newDirectoryPath);
+        CreateRecipeAndWriteIt(options, recipeSteps, newDirectoryPath);
 
         // Zipping the directory.
         var zipFilePath = newDirectoryPath + ".zip";
@@ -305,16 +318,18 @@ internal static class Program
             ? deploymentPathCommandLineValue
             : Directory.GetDirectoryRoot(Directory.GetCurrentDirectory());
 
-        return Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
-            + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
+        return values.DeploymentFileName != null
+            ? Path.Join(deploymentPath, values.DeploymentFileName)
+            : Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
+              + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
     }
 
-    private static void CreateRecipeAndWriteIt(JArray steps, string newDirectoryPath)
+    private static void CreateRecipeAndWriteIt(CommandLineOptions options, JArray steps, string newDirectoryPath)
     {
         // Creating the recipe itself.
         var recipe = JObject.FromObject(new
         {
-            name = "MediaTheme",
+            name = options.DeploymentFileName ?? "MediaTheme",
             displayName = "Media Theme",
             description = "A recipe created with the media-theme-deployment tool.",
             author = string.Empty,

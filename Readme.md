@@ -1,6 +1,6 @@
 # Lombiq Hosting - Media Theme for Orchard Core
 
-[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/) [![Lombiq.Hosting.MediaTheme.Bridge NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Bridge?label=Lombiq.Hosting.MediaTheme.Bridge)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Bridge/) [![Lombiq.Hosting.MediaTheme.Deployer NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Deployer?label=Lombiq.Hosting.MediaTheme.Deployer)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Deployer/) [![Lombiq.Hosting.MediaTheme.Tests.UI NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Tests.UI?label=Lombiq.Hosting.MediaTheme.Tests.UI)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Tests.UI/)
+[![Lombiq.Hosting.MediaTheme NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme?label=Lombiq.Hosting.MediaTheme)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme/) [![Lombiq.Hosting.MediaTheme.Bridge NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Bridge?label=Lombiq.Hosting.MediaTheme.Bridge)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Bridge/) [![Lombiq.Hosting.MediaTheme.Deployer NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Deployer?label=Lombiq.Hosting.MediaTheme.Deployer)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Deployer/) [![Lombiq.Hosting.MediaTheme.Tests.UI NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Tests.UI?label=Lombiq.Hosting.MediaTheme.Tests.UI)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Tests.UI/)[![Lombiq.Hosting.MediaTheme.Targets NuGet](https://img.shields.io/nuget/v/Lombiq.Hosting.MediaTheme.Targets?label=Lombiq.Hosting.MediaTheme.Targets)](https://www.nuget.org/packages/Lombiq.Hosting.MediaTheme.Targets/)
 
 ## About
 
@@ -12,10 +12,11 @@ Do you want to quickly try out this project and see it in action? Check it out i
 
 ### Getting started
 
-There are two Orchard Core extensions in this project:
+There are two Orchard Core extensions and a targets extension in this project:
 
 - `Lombiq.Hosting.MediaTheme.Bridge`: An Orchard Core module that enables the core logic required for hosting your theme the Media Library.
 - `Lombiq.Hosting.MediaTheme`: An Orchard Core theme that bootstraps the media theme logic using the `Lombiq.Hosting.MediaTheme.Bridge` module. With this theme active you can dynamically change the base theme from the Admin UI or using recipes.
+- `Lombiq.Hosting.MediaTheme.Targets`: Provides automatic media theme package creation in the project. Checkout its [readme file](../Lombiq.Hosting.MediaTheme/Lombiq.Hosting.MediaTheme.Targets/Readme.md).
 
 To get started, you'll need to add `Lombiq.Hosting.MediaTheme` and `Lombiq.Hosting.MediaTheme.Bridge` NuGet packages to your web project. Set the `Lombiq.Hosting.MediaTheme` as the active site theme from the Admin UI or recipe.
 
