@@ -1,4 +1,4 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Lombiq.Hosting.MediaTheme.Bridge.Models;
 using Microsoft.Extensions.Caching.Memory;
 using OrchardCore.DisplayManagement.Extensions;
@@ -49,12 +49,8 @@ public class MediaThemeManager : IMediaThemeManager
         if (!string.IsNullOrEmpty(baseThemeId))
         {
             var baseThemeFeature = (await _shellFeaturesManager.GetAvailableFeaturesAsync())
-                .FirstOrDefault(feature => feature.IsTheme() && feature.Id == baseThemeId);
-            if (baseThemeFeature == null)
-            {
-                throw new ArgumentException($"Theme with the given ID ({baseThemeId}) doesn't exist.", nameof(baseThemeId));
-            }
-
+                .FirstOrDefault(feature => feature.IsTheme() && feature.Id == baseThemeId)
+                ?? throw new ArgumentException($"Theme with the given ID ({baseThemeId}) doesn't exist.", nameof(baseThemeId));
             await _shellFeaturesManager.EnableFeaturesAsync(new[] { baseThemeFeature }, force: true);
         }
 
