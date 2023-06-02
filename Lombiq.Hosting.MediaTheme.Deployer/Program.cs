@@ -181,7 +181,7 @@ internal static class Program
         void AddFile(string rootPath, string filePath)
         {
             // These need to use forward slashes on every platform due to Orchard's import logic.
-            var importPath = Path.Combine(rootPath, filePath).Replace("\\", "/");
+            var importPath = Path.Combine(rootPath, filePath).Replace('\\', '/');
             var templateJObject = JObject.FromObject(new
             {
                 SourcePath = importPath,
