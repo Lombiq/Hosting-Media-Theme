@@ -71,7 +71,7 @@ internal static class Program
     public static Task Main(string[] args) =>
         Parser.Default.ParseArguments<CommandLineOptions>(args)
             .WithNotParsed(HandleParseError)
-            .WithParsedAsync(options => RunOptionsAsync(options));
+            .WithParsedAsync(RunOptionsAsync);
 
     private static void HandleParseError(IEnumerable<Error> errors)
     {
