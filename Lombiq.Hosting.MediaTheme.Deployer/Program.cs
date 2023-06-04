@@ -1,7 +1,6 @@
 using CommandLine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
@@ -103,10 +102,6 @@ internal static class Program
         }
     }
 
-    [SuppressMessage(
-        "Major Code Smell",
-        "S4457:Parameter validation in \"sync\"/\"await\" methods should be wrapped",
-        Justification = "RunOptionsAsync() needs to use await as well to be able to set the exit code on exception.")]
     private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
