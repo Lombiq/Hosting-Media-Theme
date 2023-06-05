@@ -31,7 +31,7 @@ public class ExtensionManagerDecorator : IExtensionManager
         if (string.IsNullOrEmpty(baseThemeId)) return dependencies;
 
         var allFeatures = GetFeatures().ToArray();
-        var baseTheme = Array.Find(allFeatures, feature => feature.Id == baseThemeId);
+        var baseTheme = allFeatures.Find(feature => feature.Id == baseThemeId);
         dependencies.Add(baseTheme);
 
         // The base theme has to be the last dependency, see ThemeFeatureBuilderEvents in Orchard's source.
