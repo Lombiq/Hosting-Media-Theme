@@ -1,6 +1,7 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using OrchardCore.Environment.Extensions;
 using OrchardCore.Environment.Extensions.Features;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ public class ExtensionManagerDecorator : IExtensionManager
         if (string.IsNullOrEmpty(baseThemeId)) return dependencies;
 
         var allFeatures = GetFeatures().ToArray();
-        var baseTheme = allFeatures.FirstOrDefault(feature => feature.Id == baseThemeId);
+        var baseTheme = allFeatures.Find(feature => feature.Id == baseThemeId);
         dependencies.Add(baseTheme);
 
         // The base theme has to be the last dependency, see ThemeFeatureBuilderEvents in Orchard's source.

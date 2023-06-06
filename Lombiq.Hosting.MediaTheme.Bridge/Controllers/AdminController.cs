@@ -1,4 +1,4 @@
-﻿using Lombiq.HelpfulLibraries.OrchardCore.DependencyInjection;
+using Lombiq.HelpfulLibraries.OrchardCore.DependencyInjection;
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Lombiq.Hosting.MediaTheme.Bridge.Services;
 using Lombiq.Hosting.MediaTheme.Bridge.ViewModels;
@@ -74,7 +74,7 @@ public class AdminController : Controller
         var availableThemes = (await _mediaThemeManager.GetAvailableBaseThemesAsync()).ToList();
         viewModel.AvailableBaseThemes = availableThemes;
         if (!string.IsNullOrEmpty(viewModel.BaseThemeId) &&
-            availableThemes.All(theme => theme.Id != viewModel.BaseThemeId))
+            availableThemes.TrueForAll(theme => theme.Id != viewModel.BaseThemeId))
         {
             _updateModelAccessor.ModelUpdater.ModelState.AddModelError(
                 nameof(viewModel.BaseThemeId),
