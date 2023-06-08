@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
 /// <summary>
-/// Service for media theme-specific operations.
+/// Service for Media Theme-specific operations.
 /// </summary>
 public interface IMediaThemeManager
 {

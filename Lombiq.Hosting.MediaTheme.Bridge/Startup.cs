@@ -23,7 +23,7 @@ namespace Lombiq.Hosting.MediaTheme.Bridge;
 
 public class Startup : StartupBase
 {
-    // Make sure the middlewares run first so we can block media theme template requests in time.
+    // Make sure the middlewares run first so we can block Media Theme template requests in time.
     public override int Order => -100;
 
     public override void ConfigureServices(IServiceCollection services)

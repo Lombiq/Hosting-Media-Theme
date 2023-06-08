@@ -9,7 +9,7 @@ public class MediaThemeDeploymentPermissions : IPermissionProvider
 {
     public static readonly Permission ManageMediaTheme = new(
         nameof(ManageMediaTheme),
-        "Manage media theme.");
+        "Manage Media Theme.");
 
     public Task<IEnumerable<Permission>> GetPermissionsAsync() =>
         Task.FromResult(new[]

@@ -161,7 +161,7 @@ internal static class Program
             }
         }
 
-        // Creating media theme step.
+        // Creating Media Theme step.
         var mediaThemeStep = JObject.FromObject(new
         {
             name = "mediatheme",
