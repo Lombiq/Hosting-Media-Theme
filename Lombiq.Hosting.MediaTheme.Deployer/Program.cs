@@ -1,7 +1,6 @@
 using CommandLine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
@@ -72,7 +71,7 @@ internal static class Program
     public static Task Main(string[] args) =>
         Parser.Default.ParseArguments<CommandLineOptions>(args)
             .WithNotParsed(HandleParseError)
-            .WithParsedAsync(options => RunOptionsAsync(options));
+            .WithParsedAsync(RunOptionsAsync);
 
     private static void HandleParseError(IEnumerable<Error> errors)
     {
@@ -103,10 +102,6 @@ internal static class Program
         }
     }
 
-    [SuppressMessage(
-        "Major Code Smell",
-        "S4457:Parameter validation in \"sync\"/\"await\" methods should be wrapped",
-        Justification = "RunOptionsAsync() needs to use await as well to be able to set the exit code on exception.")]
     private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
@@ -166,7 +161,7 @@ internal static class Program
             }
         }
 
-        // Creating media theme step.
+        // Creating Media Theme step.
         var mediaThemeStep = JObject.FromObject(new
         {
             name = "mediatheme",
@@ -181,7 +176,7 @@ internal static class Program
         void AddFile(string rootPath, string filePath)
         {
             // These need to use forward slashes on every platform due to Orchard's import logic.
-            var importPath = Path.Combine(rootPath, filePath).Replace("\\", "/");
+            var importPath = Path.Combine(rootPath, filePath).Replace('\\', '/');
             var templateJObject = JObject.FromObject(new
             {
                 SourcePath = importPath,

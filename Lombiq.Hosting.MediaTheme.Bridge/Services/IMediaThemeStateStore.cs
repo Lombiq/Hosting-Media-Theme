@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
 /// <summary>
-/// Manages the stored media theme state (e.g., base theme).
+/// Manages the stored Media Theme state (e.g., base theme).
 /// </summary>
 public interface IMediaThemeStateStore
 {
     /// <summary>
-    /// Loads the media theme store for editing.
+    /// Loads the Media Theme store for editing.
     /// </summary>
     Task<MediaThemeStateDocument> LoadMediaThemeStateAsync();
 
     /// <summary>
-    /// Fetches the media theme store from cache. Not suitable for updating.
+    /// Fetches the Media Theme store from cache. Not suitable for updating.
     /// </summary>
     Task<MediaThemeStateDocument> GetMediaThemeStateAsync();
 

@@ -15,8 +15,8 @@ Do you want to quickly try out this project and see it in action? Check it out i
 There are two Orchard Core extensions and a targets extension in this project:
 
 - `Lombiq.Hosting.MediaTheme.Bridge`: An Orchard Core module that enables the core logic required for hosting your theme the Media Library.
-- `Lombiq.Hosting.MediaTheme`: An Orchard Core theme that bootstraps the media theme logic using the `Lombiq.Hosting.MediaTheme.Bridge` module. With this theme active you can dynamically change the base theme from the Admin UI or using recipes.
-- `Lombiq.Hosting.MediaTheme.Targets`: Provides automatic media theme package creation in the project. Checkout its [readme file](../Lombiq.Hosting.MediaTheme/Lombiq.Hosting.MediaTheme.Targets/Readme.md).
+- `Lombiq.Hosting.MediaTheme`: An Orchard Core theme that bootstraps the Media Theme logic using the `Lombiq.Hosting.MediaTheme.Bridge` module. With this theme active you can dynamically change the base theme from the Admin UI or using recipes.
+- `Lombiq.Hosting.MediaTheme.Targets`: Provides automatic Media Theme package creation in the project. Checkout its [readme file](../Lombiq.Hosting.MediaTheme/Lombiq.Hosting.MediaTheme.Targets/Readme.md).
 
 To get started, you'll need to add `Lombiq.Hosting.MediaTheme` and `Lombiq.Hosting.MediaTheme.Bridge` NuGet packages to your web project. Set the `Lombiq.Hosting.MediaTheme` as the active site theme from the Admin UI or recipe.
 

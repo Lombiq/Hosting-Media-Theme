@@ -21,7 +21,7 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 /// to translate /mediatheme URLs.
 /// </para>
 /// </remarks>
-internal class FileVersionProviderDecorator : IFileVersionProvider
+internal sealed class FileVersionProviderDecorator : IFileVersionProvider
 {
     private readonly IFileVersionProvider _decorated;
     private readonly IMediaFileStore _mediaFileStore;
