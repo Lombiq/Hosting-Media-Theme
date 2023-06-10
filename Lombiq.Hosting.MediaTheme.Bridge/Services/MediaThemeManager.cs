@@ -1,4 +1,4 @@
-﻿using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Lombiq.Hosting.MediaTheme.Bridge.Models;
 using Microsoft.Extensions.Caching.Memory;
 using OrchardCore.DisplayManagement.Extensions;
@@ -9,7 +9,6 @@ using OrchardCore.Modules.Manifest;
 using OrchardCore.Themes.Services;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,10 +37,6 @@ public class MediaThemeManager : IMediaThemeManager
         _siteThemeService = siteThemeService;
     }
 
-    [SuppressMessage(
-        "Major Code Smell",
-        "S4457:Parameter validation in \"async\"/\"await\" methods should be wrapped",
-        Justification = "Part of the validation needs to call async code.")]
     public async Task UpdateBaseThemeAsync(string baseThemeId)
     {
         ThrowIfBaseThemeIdIsInvalid(baseThemeId);
@@ -49,12 +44,8 @@ public class MediaThemeManager : IMediaThemeManager
         if (!string.IsNullOrEmpty(baseThemeId))
         {
             var baseThemeFeature = (await _shellFeaturesManager.GetAvailableFeaturesAsync())
-                .FirstOrDefault(feature => feature.IsTheme() && feature.Id == baseThemeId);
-            if (baseThemeFeature == null)
-            {
-                throw new ArgumentException($"Theme with the given ID ({baseThemeId}) doesn't exist.", nameof(baseThemeId));
-            }
-
+                .FirstOrDefault(feature => feature.IsTheme() && feature.Id == baseThemeId)
+                ?? throw new ArgumentException($"Theme with the given ID ({baseThemeId}) doesn't exist.", nameof(baseThemeId));
             await _shellFeaturesManager.EnableFeaturesAsync(new[] { baseThemeFeature }, force: true);
         }
 

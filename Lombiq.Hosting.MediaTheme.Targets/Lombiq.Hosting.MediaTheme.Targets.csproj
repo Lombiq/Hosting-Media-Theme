@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Title>Lombiq Hosting - Media Theme Targets</Title>
+    <Title>Lombiq Hosting - Media Theme MSBuild Targets</Title>
     <Authors>Lombiq Technologies</Authors>
     <Copyright>Copyright © 2023, Lombiq Technologies Ltd.</Copyright>
-    <Description>Lombiq Hosting - Media Theme Targets: Provides automatic media theme recipe and tempalte updating. See the project website for detailed documentation.</Description>
+    <Description>Lombiq Hosting - Media Theme MSBuild Targets: Provides automatic Media Theme package creation in the project. This way you don't have to manage changes in your Media Theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool, what will be automatically installed locally to the project, then it will create the deployment zip file. See the project website for detailed documentation.</Description>
     <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;MSBuild,Media;Targets</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
