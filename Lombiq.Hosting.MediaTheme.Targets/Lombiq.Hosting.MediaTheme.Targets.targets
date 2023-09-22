@@ -1,38 +1,39 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Empty target that can be used to hook into the build or to override it to change its dependencies. -->
-  <Target Name="BeforeMediaThemeDeployment" BeforeTargets="BeforeBuild" />
+  <Target Name="MediaThemeDeploymentBeforeTargets" BeforeTargets="BeforeBuild" />
+  <Target Name="MediaThemeDeploymentAfterTargets" />
 
-  <Target Name="CheckFile" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="CheckFile" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Error Condition="Exists('$(MSBuildThisFileDirectory)\.config\dotnet-tools.json')"
            Text="A dotnet-tools.json file should exists, read the documentation for more information." />
   </Target>
 
-  <Target Name="RestoreDotnetTool" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Exec Command="dotnet tool restore"/>
   </Target>
 
-  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Message Text="Deleting already existing $(DeploymentFolder) folder."/>
     <RemoveDir Directories="$(DeploymentFolder)"/>
   </Target>
 
-  <Target Name="RunMediaThemeDeployer" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="RunMediaThemeDeployer" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
   </Target>
 
-  <Target Name="UnzipMediaTheme" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="UnzipMediaTheme" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Unzip SourceFiles="$(DeploymentFolder)\$(MediaThemeRecipeFileName).zip"
            DestinationFolder="$(DeploymentFolder)" />
   </Target>
 
-  <Target Name="MoveAndRenameRecipe" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="MoveAndRenameRecipe" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Message Text="Moving Files $(RecipeToMove)"/>
     <Move SourceFiles="$(RecipeToMove)"
           OverwriteReadOnlyFiles="true"
           DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
   </Target>
 
-  <Target Name="CopyMediaThemeFiles" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="CopyMediaThemeFiles" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <ItemGroup>
       <MySourceFiles Include="Deployment\_MediaTheme\**\*.*"/>
     </ItemGroup>
@@ -40,7 +41,7 @@
           DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
   </Target>
 
-  <Target Name="DeleteTempMediaThemeFolderAfter" BeforeTargets="BeforeMediaThemeDeployment">
+  <Target Name="DeleteTempMediaThemeFolderAfter" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Message Text="Deleting leftover $(DeploymentFolder) folder."/>
     <RemoveDir Directories="$(DeploymentFolder)"/>
   </Target>
