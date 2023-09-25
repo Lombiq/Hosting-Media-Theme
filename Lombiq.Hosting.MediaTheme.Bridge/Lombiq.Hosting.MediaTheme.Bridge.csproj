@@ -29,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.Media" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.Module.Targets" Version="1.7.0" />
+    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="420.69.0" />
+    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="420.69.0" />
+    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="420.69.0" />
+    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="420.69.0" />
+    <PackageReference Include="OrchardCore.Media" Version="420.69.0" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="420.69.0" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
