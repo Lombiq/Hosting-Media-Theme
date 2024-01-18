@@ -66,7 +66,7 @@ public class CommandLineOptions
     public string? RemoteDeploymentClientApiKey { get; set; }
 }
 
-internal static class Program
+internal static partial class Program
 {
     public static Task Main(string[] args) =>
         Parser.Default.ParseArguments<CommandLineOptions>(args)
@@ -102,6 +102,8 @@ internal static class Program
         }
     }
 
+    internal static readonly string[] FeaturesToEnable = ["Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme"];
+
     private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
         // Creating directory for the deployment.
@@ -134,7 +136,7 @@ internal static class Program
         var featureStep = JObject.FromObject(new
         {
             name = "Feature",
-            enable = new[] { "Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme" },
+            enable = FeaturesToEnable,
         });
         recipeSteps.Add(featureStep);
 
@@ -152,12 +154,11 @@ internal static class Program
         {
             var manifestPath = Path.Combine(themePath, "Manifest.cs");
             var manifestContent = await File.ReadAllTextAsync(manifestPath);
-            var basteThemeMatch = Regex.Match(
-                manifestContent, @"BaseTheme\s*=\s*""(?<baseThemeId>.*)""", RegexOptions.ExplicitCapture, TimeSpan.FromSeconds(1));
+            var baseThemeMatch = BaseThemeRegex().Match(manifestContent);
 
-            if (basteThemeMatch.Success)
+            if (baseThemeMatch.Success)
             {
-                baseThemeId = basteThemeMatch.Groups["baseThemeId"].Value;
+                baseThemeId = baseThemeMatch.Groups["baseThemeId"].Value;
             }
         }
 
@@ -343,4 +344,7 @@ internal static class Program
 
         file.Close();
     }
+
+    [GeneratedRegex(@"BaseTheme\s*=\s*""(?<baseThemeId>.*)""", RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
+    private static partial Regex BaseThemeRegex();
 }
