@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <Title>Lombiq Hosting - Media Theme Bridge for Orchard Core</Title>
   </PropertyGroup>
@@ -29,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.Media" Version="1.7.0" />
-    <PackageReference Include="OrchardCore.Module.Targets" Version="1.7.0" />
+    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="1.8.2" />
+    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="1.8.2" />
+    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="1.8.2" />
+    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="1.8.2" />
+    <PackageReference Include="OrchardCore.Media" Version="1.8.2" />
+    <PackageReference Include="OrchardCore.Module.Targets" Version="1.8.2" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
 
