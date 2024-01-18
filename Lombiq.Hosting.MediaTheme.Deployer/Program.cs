@@ -76,7 +76,7 @@ internal static partial class Program
     private static void HandleParseError(IEnumerable<Error> errors)
     {
         var errorsList = errors.ToList();
-        if (errorsList.Any())
+        if (errorsList.Count != 0)
         {
             foreach (var error in errorsList)
             {
