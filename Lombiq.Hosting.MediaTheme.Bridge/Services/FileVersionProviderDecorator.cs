@@ -21,22 +21,12 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 /// to translate /mediatheme URLs.
 /// </para>
 /// </remarks>
-internal sealed class FileVersionProviderDecorator : IFileVersionProvider
+internal sealed class FileVersionProviderDecorator(
+    IFileVersionProvider decorated,
+    IMediaFileStore mediaFileStore,
+    IOptions<MediaOptions> mediaOptions) : IFileVersionProvider
 {
-    private readonly IFileVersionProvider _decorated;
-    private readonly IMediaFileStore _mediaFileStore;
-    private readonly IOptions<MediaOptions> _mediaOption;
     private readonly NonSecurityRandomizer _randomizer = new();
-
-    public FileVersionProviderDecorator(
-        IFileVersionProvider decorated,
-        IMediaFileStore mediaFileStore,
-        IOptions<MediaOptions> mediaOptions)
-    {
-        _decorated = decorated;
-        _mediaFileStore = mediaFileStore;
-        _mediaOption = mediaOptions;
-    }
 
     public string AddFileVersionToPath(PathString requestPathBase, string path)
     {
@@ -45,11 +35,11 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
 
         if (!isMediaThemePath)
         {
-            return _decorated.AddFileVersionToPath(requestPathBase, path);
+            return decorated.AddFileVersionToPath(requestPathBase, path);
         }
 
-        var assetsSubPath = _mediaFileStore.Combine(
-            _mediaOption.Value.AssetsRequestPath, Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder);
+        var assetsSubPath = mediaFileStore.Combine(
+            mediaOptions.Value.AssetsRequestPath, Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder);
         path = path.Replace(Routes.MediaThemeAssets, assetsSubPath);
 
         // Note that this will work all the time for local files. When a remote storage implementation is used to store
@@ -60,7 +50,7 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         // then the original file will get stuck, and no cache busting parameter will be added until the new file is
         // accessed with some other cache busting parameter. So, before the actual cache busting parameter can be added,
         // we need to add a random parameter.
-        var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path);
+        var cacheBustedPath = decorated.AddFileVersionToPath(requestPathBase, path);
 
         // This check could be more sophisticated with UriBuilder, but let's keep it simple, since it'll run frequently.
         if (!cacheBustedPath.Contains("?v="))

@@ -15,56 +15,41 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class MediaThemeManager : IMediaThemeManager
+public class MediaThemeManager(
+    IMediaThemeStateStore mediaThemeStateStore,
+    IShellFeaturesManager shellFeaturesManager,
+    IMemoryCache memoryCache,
+    IMediaFileStore mediaFileStore,
+    ISiteThemeService siteThemeService) : IMediaThemeManager
 {
-    private readonly IMediaThemeStateStore _mediaThemeStateStore;
-    private readonly IShellFeaturesManager _shellFeaturesManager;
-    private readonly IMemoryCache _memoryCache;
-    private readonly IMediaFileStore _mediaFileStore;
-    private readonly ISiteThemeService _siteThemeService;
-
-    public MediaThemeManager(
-        IMediaThemeStateStore mediaThemeStateStore,
-        IShellFeaturesManager shellFeaturesManager,
-        IMemoryCache memoryCache,
-        IMediaFileStore mediaFileStore,
-        ISiteThemeService siteThemeService)
-    {
-        _mediaThemeStateStore = mediaThemeStateStore;
-        _shellFeaturesManager = shellFeaturesManager;
-        _memoryCache = memoryCache;
-        _mediaFileStore = mediaFileStore;
-        _siteThemeService = siteThemeService;
-    }
-
     public async Task UpdateBaseThemeAsync(string baseThemeId)
     {
         ThrowIfBaseThemeIdIsInvalid(baseThemeId);
 
         if (!string.IsNullOrEmpty(baseThemeId))
         {
-            var baseThemeFeature = (await _shellFeaturesManager.GetAvailableFeaturesAsync())
+            var baseThemeFeature = (await shellFeaturesManager.GetAvailableFeaturesAsync())
                 .FirstOrDefault(feature => feature.IsTheme() && feature.Id == baseThemeId)
                 ?? throw new ArgumentException($"Theme with the given ID ({baseThemeId}) doesn't exist.", nameof(baseThemeId));
-            await _shellFeaturesManager.EnableFeaturesAsync(new[] { baseThemeFeature }, force: true);
+            await shellFeaturesManager.EnableFeaturesAsync(new[] { baseThemeFeature }, force: true);
         }
 
-        var state = await _mediaThemeStateStore.LoadMediaThemeStateAsync();
+        var state = await mediaThemeStateStore.LoadMediaThemeStateAsync();
         state.BaseThemeId = baseThemeId;
-        await _mediaThemeStateStore.SaveMediaThemeStateAsync(state);
+        await mediaThemeStateStore.SaveMediaThemeStateAsync(state);
 
         // Invalidate the cache to have the harvesters include the shapes from the base theme.
-        var currentTheme = await _siteThemeService.GetSiteThemeAsync();
+        var currentTheme = await siteThemeService.GetSiteThemeAsync();
         if (currentTheme.Id == FeatureNames.MediaTheme)
         {
-            _memoryCache.Remove($"ShapeTable:{currentTheme.Id}");
+            memoryCache.Remove($"ShapeTable:{currentTheme.Id}");
         }
     }
 
     public async Task<IEnumerable<(string Id, string Name)>> GetAvailableBaseThemesAsync()
     {
-        var enabledFeatures = await _shellFeaturesManager.GetEnabledFeaturesAsync();
-        return (await _shellFeaturesManager.GetAvailableFeaturesAsync())
+        var enabledFeatures = await shellFeaturesManager.GetEnabledFeaturesAsync();
+        return (await shellFeaturesManager.GetAvailableFeaturesAsync())
             .Where(feature =>
                 feature.IsTheme() &&
                 feature.Id != FeatureNames.MediaTheme &&
@@ -77,13 +62,13 @@ public class MediaThemeManager : IMediaThemeManager
 
     public async Task<MediaTemplate> GetMediaTemplateByShapeTypeAsync(string shapeType)
     {
-        var templatePath = _mediaFileStore.Combine(
+        var templatePath = mediaFileStore.Combine(
             Paths.MediaThemeRootFolder,
             Paths.MediaThemeTemplatesFolder,
             shapeType + ".liquid");
-        if (!await _mediaFileStore.FileExistsAsync(templatePath)) return null;
+        if (!await mediaFileStore.FileExistsAsync(templatePath)) return null;
 
-        await using var templateFileStream = await _mediaFileStore.GetFileStreamAsync(templatePath);
+        await using var templateFileStream = await mediaFileStore.GetFileStreamAsync(templatePath);
         using var reader = new StreamReader(templateFileStream);
         var content = await reader.ReadToEndAsync();
 

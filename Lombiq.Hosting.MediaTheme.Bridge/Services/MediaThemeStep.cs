@@ -8,19 +8,10 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class MediaThemeStep : IRecipeStepHandler
+public class MediaThemeStep(
+    IMediaFileStore mediaFileStore,
+    IMediaThemeManager mediaThemeManager) : IRecipeStepHandler
 {
-    private readonly IMediaFileStore _mediaFileStore;
-    private readonly IMediaThemeManager _mediaThemeManager;
-
-    public MediaThemeStep(
-        IMediaFileStore mediaFileStore,
-        IMediaThemeManager mediaThemeManager)
-    {
-        _mediaFileStore = mediaFileStore;
-        _mediaThemeManager = mediaThemeManager;
-    }
-
     public async Task ExecuteAsync(RecipeExecutionContext context)
     {
         if (!string.Equals(context.Name, RecipeStepIds.MediaTheme, StringComparison.OrdinalIgnoreCase))
@@ -30,11 +21,11 @@ public class MediaThemeStep : IRecipeStepHandler
 
         var model = context.Step.ToObject<MediaThemeStepModel>();
 
-        await _mediaThemeManager.UpdateBaseThemeAsync(model.BaseThemeId);
+        await mediaThemeManager.UpdateBaseThemeAsync(model.BaseThemeId);
 
         if (model.ClearMediaThemeFolder)
         {
-            await _mediaFileStore.TryDeleteDirectoryAsync(_mediaFileStore.Combine(Paths.MediaThemeRootFolder));
+            await mediaFileStore.TryDeleteDirectoryAsync(mediaFileStore.Combine(Paths.MediaThemeRootFolder));
         }
     }
 

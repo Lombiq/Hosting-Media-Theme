@@ -8,22 +8,13 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class ExtensionManagerDecorator : IExtensionManager
+public class ExtensionManagerDecorator(
+    IExtensionManager decorated,
+    IMediaThemeStateStore mediaThemeStateStore) : IExtensionManager
 {
-    private readonly IExtensionManager _decorated;
-    private readonly IMediaThemeStateStore _mediaThemeStateStore;
-
-    public ExtensionManagerDecorator(
-        IExtensionManager decorated,
-        IMediaThemeStateStore mediaThemeStateStore)
-    {
-        _decorated = decorated;
-        _mediaThemeStateStore = mediaThemeStateStore;
-    }
-
     public IEnumerable<IFeatureInfo> GetFeatureDependencies(string featureId)
     {
-        var dependencies = _decorated.GetFeatureDependencies(featureId).ToList();
+        var dependencies = decorated.GetFeatureDependencies(featureId).ToList();
 
         if (featureId != FeatureNames.MediaTheme) return dependencies;
 
@@ -43,16 +34,16 @@ public class ExtensionManagerDecorator : IExtensionManager
     }
 
     public IExtensionInfo GetExtension(string extensionId) =>
-        _decorated.GetExtension(extensionId);
+        decorated.GetExtension(extensionId);
 
     public IEnumerable<IExtensionInfo> GetExtensions() =>
-        _decorated.GetExtensions();
+        decorated.GetExtensions();
 
     public Task<ExtensionEntry> LoadExtensionAsync(IExtensionInfo extensionInfo) =>
-        _decorated.LoadExtensionAsync(extensionInfo);
+        decorated.LoadExtensionAsync(extensionInfo);
 
     public IEnumerable<IFeatureInfo> GetFeatures() =>
-        _decorated.GetFeatures();
+        decorated.GetFeatures();
 
     public IEnumerable<IFeatureInfo> GetFeatures(string[] featureIdsToLoad)
     {
@@ -62,19 +53,19 @@ public class ExtensionManagerDecorator : IExtensionManager
             if (!string.IsNullOrEmpty(baseThemeId)) featureIdsToLoad = [.. featureIdsToLoad, baseThemeId];
         }
 
-        return _decorated.GetFeatures(featureIdsToLoad);
+        return decorated.GetFeatures(featureIdsToLoad);
     }
 
     public IEnumerable<IFeatureInfo> GetDependentFeatures(string featureId) =>
-        _decorated.GetDependentFeatures(featureId);
+        decorated.GetDependentFeatures(featureId);
 
     public Task<IEnumerable<FeatureEntry>> LoadFeaturesAsync() =>
-        _decorated.LoadFeaturesAsync();
+        decorated.LoadFeaturesAsync();
 
     public Task<IEnumerable<FeatureEntry>> LoadFeaturesAsync(string[] featureIdsToLoad) =>
-        _decorated.LoadFeaturesAsync(featureIdsToLoad);
+        decorated.LoadFeaturesAsync(featureIdsToLoad);
 
     private string GetBaseThemeId() =>
         // It'll be retrieved from cache so it's not an issue.
-        _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
+        mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
 }

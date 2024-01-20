@@ -8,19 +8,11 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Middlewares;
 
-public class BlockMediaThemeTemplateDirectAccessMiddleware
+public class BlockMediaThemeTemplateDirectAccessMiddleware(
+    RequestDelegate next,
+    IOptions<MediaOptions> mediaOptions)
 {
-    private readonly RequestDelegate _next;
-
-    private readonly PathString _assetsRequestPath;
-
-    public BlockMediaThemeTemplateDirectAccessMiddleware(
-        RequestDelegate next,
-        IOptions<MediaOptions> mediaOptions)
-    {
-        _next = next;
-        _assetsRequestPath = mediaOptions.Value.AssetsRequestPath;
-    }
+    private readonly PathString _assetsRequestPath = mediaOptions.Value.AssetsRequestPath;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -33,7 +25,7 @@ public class BlockMediaThemeTemplateDirectAccessMiddleware
         // be available. So, we can't let people with the ManageMediaTheme permission still see the templates.
         if (!isMediaThemeTemplateRequest)
         {
-            await _next(context);
+            await next(context);
             return;
         }
 
