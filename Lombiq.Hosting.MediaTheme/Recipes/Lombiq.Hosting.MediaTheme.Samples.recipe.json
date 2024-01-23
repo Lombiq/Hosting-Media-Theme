@@ -32,10 +32,6 @@
           "TargetPath": "_MediaTheme/Assets/example.png"
         },
         {
-          "SourcePath": "_MediaTheme/Assets/favicon.ico",
-          "TargetPath": "_MediaTheme/Assets/favicon.ico"
-        },
-        {
           "SourcePath": "_MediaTheme/Templates/Example.liquid",
           "TargetPath": "_MediaTheme/Templates/Example.liquid"
         }
