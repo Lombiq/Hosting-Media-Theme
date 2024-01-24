@@ -50,7 +50,6 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
 
         var assetsSubPath = _mediaFileStore.Combine(
             _mediaOption.Value.AssetsRequestPath, Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder);
-        path = path.Replace(Routes.MediaThemeAssets, assetsSubPath);
 
         // Note that this will work all the time for local files. When a remote storage implementation is used to store
         // Media files though (like Azure Blob Storage) then Media Cache will mirror the files locally. Since this only
@@ -60,7 +59,7 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         // then the original file will get stuck, and no cache busting parameter will be added until the new file is
         // accessed with some other cache busting parameter. So, before the actual cache busting parameter can be added,
         // we need to add a random parameter.
-        var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path);
+        var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path.Replace(Routes.MediaThemeAssets, assetsSubPath));
 
         // This check could be more sophisticated with UriBuilder, but let's keep it simple, since it'll run frequently.
         if (!cacheBustedPath.Contains("?v="))
@@ -68,6 +67,6 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
             return QueryHelpers.AddQueryString(path, "mediatheme", _randomizer.Get().ToTechnicalString());
         }
 
-        return cacheBustedPath;
+        return cacheBustedPath.Replace(assetsSubPath, Routes.MediaThemeAssets);
     }
 }
