@@ -1,5 +1,8 @@
 <p>This is an example template hosted in Media Theme.</p>
 <p>Below is an image also hosted in Media Theme:</p>
+{% comment %}
+The images are from https://unsplash.com/.
+{% endcomment %}
 <img src="{{ '~/mediatheme/example.png' | href }}" alt="example" />
 
 <img src="{{ '~/mediatheme/example.png' | href |  append_version }}" alt="example2" />
