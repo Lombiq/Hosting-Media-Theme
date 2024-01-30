@@ -9,8 +9,13 @@ using MediaPermissions = OrchardCore.Media.Permissions;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class ManageMediaThemeFolderAuthorizationHandler(IServiceProvider serviceProvider) : AuthorizationHandler<PermissionRequirement>
+public class ManageMediaThemeFolderAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {
+    private readonly IServiceProvider _serviceProvider;
+
+    public ManageMediaThemeFolderAuthorizationHandler(IServiceProvider serviceProvider) =>
+        _serviceProvider = serviceProvider;
+
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
     {
         if (requirement.Permission.Name != MediaPermissions.ManageMediaFolder.Name) return;
@@ -21,7 +26,7 @@ public class ManageMediaThemeFolderAuthorizationHandler(IServiceProvider service
             return;
         }
 
-        var authorizationService = serviceProvider.GetService<IAuthorizationService>();
+        var authorizationService = _serviceProvider.GetService<IAuthorizationService>();
 
         if (!await authorizationService.AuthorizeAsync(context.User, ManageMediaTheme))
         {

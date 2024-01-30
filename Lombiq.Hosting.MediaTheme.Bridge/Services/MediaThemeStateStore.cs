@@ -1,17 +1,22 @@
-using Lombiq.Hosting.MediaTheme.Bridge.Models;
+﻿using Lombiq.Hosting.MediaTheme.Bridge.Models;
 using OrchardCore.Documents;
 using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 
-public class MediaThemeStateStore(IDocumentManager<MediaThemeStateDocument> documentManager) : IMediaThemeStateStore
+public class MediaThemeStateStore : IMediaThemeStateStore
 {
+    private readonly IDocumentManager<MediaThemeStateDocument> _documentManager;
+
+    public MediaThemeStateStore(IDocumentManager<MediaThemeStateDocument> documentManager) =>
+        _documentManager = documentManager;
+
     public Task<MediaThemeStateDocument> LoadMediaThemeStateAsync() =>
-        documentManager.GetOrCreateMutableAsync();
+        _documentManager.GetOrCreateMutableAsync();
 
     public Task<MediaThemeStateDocument> GetMediaThemeStateAsync() =>
-        documentManager.GetOrCreateImmutableAsync();
+        _documentManager.GetOrCreateImmutableAsync();
 
     public Task SaveMediaThemeStateAsync(MediaThemeStateDocument state) =>
-        documentManager.UpdateAsync(state);
+        _documentManager.UpdateAsync(state);
 }

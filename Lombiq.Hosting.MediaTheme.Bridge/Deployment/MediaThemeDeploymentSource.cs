@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Deployment;
 
-public class MediaThemeDeploymentSource(IMediaThemeStateStore mediaThemeStateStore) : IDeploymentSource
+public class MediaThemeDeploymentSource : IDeploymentSource
 {
+    private readonly IMediaThemeStateStore _mediaThemeStateStore;
+
+    public MediaThemeDeploymentSource(IMediaThemeStateStore mediaThemeStateStore) =>
+        _mediaThemeStateStore = mediaThemeStateStore;
+
     public async Task ProcessDeploymentStepAsync(DeploymentStep step, DeploymentPlanResult result)
     {
         if (step is not MediaThemeDeploymentStep mediaThemeStep)
@@ -16,7 +21,7 @@ public class MediaThemeDeploymentSource(IMediaThemeStateStore mediaThemeStateSto
             return;
         }
 
-        var mediaThemeState = await mediaThemeStateStore.GetMediaThemeStateAsync();
+        var mediaThemeState = await _mediaThemeStateStore.GetMediaThemeStateAsync();
 
         result.Steps.Add(new JObject(
             new JProperty("name", RecipeStepIds.MediaTheme),

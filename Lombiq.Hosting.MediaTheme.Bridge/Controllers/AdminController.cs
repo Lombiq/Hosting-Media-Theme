@@ -15,26 +15,45 @@ using static Lombiq.Hosting.MediaTheme.Bridge.Permissions.MediaThemeDeploymentPe
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Controllers;
 
-public class AdminController(
-    IOrchardServices<AdminController> orchardServices,
-    IMediaThemeStateStore mediaThemeStateStore,
-    IUpdateModelAccessor updateModelAccessor,
-    IMediaThemeManager mediaThemeManager,
-    ISiteThemeService siteThemeService,
-    IMediaThemeCachingService mediaThemeCachingService,
-    INotifier notifier) : Controller
+public class AdminController : Controller
 {
-    private readonly IAuthorizationService _authorizationService = orchardServices.AuthorizationService.Value;
-    private readonly IStringLocalizer<AdminController> T = orchardServices.StringLocalizer.Value;
-    private readonly IHtmlLocalizer<AdminController> H = orchardServices.HtmlLocalizer.Value;
+    private readonly IAuthorizationService _authorizationService;
+    private readonly IMediaThemeStateStore _mediaThemeStateStore;
+    private readonly IUpdateModelAccessor _updateModelAccessor;
+    private readonly IStringLocalizer<AdminController> T;
+    private readonly IHtmlLocalizer<AdminController> H;
+    private readonly IMediaThemeManager _mediaThemeManager;
+    private readonly ISiteThemeService _siteThemeService;
+    private readonly IMediaThemeCachingService _mediaThemeCachingService;
+    private readonly INotifier _notifier;
+
+    public AdminController(
+        IOrchardServices<AdminController> orchardServices,
+        IMediaThemeStateStore mediaThemeStateStore,
+        IUpdateModelAccessor updateModelAccessor,
+        IMediaThemeManager mediaThemeManager,
+        ISiteThemeService siteThemeService,
+        IMediaThemeCachingService mediaThemeCachingService,
+        INotifier notifier)
+    {
+        _authorizationService = orchardServices.AuthorizationService.Value;
+        _mediaThemeStateStore = mediaThemeStateStore;
+        _updateModelAccessor = updateModelAccessor;
+        T = orchardServices.StringLocalizer.Value;
+        _mediaThemeManager = mediaThemeManager;
+        _siteThemeService = siteThemeService;
+        _mediaThemeCachingService = mediaThemeCachingService;
+        _notifier = notifier;
+        H = orchardServices.HtmlLocalizer.Value;
+    }
 
     [HttpGet]
     public async Task<ActionResult> Index()
     {
         if (!await IsAuthorizedToManageMediaThemeAsync()) return NotFound();
 
-        var baseThemeId = (await mediaThemeStateStore.GetMediaThemeStateAsync())?.BaseThemeId;
-        var availableThemes = await mediaThemeManager.GetAvailableBaseThemesAsync();
+        var baseThemeId = (await _mediaThemeStateStore.GetMediaThemeStateAsync())?.BaseThemeId;
+        var availableThemes = await _mediaThemeManager.GetAvailableBaseThemesAsync();
 
         return View(await SetFlagIfMediaThemeIsActiveAsync(new MediaThemeSettingsViewModel
         {
@@ -49,22 +68,22 @@ public class AdminController(
     {
         if (!await IsAuthorizedToManageMediaThemeAsync()) return NotFound();
 
-        var state = await mediaThemeStateStore.LoadMediaThemeStateAsync();
+        var state = await _mediaThemeStateStore.LoadMediaThemeStateAsync();
         if (state.BaseThemeId == viewModel.BaseThemeId) RedirectToAction(nameof(Index));
 
-        var availableThemes = (await mediaThemeManager.GetAvailableBaseThemesAsync()).ToList();
+        var availableThemes = (await _mediaThemeManager.GetAvailableBaseThemesAsync()).ToList();
         viewModel.AvailableBaseThemes = availableThemes;
         if (!string.IsNullOrEmpty(viewModel.BaseThemeId) &&
             availableThemes.TrueForAll(theme => theme.Id != viewModel.BaseThemeId))
         {
-            updateModelAccessor.ModelUpdater.ModelState.AddModelError(
+            _updateModelAccessor.ModelUpdater.ModelState.AddModelError(
                 nameof(viewModel.BaseThemeId),
                 T["The selected theme is not available."]);
 
             return View(await SetFlagIfMediaThemeIsActiveAsync(viewModel));
         }
 
-        await mediaThemeManager.UpdateBaseThemeAsync(viewModel.BaseThemeId);
+        await _mediaThemeManager.UpdateBaseThemeAsync(viewModel.BaseThemeId);
 
         return RedirectToAction(nameof(Index));
     }
@@ -75,8 +94,8 @@ public class AdminController(
     {
         if (!await IsAuthorizedToManageMediaThemeAsync()) return NotFound();
 
-        await mediaThemeCachingService.InvalidateCachedMediaThemeTemplatesAsync();
-        await notifier.SuccessAsync(H["Media Theme template cache was invalidated successfully!"]);
+        await _mediaThemeCachingService.InvalidateCachedMediaThemeTemplatesAsync();
+        await _notifier.SuccessAsync(H["Media Theme template cache was invalidated successfully!"]);
         return RedirectToAction(nameof(Index));
     }
 
@@ -85,7 +104,7 @@ public class AdminController(
 
     private async Task<MediaThemeSettingsViewModel> SetFlagIfMediaThemeIsActiveAsync(MediaThemeSettingsViewModel viewModel)
     {
-        viewModel.IsMediaThemeActive = (await siteThemeService.GetSiteThemeAsync())?.Id == FeatureNames.MediaTheme;
+        viewModel.IsMediaThemeActive = (await _siteThemeService.GetSiteThemeAsync())?.Id == FeatureNames.MediaTheme;
         return viewModel;
     }
 }

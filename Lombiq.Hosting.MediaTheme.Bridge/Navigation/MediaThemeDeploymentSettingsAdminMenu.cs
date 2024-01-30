@@ -7,9 +7,11 @@ using static Lombiq.Hosting.MediaTheme.Bridge.Permissions.MediaThemeDeploymentPe
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Navigation;
 
-public class MediaThemeDeploymentSettingsAdminMenu(IStringLocalizer<MediaThemeDeploymentSettingsAdminMenu> stringLocalizer) : INavigationProvider
+public class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
 {
-    private readonly IStringLocalizer T = stringLocalizer;
+    private readonly IStringLocalizer T;
+
+    public MediaThemeDeploymentSettingsAdminMenu(IStringLocalizer<MediaThemeDeploymentSettingsAdminMenu> stringLocalizer) => T = stringLocalizer;
 
     public Task BuildNavigationAsync(string name, NavigationBuilder builder)
     {

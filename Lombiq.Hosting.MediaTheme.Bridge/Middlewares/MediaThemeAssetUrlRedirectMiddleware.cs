@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Middlewares;
 
-public class MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next)
+public class MediaThemeAssetUrlRedirectMiddleware
 {
+    private readonly RequestDelegate _next;
+
+    public MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next) => _next = next;
+
     public async Task InvokeAsync(
         HttpContext context,
         IMediaFileStore mediaFileStore,
@@ -20,7 +24,7 @@ public class MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next)
 
         if (!isMediaThemeRequest)
         {
-            await next(context);
+            await _next(context);
             return;
         }
 
