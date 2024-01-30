@@ -38,8 +38,7 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         _mediaOption = mediaOptions;
     }
 
-    public
-        string AddFileVersionToPath(PathString requestPathBase, string path)
+    public string AddFileVersionToPath(PathString requestPathBase, string path)
     {
         var isMediaThemePath = path.StartsWithOrdinalIgnoreCase(Routes.MediaThemeAssets) ||
             path.ContainsOrdinalIgnoreCase(Routes.MediaThemeAssets + "/");
@@ -60,7 +59,7 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         // then the original file will get stuck, and no cache busting parameter will be added until the new file is
         // accessed with some other cache busting parameter. So, before the actual cache busting parameter can be added,
         // we need to add a random parameter.
-        var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path);
+        var cacheBustedPath = _decorated.AddFileVersionToPath(requestPathBase, path.Replace(Routes.MediaThemeAssets, assetsSubPath));
 
         // This check could be more sophisticated with UriBuilder, but let's keep it simple, since it'll run frequently.
         if (!cacheBustedPath.Contains("?v="))
