@@ -68,6 +68,8 @@ public class CommandLineOptions
 
 internal static partial class Program
 {
+    internal static readonly string[] FeaturesToEnable = ["Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme"];
+
     public static Task Main(string[] args) =>
         Parser.Default.ParseArguments<CommandLineOptions>(args)
             .WithNotParsed(HandleParseError)
@@ -101,8 +103,6 @@ internal static partial class Program
             Environment.ExitCode = 1;
         }
     }
-
-    internal static readonly string[] FeaturesToEnable = ["Lombiq.Hosting.MediaTheme.Bridge", "Lombiq.Hosting.MediaTheme"];
 
     private static async Task RunOptionsInnerAsync(CommandLineOptions options)
     {
