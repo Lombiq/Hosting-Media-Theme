@@ -109,6 +109,7 @@ on:
 
 jobs:
   deploy-media-theme:
+    name: Deploy Media Theme to DotNest
     uses: Lombiq/Hosting-Media-Theme/.github/workflows/deploy-media-theme.yml@dev
     secrets:
       URL: ${{ secrets.MY_THEME_DEPLOYMENT_URL }}
