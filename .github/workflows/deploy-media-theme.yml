@@ -35,6 +35,7 @@ on:
 
 jobs:
   deploy-media-theme:
+    name: Deploy Media Theme
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
