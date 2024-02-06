@@ -12,7 +12,7 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Middlewares;
 /// Middleware to rewrite requests coming to ~/mediatheme to the real (Media or theme) paths the files are properly
 /// loaded behind the scenes.
 /// </summary>
-internal class MediaThemeAssetUrlRewritingMiddleware
+internal sealed class MediaThemeAssetUrlRewritingMiddleware
 {
     private readonly RequestDelegate _next;
 
