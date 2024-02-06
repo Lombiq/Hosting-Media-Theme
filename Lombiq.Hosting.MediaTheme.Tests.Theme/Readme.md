@@ -8,3 +8,5 @@ Media Themes are used in two distinct modes:
 - From the Media folder when deployed.
 
 We need to test both cases. This project tests the standard theme scenario while the sample in `Lombiq.Hosting.MediaTheme` provides the content for testing the deployed scenario.
+
+This project is intentionally not published to NuGet.
