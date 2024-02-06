@@ -6,7 +6,7 @@ using static Lombiq.Hosting.MediaTheme.Bridge.Constants.FeatureNames;
     Author = "Lombiq Technologies",
     Website = "https://github.com/Lombiq/Hosting-Media-Theme",
     Version = "0.0.1",
-    Description = "It allows developers to host their themes in the Orchard Core Media Library, including templates and assets.",
+    Description = "Allows developers to host their themes in the Orchard Core Media Library, including templates and assets.",
     Category = "Hosting",
     Dependencies = new[] { MediaThemeBridge }
 )]
