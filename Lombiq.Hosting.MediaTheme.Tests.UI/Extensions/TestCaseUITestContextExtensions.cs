@@ -14,9 +14,9 @@ public static class TestCaseUITestContextExtensions
         await context.ExecuteMediaThemeSampleRecipeDirectlyAsync();
         await context.GoToMediaThemeTestContentPageAsync();
 
-        context.Exists(By.XPath("//head//link[contains(@href, '/media/_MediaTheme/Assets/example.css?v=')]").Hidden());
+        context.Exists(By.XPath("//head//link[contains(@href, '/mediatheme/example.css?v=')]").Hidden());
         context.Exists(By.XPath("//p[contains(., 'This is an example template hosted in Media Theme.')]"));
         context.Exists(By.XPath("//main//img[contains(@src, '/mediatheme/example.png')]"));
-        context.Exists(By.XPath("//main//img[contains(@src, '/media/_MediaTheme/Assets/example2.png?v=')]"));
+        context.Exists(By.XPath("//main//img[contains(@src, '/mediatheme/example2.png?v=')]"));
     }
 }
