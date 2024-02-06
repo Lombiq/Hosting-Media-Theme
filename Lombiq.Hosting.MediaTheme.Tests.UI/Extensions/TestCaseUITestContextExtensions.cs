@@ -1,3 +1,4 @@
+using Atata;
 using Lombiq.Tests.UI.Extensions;
 using Lombiq.Tests.UI.Services;
 using OpenQA.Selenium;
@@ -13,6 +14,7 @@ public static class TestCaseUITestContextExtensions
         await context.ExecuteMediaThemeSampleRecipeDirectlyAsync();
         await context.GoToMediaThemeTestContentPageAsync();
 
+        context.Exists(By.XPath("//head//link[contains(@href, '/media/_MediaTheme/Assets/example.css?v=')]").Hidden());
         context.Exists(By.XPath("//p[contains(., 'This is an example template hosted in Media Theme.')]"));
     }
 }
