@@ -46,7 +46,7 @@ public class Startup : StartupBase
 
     public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
     {
-        app.UseMiddleware<MediaThemeAssetUrlRedirectMiddleware>();
+        app.UseMiddleware<MediaThemeAssetUrlRewritingMiddleware>();
         app.UseMiddleware<BlockMediaThemeTemplateDirectAccessMiddleware>();
     }
 }

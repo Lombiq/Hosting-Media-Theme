@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Middlewares;
 
-public class MediaThemeAssetUrlRedirectMiddleware
+/// <summary>
+/// Middleware to rewrite requests coming to ~/mediatheme to the real (Media or theme) paths the files are properly
+/// loaded behind the scenes.
+/// </summary>
+internal sealed class MediaThemeAssetUrlRewritingMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public MediaThemeAssetUrlRedirectMiddleware(RequestDelegate next) => _next = next;
+    public MediaThemeAssetUrlRewritingMiddleware(RequestDelegate next) => _next = next;
 
     public async Task InvokeAsync(
         HttpContext context,
@@ -44,9 +48,8 @@ public class MediaThemeAssetUrlRedirectMiddleware
             assetUrl = "/" + activeTheme.Id + assetRelativePath;
         }
 
-        // URL starts with "/mediatheme" which is checked above.
-#pragma warning disable SCS0027 // Potential Open Redirect vulnerability.
-        context.Response.Redirect(assetUrl, permanent: true);
-#pragma warning restore SCS0027 // Potential Open Redirect vulnerability.
+        context.Request.Path = assetUrl;
+
+        await _next(context);
     }
 }

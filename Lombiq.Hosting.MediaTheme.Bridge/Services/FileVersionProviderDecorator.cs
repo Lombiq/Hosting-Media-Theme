@@ -17,8 +17,8 @@ namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
 /// </summary>
 /// <remarks>
 /// <para>
-/// The default <see cref="IFileVersionProvider"/>, <see cref="ShellFileVersionProvider"/>, works just fine, but we need
-/// to translate /mediatheme URLs.
+/// The default <see cref="IFileVersionProvider"/> and <see cref="ShellFileVersionProvider"/> work just fine, but we
+/// need to translate /mediatheme URLs.
 /// </para>
 /// </remarks>
 internal sealed class FileVersionProviderDecorator : IFileVersionProvider

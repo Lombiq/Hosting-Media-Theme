@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-    <Title>Lombiq Hosting - Media Theme for Orchard Core</Title>
   </PropertyGroup>
 
   <PropertyGroup>
