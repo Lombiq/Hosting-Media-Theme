@@ -1,0 +1,35 @@
+{% comment %}
+Keep this in sync with the template and files in Lombiq.Hosting.MediaTheme.
+{% endcomment %}
+<!DOCTYPE html>
+<html lang="{{ Culture.Name }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ "PageTitle" | shape_new | shape_stringify }}</title>
+
+        {% assign stylesUrl = "~/mediatheme/example.css" | href %}
+        {% style src:stylesUrl %}
+
+        {% resources type: "HeadScript" %}
+        {% resources type: "HeadLink" %}
+        {% resources type: "Stylesheet" %}
+        {% render_section "HeadMeta", required: false %}
+    </head>
+<body>
+    <div id="layout-wrapper">
+        <p>This is an example template hosted in Media Theme.</p>
+        <p>Below is an image also hosted in Media Theme:</p>
+        {% comment %}
+        The images are from https://unsplash.com/.
+        {% endcomment %}
+        <img src="{{ '~/mediatheme/example.png' | href }}" alt="example" />
+
+        <img src="{{ '~/mediatheme/example2.png' | href |  append_version }}" alt="example2" />
+
+        <div id="layout-footer">
+            {% resources type: "FootScript" %}
+        </div>
+    </div>
+</body>
+</html>

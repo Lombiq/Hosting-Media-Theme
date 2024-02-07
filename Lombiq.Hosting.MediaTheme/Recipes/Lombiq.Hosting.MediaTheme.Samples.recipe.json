@@ -28,6 +28,10 @@
       "name": "media",
       "Files": [
         {
+          "SourcePath": "_MediaTheme/Assets/example.css",
+          "TargetPath": "_MediaTheme/Assets/example.css"
+        },
+        {
           "SourcePath": "_MediaTheme/Assets/example.png",
           "TargetPath": "_MediaTheme/Assets/example.png"
         },
