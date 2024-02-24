@@ -1,7 +1,6 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Lombiq.Hosting.MediaTheme.Bridge.Models;
 using Lombiq.Hosting.MediaTheme.Bridge.Services;
-using Newtonsoft.Json.Serialization;
 using OrchardCore.Deployment;
 using System.Collections.Generic;
 using System.Text.Json.Nodes;
