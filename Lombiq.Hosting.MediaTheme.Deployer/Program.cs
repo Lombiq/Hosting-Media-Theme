@@ -333,7 +333,7 @@ internal static partial class Program
             author = string.Empty,
             website = string.Empty,
             version = string.Empty,
-            issetuprecipe = false,// #spell-check-ignore-line
+            issetuprecipe = false, // #spell-check-ignore-line
             categories = Enumerable.Empty<object>(),
             tags = Enumerable.Empty<object>(),
             steps,
