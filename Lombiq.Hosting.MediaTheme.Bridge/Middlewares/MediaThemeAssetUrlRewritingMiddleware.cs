@@ -1,5 +1,6 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
+using OrchardCore.Environment.Shell;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
 using OrchardCore.Themes.Services;
@@ -21,7 +22,8 @@ internal sealed class MediaThemeAssetUrlRewritingMiddleware
     public async Task InvokeAsync(
         HttpContext context,
         IMediaFileStore mediaFileStore,
-        ISiteThemeService siteThemeService)
+        ISiteThemeService siteThemeService,
+        ShellSettings shellSettings)
     {
         var isMediaThemeRequest = context.Request.Path
             .StartsWithSegments(new PathString(Routes.MediaThemeAssets), StringComparison.OrdinalIgnoreCase, out _);
@@ -40,6 +42,12 @@ internal sealed class MediaThemeAssetUrlRewritingMiddleware
         if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(mediaPath))
         {
             assetUrl = mediaFileStore.MapPathToPublicUrl(mediaPath);
+
+            if (!string.IsNullOrEmpty(shellSettings.RequestUrlPrefix) &&
+                assetUrl.StartsWith("/" + shellSettings.RequestUrlPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                assetUrl = assetUrl[(shellSettings.RequestUrlPrefix.Length + 1)..];
+            }
         }
         else
         {
