@@ -1,4 +1,5 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.Hosting.MediaTheme.Bridge.Helpers;
 using Microsoft.AspNetCore.Http;
 using OrchardCore.Environment.Shell;
 using OrchardCore.FileStorage;
@@ -41,13 +42,7 @@ internal sealed class MediaThemeAssetUrlRewritingMiddleware
         string assetUrl;
         if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(mediaPath))
         {
-            assetUrl = mediaFileStore.MapPathToPublicUrl(mediaPath);
-
-            if (!string.IsNullOrEmpty(shellSettings.RequestUrlPrefix) &&
-                assetUrl.StartsWith("/" + shellSettings.RequestUrlPrefix, StringComparison.OrdinalIgnoreCase))
-            {
-                assetUrl = assetUrl[(shellSettings.RequestUrlPrefix.Length + 1)..];
-            }
+            assetUrl = RequestUrlPrefixRemover.RemoveIfHasPrefix(mediaFileStore.MapPathToPublicUrl(mediaPath), shellSettings);
         }
         else
         {
