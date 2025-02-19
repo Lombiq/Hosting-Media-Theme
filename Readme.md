@@ -6,7 +6,7 @@
 
 The Media Theme feature will allow developers to host their themes in the Orchard Core Media Library, including templates and assets. This is useful in SaaS scenarios where you can't allow everyone to develop full Orchard themes, but still want to make the usual Orchard theming experience available to all users. Media Theme allows full theming of sites running on [DotNest](https://dotnest.com/), the Orchard SaaS, too. Watch a demo video of it from the Orchard Community Meeting [here](https://www.youtube.com/watch?v=bKXFo_U0TwA).
 
-We at [Lombiq](https://lombiq.com/) also used this SDK for the new [Show Orchard website](https://showorchard.com/) when migrating it from Orchard 1 DotNest to DotNest Core (see [case study](https://dotnest.com/blog/show-orchard-case-study-migrating-an-orchard-1-dotnest-site-to-orchard-core) and the [theme's source code](https://github.com/Lombiq/Show-Orchard-Theme)).<!-- #spell-check-ignore-line -->
+We at [Lombiq](https://lombiq.com/) also used this SDK for the new [Show Orchard website](https://showorchard.com/) when migrating it from Orchard 1 DotNest to DotNest Core (see [case study](https://dotnest.com/blog/show-orchard-case-study-migrating-an-orchard-1-dotnest-site-to-orchard-core) and the [theme's source code](https://github.com/Lombiq/Show-Orchard-Theme)).
 
 Do you want to quickly try out this project and see it in action? Check it out in our [Open-Source Orchard Core Extensions](https://github.com/Lombiq/Open-Source-Orchard-Core-Extensions) full Orchard Core solution and also see our other useful Orchard Core-related open-source projects!
 
@@ -146,5 +146,5 @@ If you want to publish `Lombiq.Hosting.MediaTheme.Deployer` to test it during lo
 
 1. Pack it into a NuGet package by running `dotnet pack` in the project's folder.
 2. Uninstall the tool if you have it installed already: `dotnet tool uninstall --global Lombiq.Hosting.MediaTheme.Deployer`.
-3. Install the local version (note that without a version specified, it'll be published as v1.0.0): `dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --add-source .\nupkg --version 1.0.0`.<!-- #spell-check-ignore-line -->
+3. Install the local version (note that without a version specified, it'll be published as v1.0.0): `dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer --add-source .\nupkg --version 1.0.0`.
 4. Now `media-theme-deploy` will use the development version.

@@ -319,7 +319,7 @@ internal static partial class Program
         return values.DeploymentFileName != null
             ? Path.Join(deploymentPath, values.DeploymentFileName)
             : Path.Join(deploymentPath, MediaThemeDeploymentDirectory)
-              + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture); // #spell-check-ignore-line
+              + DateTime.Now.ToString("ddMMMyyyyHHmmss", CultureInfo.CurrentCulture);
     }
 
     private static Task CreateRecipeAndWriteItAsync(CommandLineOptions options, JsonArray steps, string newDirectoryPath)
@@ -333,7 +333,7 @@ internal static partial class Program
             author = string.Empty,
             website = string.Empty,
             version = string.Empty,
-            issetuprecipe = false, // #spell-check-ignore-line
+            issetuprecipe = false,
             categories = Enumerable.Empty<object>(),
             tags = Enumerable.Empty<object>(),
             steps,
