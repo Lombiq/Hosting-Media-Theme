@@ -21,9 +21,8 @@
   <ItemGroup>
     <None Include="Readme.md" />
     <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
-    <None Include="build\**" Pack="true" PackagePath="build\" />
-    <None Include="*.props" Pack="true" PackagePath="" />
-    <None Include="*.targets" Pack="true" PackagePath="" />
+    <None Include="*.props" Pack="true" PackagePath="build\" />
+    <None Include="*.targets" Pack="true" PackagePath="build\" />
   </ItemGroup>
 
 </Project>
