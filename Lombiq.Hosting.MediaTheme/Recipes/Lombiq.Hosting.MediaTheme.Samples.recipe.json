@@ -25,6 +25,10 @@
       ]
     },
     {
+      "name": "themes",
+      "site": "Lombiq.Hosting.MediaTheme"
+    },
+    {
       "name": "media",
       "Files": [
         {
