@@ -34,6 +34,11 @@ public class MediaTemplatesShapeBindingResolver : IShapeBindingResolver
         _siteThemeService = siteThemeService;
     }
 
+    /// <summary>
+    /// Resolves the shape binding for the given shape type. If the current site theme is the Media Theme, it will return a binding for the shape type
+    /// using the media library content directly or from cache. Otherwise, it will return null, so the default shape binding will be used. Which means
+    /// shapes will be loaded in the regular way.
+    /// </summary>
     public async Task<ShapeBinding> GetShapeBindingAsync(string shapeType) =>
         !AdminAttribute.IsApplied(_hca.HttpContext) &&
         (await _siteThemeService.GetSiteThemeAsync()).Id == FeatureNames.MediaTheme &&
