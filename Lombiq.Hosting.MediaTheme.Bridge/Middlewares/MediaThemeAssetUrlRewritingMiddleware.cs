@@ -38,9 +38,23 @@ internal sealed class MediaThemeAssetUrlRewritingMiddleware
         var assetRelativePath = context.Request.Path.Value?.Replace(
             Routes.MediaThemeAssets,
             string.Empty);
+
+        await GenerateMediaThemeAssetUrlAsync(context, mediaFileStore, siteThemeService, shellSettings, assetRelativePath);
+
+        await _next(context);
+    }
+
+    private static async Task GenerateMediaThemeAssetUrlAsync(
+        HttpContext context,
+        IMediaFileStore mediaFileStore,
+        ISiteThemeService siteThemeService,
+        ShellSettings shellSettings,
+        string assetRelativePath)
+    {
         var mediaPath = mediaFileStore.Combine(Paths.MediaThemeRootFolder, Paths.MediaThemeAssetsFolder, assetRelativePath);
         string assetUrl;
-        if (!context.IsDevelopment() || await mediaFileStore.FileExistsAsync(mediaPath))
+        var siteThemeId = (await siteThemeService.GetSiteThemeAsync()).Id;
+        if (siteThemeId == FeatureNames.MediaTheme && await mediaFileStore.FileExistsAsync(mediaPath))
         {
             assetUrl = RequestUrlPrefixRemover.RemoveIfHasPrefix(mediaFileStore.MapPathToPublicUrl(mediaPath), shellSettings);
 
@@ -52,13 +66,9 @@ internal sealed class MediaThemeAssetUrlRewritingMiddleware
         }
         else
         {
-            var activeTheme = await siteThemeService.GetSiteThemeAsync();
-
-            assetUrl = "/" + activeTheme.Id + assetRelativePath;
+            assetUrl = $"/{siteThemeId}{assetRelativePath}";
         }
 
         context.Request.Path = assetUrl;
-
-        await _next(context);
     }
 }

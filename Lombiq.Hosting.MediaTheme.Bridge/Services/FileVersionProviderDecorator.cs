@@ -3,10 +3,12 @@ using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OrchardCore.FileStorage;
 using OrchardCore.Media;
 using OrchardCore.Mvc;
+using OrchardCore.Themes.Services;
 using System;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Services;
@@ -27,15 +29,18 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
     private readonly IMediaFileStore _mediaFileStore;
     private readonly IOptions<MediaOptions> _mediaOption;
     private readonly NonSecurityRandomizer _randomizer = new();
+    private readonly IHttpContextAccessor _hca;
 
     public FileVersionProviderDecorator(
         IFileVersionProvider decorated,
         IMediaFileStore mediaFileStore,
-        IOptions<MediaOptions> mediaOptions)
+        IOptions<MediaOptions> mediaOptions,
+        IHttpContextAccessor httpContextAccessor)
     {
         _decorated = decorated;
         _mediaFileStore = mediaFileStore;
         _mediaOption = mediaOptions;
+        _hca = httpContextAccessor;
     }
 
     public string AddFileVersionToPath(PathString requestPathBase, string path)
@@ -46,6 +51,17 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         if (!isMediaThemePath)
         {
             return _decorated.AddFileVersionToPath(requestPathBase, path);
+        }
+
+        // If the Media Theme is not the current site theme, we need to rewrite the path to use the current site theme wwwroot
+        // folder.
+        var siteThemeService = _hca.HttpContext?.RequestServices.GetRequiredService<ISiteThemeService>();
+        if (siteThemeService?.GetSiteThemeAsync().GetAwaiter().GetResult().Id is { } mediaThemeId &&
+            mediaThemeId != FeatureNames.MediaTheme)
+        {
+            var pathWithoutMediaTheme = path[(path.IndexOfOrdinal(Routes.MediaThemeAssets) + Routes.MediaThemeAssets.Length)..];
+
+            return _decorated.AddFileVersionToPath(requestPathBase, $"/{mediaThemeId}/{pathWithoutMediaTheme}");
         }
 
         var assetsSubPath = _mediaFileStore.Combine(
