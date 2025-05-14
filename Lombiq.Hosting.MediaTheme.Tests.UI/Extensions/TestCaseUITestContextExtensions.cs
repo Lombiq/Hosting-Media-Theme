@@ -20,6 +20,7 @@ public static class TestCaseUITestContextExtensions
         {
             tenantPrefix += "/mediatheme";
         }
+
         AssertElements(context, "v", tenantPrefix);
     }
 
