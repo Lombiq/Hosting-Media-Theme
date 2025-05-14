@@ -16,6 +16,10 @@ public static class TestCaseUITestContextExtensions
     {
         await context.ExecuteMediaThemeSampleRecipeDirectlyAsync();
         await context.GoToMediaThemeTestContentPageAsync();
+        if (!string.IsNullOrEmpty(tenantPrefix))
+        {
+            tenantPrefix += "/mediatheme";
+        }
         AssertElements(context, "v", tenantPrefix);
     }
 
