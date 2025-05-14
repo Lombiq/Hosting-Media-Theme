@@ -61,7 +61,7 @@ internal sealed class FileVersionProviderDecorator : IFileVersionProvider
         {
             var pathWithoutMediaTheme = path[(path.IndexOfOrdinal(Routes.MediaThemeAssets) + Routes.MediaThemeAssets.Length)..];
 
-            return _decorated.AddFileVersionToPath(requestPathBase, $"/{mediaThemeId}/{pathWithoutMediaTheme}");
+            return _decorated.AddFileVersionToPath(requestPathBase, $"/{mediaThemeId}{pathWithoutMediaTheme}");
         }
 
         var assetsSubPath = _mediaFileStore.Combine(
