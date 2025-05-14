@@ -27,16 +27,16 @@ public static class TestCaseUITestContextExtensions
     {
         await context.SetThemeDirectlyAsync("Lombiq.Hosting.MediaTheme.Tests.Theme");
         await context.GoToHomePageAsync(onlyIfNotAlreadyThere: false);
-        AssertElements(context, "mediatheme", tenantPrefix);
+        AssertElements(context, "v", tenantPrefix);
     }
 
     private static void AssertElements(UITestContext context, string cacheBustingParameterName, string tenantPrefix)
     {
         context.Exists(By.XPath(
-            $"//head//link[contains(@href, '{GetTenantUrlPrefix(tenantPrefix)}/mediatheme/example.css?{cacheBustingParameterName}=')]").Hidden());
+            $"//head//link[contains(@href, '{GetTenantUrlPrefix(tenantPrefix)}/example.css?{cacheBustingParameterName}=')]").Hidden());
         context.Exists(By.XPath("//p[contains(., 'This is an example template hosted in Media Theme.')]"));
-        context.Exists(By.XPath($"//img[contains(@src, '{GetTenantUrlPrefix(tenantPrefix)}/mediatheme/example.png')]"));
-        context.Exists(By.XPath($"//img[contains(@src, '{GetTenantUrlPrefix(tenantPrefix)}/mediatheme/example2.png?{cacheBustingParameterName}=')]"));
+        context.Exists(By.XPath($"//img[contains(@src, '{GetTenantUrlPrefix(tenantPrefix)}/example.png')]"));
+        context.Exists(By.XPath($"//img[contains(@src, '{GetTenantUrlPrefix(tenantPrefix)}/example2.png?{cacheBustingParameterName}=')]"));
     }
 
     private static string GetTenantUrlPrefix(string tenantName) =>
