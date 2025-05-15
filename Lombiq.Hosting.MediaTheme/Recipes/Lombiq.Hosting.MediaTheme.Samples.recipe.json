@@ -19,10 +19,20 @@
   },
   "steps": [
     {
-      "name": "feature",
+      "name": "Feature",
       "enable": [
-        "Lombiq.Hosting.MediaTheme.Bridge"
+        "Lombiq.Hosting.MediaTheme.Bridge",
+        "Lombiq.Hosting.MediaTheme"
       ]
+    },
+    {
+      "name": "Themes",
+      "Site": "Lombiq.Hosting.MediaTheme"
+    },
+    {
+      "name": "mediatheme",
+      "ClearMediaThemeFolder": true,
+      "BaseThemeId": "Lombiq.Hosting.MediaTheme.Tests.Theme"
     },
     {
       "name": "media",
