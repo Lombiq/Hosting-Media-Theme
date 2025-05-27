@@ -1,6 +1,8 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using OrchardCore.DisplayManagement.Manifest;
 using OrchardCore.Environment.Extensions;
 using OrchardCore.Environment.Extensions.Features;
+using OrchardCore.Environment.Extensions.Manifests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,23 @@ public sealed class ExtensionManagerDecorator : IExtensionManager
 
     public IEnumerable<IFeatureInfo> GetFeatureDependencies(string featureId)
     {
+        static void FindBaseThemes(List<IFeatureInfo> dependencies, IFeatureInfo[] allFeatures, string baseThemeId)
+        {
+            if (string.IsNullOrWhiteSpace(baseThemeId) ||
+                allFeatures.Find(feature => baseThemeId.EqualsOrdinalIgnoreCase(feature.Id)) is not
+                { Extension.Manifest: { } manifest } baseTheme)
+            {
+                return;
+            }
+
+            dependencies.Add(baseTheme);
+
+            if (manifest is ManifestInfo { ModuleInfo: ThemeAttribute { BaseTheme: { } ancestorThemeId } })
+            {
+                FindBaseThemes(dependencies, allFeatures, ancestorThemeId);
+            }
+        }
+
         var dependencies = _decorated.GetFeatureDependencies(featureId).ToList();
 
         if (featureId != FeatureNames.MediaTheme) return dependencies;
@@ -30,9 +49,7 @@ public sealed class ExtensionManagerDecorator : IExtensionManager
         var baseThemeId = GetBaseThemeId();
         if (string.IsNullOrEmpty(baseThemeId)) return dependencies;
 
-        var allFeatures = GetFeatures().ToArray();
-        var baseTheme = allFeatures.Find(feature => feature.Id == baseThemeId);
-        dependencies.Add(baseTheme);
+        FindBaseThemes(dependencies, GetFeatures().ToArray(), baseThemeId);
 
         // The base theme has to be the last dependency, see ThemeFeatureBuilderEvents in Orchard's source.
         var mediaTheme = dependencies.First(theme => theme.Id == FeatureNames.MediaTheme);
