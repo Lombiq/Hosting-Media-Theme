@@ -1,4 +1,5 @@
 using Lombiq.HelpfulLibraries.OrchardCore.DependencyInjection;
+using Lombiq.HelpfulLibraries.OrchardCore.ResourceManagement;
 using Lombiq.Hosting.MediaTheme.Bridge.Deployment;
 using Lombiq.Hosting.MediaTheme.Bridge.Middlewares;
 using Lombiq.Hosting.MediaTheme.Bridge.Navigation;
@@ -39,6 +40,7 @@ public sealed class Startup : StartupBase
         services.AddScoped<IMediaThemeCachingService, MediaThemeCachingService>();
         services.AddOrchardServices();
         services.Decorate<IFileVersionProvider, FileVersionProviderDecorator>();
+        services.AddScoped<IResourceFilterThemeResolver, MediaThemeResourceFilterThemeResolver>();
     }
 
     public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
