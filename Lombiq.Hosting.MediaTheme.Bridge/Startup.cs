@@ -41,6 +41,7 @@ public sealed class Startup : StartupBase
         services.AddOrchardServices();
         services.Decorate<IFileVersionProvider, FileVersionProviderDecorator>();
         services.AddScoped<IResourceFilterThemeResolver, MediaThemeResourceFilterThemeResolver>();
+        services.AddLiquidParserBlock<MediaThemeResourceLiquidParserBlock>("mediathemeresources");
     }
 
     public override void Configure(IApplicationBuilder app, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
