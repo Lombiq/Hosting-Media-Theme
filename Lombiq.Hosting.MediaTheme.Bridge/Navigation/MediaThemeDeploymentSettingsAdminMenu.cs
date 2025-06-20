@@ -1,30 +1,25 @@
-using Lombiq.Hosting.MediaTheme.Bridge.Constants;
+using Lombiq.HelpfulLibraries.OrchardCore.Navigation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using OrchardCore.Navigation;
-using System;
-using System.Threading.Tasks;
 using static Lombiq.Hosting.MediaTheme.Bridge.Permissions.MediaThemeDeploymentPermissions;
 
 namespace Lombiq.Hosting.MediaTheme.Bridge.Navigation;
 
-public sealed class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
+public sealed class MediaThemeDeploymentSettingsAdminMenu : AdminMenuNavigationProviderBase
 {
-    private readonly IStringLocalizer T;
-
-    public MediaThemeDeploymentSettingsAdminMenu(IStringLocalizer<MediaThemeDeploymentSettingsAdminMenu> stringLocalizer) => T = stringLocalizer;
-
-    public ValueTask BuildNavigationAsync(string name, NavigationBuilder builder)
+    public MediaThemeDeploymentSettingsAdminMenu(
+        IHttpContextAccessor hca,
+        IStringLocalizer<MediaThemeDeploymentSettingsAdminMenu> stringLocalizer)
+        : base(hca, stringLocalizer)
     {
-        if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase)) return ValueTask.CompletedTask;
-
-        builder
-            .Add(T["Configuration"], configuration => configuration
-                .Add(T["Media Theme"], T["Media Theme"].PrefixPosition(), entry => entry
-                    .AddClass("mediatheme").Id("mediatheme")
-                    .Action("Index", "Admin", new { area = FeatureNames.MediaThemeBridge })
-                    .Permission(ManageMediaTheme)
-                    .LocalNav()));
-
-        return ValueTask.CompletedTask;
     }
+
+    protected override void Build(NavigationBuilder builder) =>
+    builder.Add(T["Configuration"], config => config
+        .Add(T["Media Theme"], T["Media Theme"].PrefixPosition(), entry => entry
+            .AddClass("mediatheme").Id("mediatheme")
+            .Action("Index", "Admin", new { area = "Lombiq.Hosting.MediaTheme.Bridge" })
+            .Permission(ManageMediaTheme)
+            .LocalNav()));
 }
