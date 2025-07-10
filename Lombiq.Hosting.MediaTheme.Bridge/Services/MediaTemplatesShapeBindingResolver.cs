@@ -41,7 +41,7 @@ public class MediaTemplatesShapeBindingResolver : IShapeBindingResolver
     /// </summary>
     public async Task<ShapeBinding> GetShapeBindingAsync(string shapeType) =>
         !AdminAttribute.IsApplied(_hca.HttpContext) &&
-        (await _siteThemeService.GetSiteThemeAsync()).Id == FeatureNames.MediaTheme &&
+        (await _siteThemeService.GetSiteThemeAsync())?.Id == FeatureNames.MediaTheme &&
         await _mediaThemeCachingService.GetMemoryCachedMediaTemplateAsync(shapeType) is { } mediaTemplate
             ? new()
             {
