@@ -57,7 +57,7 @@ public class MediaThemeManager : IMediaThemeManager
 
         // Invalidate the cache to have the harvesters include the shapes from the base theme.
         var currentTheme = await _siteThemeService.GetSiteThemeAsync();
-        if (currentTheme.Id == FeatureNames.MediaTheme)
+        if (currentTheme?.Id == FeatureNames.MediaTheme)
         {
             _memoryCache.Remove($"ShapeTable:{currentTheme.Id}");
         }
