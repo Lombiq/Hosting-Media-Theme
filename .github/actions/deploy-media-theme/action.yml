@@ -13,6 +13,10 @@ inputs:
     required: false
     default: 'true'
     description: When set to "true", will clear the Media folder of the Media Theme before deployment.
+  dotnet-tool-version:
+    required: false
+    default: ''
+    description: When not empty, the specified version of the .NET tool Lombiq.Hosting.MediaTheme.Deployer is used.
 
 runs:
   using: composite
@@ -20,7 +24,13 @@ runs:
     - name: Install Lombiq.Hosting.MediaTheme.Deployer
       shell: pwsh
       run: |
-        dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer
+        $switches = @()
+        if ('${{ inputs.dotnet-tool-version }}'.Trim() -ne '')
+        {
+          $switches += @('--version', '${{ inputs.dotnet-tool-version }}'.Trim())
+        }
+
+        dotnet tool install --global Lombiq.Hosting.MediaTheme.Deployer @switches
 
     - name: Deploy Media Theme
       shell: pwsh

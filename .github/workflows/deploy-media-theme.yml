@@ -32,6 +32,11 @@ on:
         type: string
         default: 'true'
         description: When set to "true", will clear the Media folder of the Media Theme before deployment.
+      dotnet-tool-version:
+        required: false
+        type: string
+        default: ''
+        description: When not empty, the specified version of the .NET tool Lombiq.Hosting.MediaTheme.Deployer is used.
 
 jobs:
   deploy-media-theme:
@@ -53,3 +58,4 @@ jobs:
           theme-path: ${{ inputs.theme-path }}
           base-theme-id: ${{ inputs.base-theme-id }}
           clear-media-folder: ${{ inputs.clear-media-folder }}
+          dotnet-tool-version: ${{ inputs.dotnet-tool-version }}
