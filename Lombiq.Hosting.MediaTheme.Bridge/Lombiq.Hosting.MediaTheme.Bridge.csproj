@@ -1,37 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-  </PropertyGroup>
+  <Import Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Module.Targets/Lombiq.MSBuild.Module.Targets.props"
+          Condition="'$(NuGetBuild)' != 'true' "/>
 
   <PropertyGroup>
     <Title>Lombiq Hosting - Media Theme Bridge for Orchard Core</Title>
-    <Authors>Lombiq Technologies</Authors>
     <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
     <Description>Lombiq Hosting - Media Theme Bridge for Orchard Core: Provides the processing logic for the Media Theme. See the project website for detailed documentation.</Description>
-    <PackageIcon>NuGetIcon.png</PackageIcon>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Module</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme</PackageProjectUrl>
-    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="2.1.0" />
-    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="2.1.0" />
-    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="2.1.0" />
-    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="2.1.0" />
-    <PackageReference Include="OrchardCore.Media" Version="2.1.0" />
-    <PackageReference Include="OrchardCore.Module.Targets" Version="2.1.0" />
+    <PackageReference Include="OrchardCore.Deployment.Abstractions" Version="$(OrchardCoreVersion)" />
+    <PackageReference Include="OrchardCore.DisplayManagement.Abstractions" Version="$(OrchardCoreVersion)" />
+    <PackageReference Include="OrchardCore.Recipes.Abstractions" Version="$(OrchardCoreVersion)" />
+    <PackageReference Include="OrchardCore.ResourceManagement.Abstractions" Version="$(OrchardCoreVersion)" />
+    <PackageReference Include="OrchardCore.Media" Version="$(OrchardCoreVersion)" />
     <PackageReference Include="Scrutor" Version="6.1.0" />
   </ItemGroup>
 
@@ -44,5 +30,8 @@
     <PackageReference Include="Lombiq.HelpfulLibraries.OrchardCore" Version="12.5.0" />
     <PackageReference Include="Lombiq.HelpfulExtensions" Version="11.1.0" />
   </ItemGroup>
+
+  <Import Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Module.Targets/Lombiq.MSBuild.Module.Targets.targets"
+          Condition="'$(NuGetBuild)' != 'true' "/>
 
 </Project>
