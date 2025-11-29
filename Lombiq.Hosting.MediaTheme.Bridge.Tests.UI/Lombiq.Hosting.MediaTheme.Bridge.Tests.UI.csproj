@@ -1,37 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <DefaultItemExcludes>$(DefaultItemExcludes);.git*</DefaultItemExcludes>
-    </PropertyGroup>
+  <Import Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Tests.UI.Targets/Lombiq.MSBuild.Tests.UI.Targets.props"/>
 
-    <PropertyGroup>
-        <Title>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions</Title>
-        <Authors>Lombiq Technologies</Authors>
-        <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
-        <Description>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions: Extensions to aid in UI bridge testing Lombiq Hosting - Media Theme for Orchard Core. See the project website for detailed documentation.</Description>
-        <PackageIcon>NuGetIcon.png</PackageIcon>
-        <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
-        <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
-        <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
-        <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-    </PropertyGroup>
+  <PropertyGroup>
+    <Title>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions</Title>
+    <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
+    <Description>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions: Extensions to aid in UI bridge testing Lombiq Hosting - Media Theme for Orchard Core. See the project website for detailed documentation.</Description>
+    <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
+    <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(NuGetBuild)' != 'true'">
-        <ProjectReference Include="..\..\..\..\test\Lombiq.UITestingToolbox\Lombiq.Tests.UI\Lombiq.Tests.UI.csproj" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(NuGetBuild)' == 'true'">
-        <PackageReference Include="Lombiq.Tests.UI" Version="14.2.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Bridge\Lombiq.Hosting.MediaTheme.Bridge.csproj" />
-        <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Tests.UI\Lombiq.Hosting.MediaTheme.Tests.UI.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Bridge\Lombiq.Hosting.MediaTheme.Bridge.csproj"/>
+    <ProjectReference Include="..\Lombiq.Hosting.MediaTheme.Tests.UI\Lombiq.Hosting.MediaTheme.Tests.UI.csproj"/>
+  </ItemGroup>
 
 </Project>
