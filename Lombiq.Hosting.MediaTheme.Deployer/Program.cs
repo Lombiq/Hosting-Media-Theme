@@ -1,4 +1,5 @@
 using CommandLine;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text.Json;
@@ -66,6 +67,10 @@ public class CommandLineOptions
     public string? RemoteDeploymentClientApiKey { get; set; }
 }
 
+[SuppressMessage(
+    "Major Code Smell",
+    "S106:Standard outputs should not be used directly to log anything",
+    Justification = "This is a command line utility, where it's fine.")]
 internal static partial class Program
 {
     private static readonly JsonSerializerOptions _indentedJsonSerializerOptions = new() { WriteIndented = true };

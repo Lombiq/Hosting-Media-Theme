@@ -43,7 +43,9 @@ internal static class RemoteDeploymentHelper
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+#pragma warning disable S106 // Remove this logging statement. It's fine since this is a command line utility.
                 Console.WriteLine("Remote deployment to {0} succeeded.", options.RemoteDeploymentUrl);
+#pragma warning restore S106 // Remove this logging statement.
             }
             else
             {
