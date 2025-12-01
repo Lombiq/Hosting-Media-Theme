@@ -3,6 +3,7 @@
   <Import Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Tests.UI.Targets/Lombiq.MSBuild.Tests.UI.Targets.props"/>
 
   <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
     <Title>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions</Title>
     <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
     <Description>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions: Extensions to aid in UI bridge testing Lombiq Hosting - Media Theme for Orchard Core. See the project website for detailed documentation.</Description>
