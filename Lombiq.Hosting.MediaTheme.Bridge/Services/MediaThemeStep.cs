@@ -1,8 +1,9 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
-using OrchardCore.FileStorage;
+using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.Media;
 using OrchardCore.Recipes.Models;
 using OrchardCore.Recipes.Services;
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -12,14 +13,17 @@ public sealed class MediaThemeStep : NamedRecipeStepHandler
 {
     private readonly IMediaFileStore _mediaFileStore;
     private readonly IMediaThemeManager _mediaThemeManager;
+    private readonly IServiceProvider _serviceProvider;
 
     public MediaThemeStep(
         IMediaFileStore mediaFileStore,
-        IMediaThemeManager mediaThemeManager)
+        IMediaThemeManager mediaThemeManager,
+        IServiceProvider serviceProvider)
         : base(RecipeStepIds.MediaTheme)
     {
         _mediaFileStore = mediaFileStore;
         _mediaThemeManager = mediaThemeManager;
+        _serviceProvider = serviceProvider;
     }
 
     protected override async Task HandleAsync(RecipeExecutionContext context)
@@ -30,7 +34,15 @@ public sealed class MediaThemeStep : NamedRecipeStepHandler
 
         if (model.ClearMediaThemeFolder)
         {
-            await _mediaFileStore.TryDeleteDirectoryAsync(_mediaFileStore.Combine(Paths.MediaThemeRootFolder));
+            await _mediaFileStore.TryDeleteDirectoryAsync(Paths.MediaThemeRootFolder);
+        }
+
+        // If a remote storage implementation is used, it needs to be purged too to make sure all files are fresh. This
+        // is easiest to do by removing the whole folder even if the theme Media folder itself wasn't cleared.
+        var mediaFileStoreCache = _serviceProvider.GetService<IMediaFileStoreCache>();
+        if (mediaFileStoreCache != null)
+        {
+            await mediaFileStoreCache.TryDeleteDirectoryAsync(Paths.MediaThemeRootFolder);
         }
     }
 
