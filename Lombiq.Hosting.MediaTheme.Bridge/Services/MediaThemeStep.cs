@@ -39,8 +39,7 @@ public sealed class MediaThemeStep : NamedRecipeStepHandler
 
         // If a remote storage implementation is used, it needs to be purged too to make sure all files are fresh. This
         // is easiest to do by removing the whole folder even if the theme Media folder itself wasn't cleared.
-        var mediaFileStoreCache = _serviceProvider.GetService<IMediaFileStoreCache>();
-        if (mediaFileStoreCache != null)
+        if (_serviceProvider.GetService<IMediaFileStoreCache>() is { } mediaFileStoreCache)
         {
             await mediaFileStoreCache.TryDeleteDirectoryAsync(Paths.MediaThemeRootFolder);
         }
