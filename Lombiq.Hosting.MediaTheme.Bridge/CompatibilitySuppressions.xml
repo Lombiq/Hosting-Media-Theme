@@ -1,9 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- https://learn.microsoft.com/en-us/dotnet/fundamentals/package-validation/diagnostic-ids -->
+<!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
 <Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
     <Target>M:Lombiq.Hosting.MediaTheme.Bridge.Services.MediaTemplatesShapeBindingResolver.#ctor(OrchardCore.Liquid.ILiquidTemplateManager,Microsoft.AspNetCore.Http.IHttpContextAccessor,System.Text.Encodings.Web.HtmlEncoder,Lombiq.Hosting.MediaTheme.Bridge.Services.IMediaThemeCachingService)</Target>
+    <Left>lib/net8.0/Lombiq.Hosting.MediaTheme.Bridge.dll</Left>
+    <Right>lib/net8.0/Lombiq.Hosting.MediaTheme.Bridge.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:Lombiq.Hosting.MediaTheme.Bridge.Services.MediaThemeStep.#ctor(OrchardCore.Media.IMediaFileStore,Lombiq.Hosting.MediaTheme.Bridge.Services.IMediaThemeManager)</Target>
     <Left>lib/net8.0/Lombiq.Hosting.MediaTheme.Bridge.dll</Left>
     <Right>lib/net8.0/Lombiq.Hosting.MediaTheme.Bridge.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
