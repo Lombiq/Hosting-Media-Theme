@@ -41,7 +41,11 @@ public sealed class MediaThemeStep : NamedRecipeStepHandler
         // fresh. This is easiest to do by removing the whole folder even if ClearMediaThemeFolder wasn't set.
         if (_serviceProvider.GetService<IMediaFileStoreCache>() is { } mediaFileStoreCache)
         {
-            await mediaFileStoreCache.TryDeleteDirectoryAsync(Paths.MediaThemeRootFolder);
+            // Until https://github.com/OrchardCMS/OrchardCore/pull/18644 is released and this project updated to it,
+            // deleting a single directory won't work, just purging the whole cache. Restore the below commented-out
+            // line after an Orchard Core upgrade.
+            await mediaFileStoreCache.PurgeAsync();
+            ////await mediaFileStoreCache.TryDeleteDirectoryAsync(Paths.MediaThemeRootFolder);
         }
     }
 
