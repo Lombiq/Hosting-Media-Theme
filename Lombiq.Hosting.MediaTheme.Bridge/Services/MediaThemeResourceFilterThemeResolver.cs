@@ -1,3 +1,5 @@
+#nullable enable
+
 using Lombiq.HelpfulLibraries.OrchardCore.ResourceManagement;
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using OrchardCore.DisplayManagement.Extensions;
