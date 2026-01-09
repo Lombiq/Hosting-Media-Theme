@@ -79,7 +79,7 @@ public sealed class ExtensionManagerDecorator : IExtensionManager
             if (!string.IsNullOrEmpty(baseThemeId)) featureIdsToLoad = [.. featureIdsToLoad, baseThemeId];
         }
 
-        return _decorated.GetFeatures(featureIdsToLoad);
+        return _decorated.GetFeatures(featureIdsToLoad.AsEnumerable());
     }
 
     public IEnumerable<IFeatureInfo> GetDependentFeatures(string featureId) =>
@@ -89,7 +89,7 @@ public sealed class ExtensionManagerDecorator : IExtensionManager
         _decorated.LoadFeaturesAsync();
 
     Task<IEnumerable<IFeatureInfo>> IExtensionManager.LoadFeaturesAsync(string[] featureIdsToLoad) =>
-        _decorated.LoadFeaturesAsync(featureIdsToLoad);
+        _decorated.LoadFeaturesAsync(featureIdsToLoad.AsEnumerable());
 
     private string GetBaseThemeId() =>
         // It'll be retrieved from cache, so it's not an issue.
