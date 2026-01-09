@@ -238,7 +238,7 @@ internal static partial class Program
 
         // Zipping the directory.
         var zipFilePath = newDirectoryPath + ".zip";
-        ZipFile.CreateFromDirectory(newDirectoryPath, zipFilePath);
+        await ZipFile.CreateFromDirectoryAsync(newDirectoryPath, zipFilePath);
 
         // Getting rid of the original directory.
         Directory.Delete(newDirectoryPath, recursive: true);
