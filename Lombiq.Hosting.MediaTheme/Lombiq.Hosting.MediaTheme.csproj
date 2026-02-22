@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OrchardCore.Theme.Targets" Version="3.0.0-preview-18923" />
+    <PackageReference Include="OrchardCore.Theme.Targets" Version="3.0.0-preview-18924" />
   </ItemGroup>
 
   <ItemGroup>
