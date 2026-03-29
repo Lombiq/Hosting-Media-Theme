@@ -169,7 +169,7 @@ internal static partial class Program
         {
             var manifestPath = Path.Combine(themePath, "Manifest.cs");
             var manifestContent = await File.ReadAllTextAsync(manifestPath);
-            var baseThemeMatch = BaseThemeRegex().Match(manifestContent);
+            var baseThemeMatch = BaseThemeRegex.Match(manifestContent);
 
             if (baseThemeMatch.Success)
             {
@@ -346,5 +346,5 @@ internal static partial class Program
     }
 
     [GeneratedRegex(@"BaseTheme\s*=\s*""(?<baseThemeId>.*)""", RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 1000)]
-    private static partial Regex BaseThemeRegex();
+    private static partial Regex BaseThemeRegex { get; }
 }
