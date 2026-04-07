@@ -9,7 +9,7 @@
     <PropertyGroup>
         <Title>Lombiq Hosting - Media Theme for Orchard Core - UI Bridge Test Extensions</Title>
         <CopyrightYear>2022</CopyrightYear>
-        <DescriptionBody>Extensions to aid in UI bridge testing Lombiq Hosting - Media Theme for Orchard Core. See the project website for detailed documentation.</DescriptionBody>
+        <DescriptionBody>Extensions to aid in UI bridge testing Lombiq Hosting - Media Theme for Orchard Core.</DescriptionBody>
         <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Theme</PackageTags>
         <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
         <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme/blob/dev/Readme.md</PackageProjectUrl>
