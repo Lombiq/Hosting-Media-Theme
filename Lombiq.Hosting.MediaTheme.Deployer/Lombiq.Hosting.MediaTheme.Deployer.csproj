@@ -1,17 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <Title>Lombiq Hosting - Media Theme Deployer for Orchard Core</Title>
-    <Authors>Lombiq Technologies</Authors>
-    <Copyright>Copyright © 2022, Lombiq Technologies Ltd.</Copyright>
-    <Description>Lombiq Hosting - Media Theme Deployer for Orchard Core: A tool to easily export Media Themes. See the project website for detailed documentation.</Description>
-    <PackageIcon>NuGetIcon.png</PackageIcon>
-    <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
-    <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme</PackageProjectUrl>
-    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-  </PropertyGroup>
-
+<Project>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
@@ -22,6 +9,17 @@
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Library.Sdk/Sdk/Import.props" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.Library.Sdk" Version="1.0.1-alpha.12.osoe-1208" />
+
+  <PropertyGroup>
+    <Title>Lombiq Hosting - Media Theme Deployer for Orchard Core</Title>
+    <CopyrightYear>2022</CopyrightYear>
+    <DescriptionBody>A tool to easily export Media Themes. See the project website for detailed documentation.</DescriptionBody>
+    <PackageTags>OrchardCore;Lombiq;AspNetCore;Media;Deployer</PackageTags>
+    <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
   </ItemGroup>
@@ -29,7 +27,8 @@
   <ItemGroup>
     <None Include="..\.github\actions\deploy-media-theme\action.yml" Link=".github\action.yml" />
     <None Include="..\.github\workflows\deploy-media-theme.yml" Link=".github\deploy-media-theme.yml" />
-    <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Library.Sdk/Sdk/Import.targets" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.targets" Sdk="Lombiq.MSBuild.Library.Sdk" Version="1.0.1-alpha.12.osoe-1208" />
 </Project>

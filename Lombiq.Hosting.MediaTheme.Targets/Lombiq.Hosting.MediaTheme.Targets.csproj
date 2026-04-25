@@ -1,28 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <DefaultItemExcludes>$(DefaultItemExcludes);.git*</DefaultItemExcludes>
     <IsPublishable>false</IsPublishable>
   </PropertyGroup>
 
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Base.Sdk/Sdk/Import.props" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.props" Sdk="Lombiq.MSBuild.Base.Sdk" Version="1.0.1-alpha.12.osoe-1208" />
+
   <PropertyGroup>
     <Title>Lombiq Hosting - Media Theme MSBuild Targets</Title>
-    <Authors>Lombiq Technologies</Authors>
-    <Copyright>Copyright © 2023, Lombiq Technologies Ltd.</Copyright>
-    <Description>Lombiq Hosting - Media Theme MSBuild Targets: Provides automatic Media Theme package creation in the project. This way you don't have to manage changes in your Media Theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool, what will be automatically installed locally to the project, then it will create the deployment zip file. See the project website for detailed documentation.</Description>
-    <PackageIcon>NuGetIcon.png</PackageIcon>
+    <CopyrightYear>2022</CopyrightYear>
+    <DescriptionBody>Provides automatic Media Theme package creation in the project. This way you don't have to manage changes in your Media Theme recipe, or folder structure. The targets reuses the media-theme-deployer dotnet tool, what will be automatically installed locally to the project, then it will create the deployment zip file. See the project website for detailed documentation.</DescriptionBody>
     <PackageTags>OrchardCore;Lombiq;AspNetCore;MSBuild,Media;Targets</PackageTags>
     <RepositoryUrl>https://github.com/Lombiq/Hosting-Media-Theme</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/Lombiq/Hosting-Media-Theme</PackageProjectUrl>
-    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Readme.md" />
-    <None Include="NuGetIcon.png" Pack="true" PackagePath="" />
     <None Include="Lombiq.Hosting.MediaTheme.Targets.props" Pack="true" PackagePath="build\Lombiq.Hosting.MediaTheme.Targets.props" />
     <None Include="Lombiq.Hosting.MediaTheme.Targets.targets" Pack="true" PackagePath="build\Lombiq.Hosting.MediaTheme.Targets.targets" />
   </ItemGroup>
 
+  <Import Condition="'$(NuGetBuild)' != 'true'" Project="../../../Utilities/Lombiq.MSBuild.Targets/Lombiq.MSBuild.Base.Sdk/Sdk/Import.targets" />
+  <Import Condition="'$(NuGetBuild)' == 'true'" Project="Sdk.targets" Sdk="Lombiq.MSBuild.Base.Sdk" Version="1.0.1-alpha.12.osoe-1208" />
 </Project>
