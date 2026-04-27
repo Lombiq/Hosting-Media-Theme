@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="Lombiq.Hosting.MediaTheme.Bridge.Tests.UI/Lombiq.Hosting.MediaTheme.Bridge.Tests.UI.csproj" />
+  <Project Path="Lombiq.Hosting.MediaTheme.Bridge/Lombiq.Hosting.MediaTheme.Bridge.csproj" />
+  <Project Path="Lombiq.Hosting.MediaTheme.Deployer/Lombiq.Hosting.MediaTheme.Deployer.csproj" />
+  <Project Path="Lombiq.Hosting.MediaTheme.Targets/Lombiq.Hosting.MediaTheme.Targets.csproj" />
+  <Project Path="Lombiq.Hosting.MediaTheme.Tests.Theme/Lombiq.Hosting.MediaTheme.Tests.Theme.csproj" />
+  <Project Path="Lombiq.Hosting.MediaTheme.Tests.UI/Lombiq.Hosting.MediaTheme.Tests.UI.csproj" />
+  <Project Path="Lombiq.Hosting.MediaTheme/Lombiq.Hosting.MediaTheme.csproj" />
+</Solution>
