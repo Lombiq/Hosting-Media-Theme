@@ -49,7 +49,7 @@ jobs:
           token: ${{ secrets.CHECKOUT_TOKEN }}
 
       - name: Deploy Media Theme
-        uses: Lombiq/Hosting-Media-Theme/.github/actions/deploy-media-theme@98a6f375d4623386713ebc821f579537133a8dba # dev
+        uses: Lombiq/Hosting-Media-Theme/.github/actions/deploy-media-theme@6c81dcc6bde21f64ad614d5ed3b7c6b2b4467ec3 # dev
         env:
           URL: ${{ secrets.URL }}
           CLIENT_NAME: ${{ secrets.CLIENT_NAME }}
