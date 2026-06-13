@@ -1,7 +1,6 @@
 using Lombiq.Hosting.MediaTheme.Bridge.Constants;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Microsoft.Net.Http.Headers;
 using OrchardCore.Media;
 using OrchardCore.Routing;
 using System;
@@ -33,6 +32,5 @@ public class BlockMediaThemeTemplateDirectAccessMiddleware
         // Since this middleware needs to run early (see comment in Startup), the user's authentication state won't yet
         // be available. So, we can't let people with the ManageMediaTheme permission still see the templates.
         return isMediaThemeTemplateRequest ? context.NotFoundAsync() : _next(context);
-
     }
 }
