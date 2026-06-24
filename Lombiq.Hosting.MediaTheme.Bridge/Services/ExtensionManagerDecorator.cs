@@ -91,7 +91,7 @@ public sealed class ExtensionManagerDecorator : IExtensionManager
     Task<IEnumerable<IFeatureInfo>> IExtensionManager.LoadFeaturesAsync(string[] featureIdsToLoad) =>
         _decorated.LoadFeaturesAsync(featureIdsToLoad.AsEnumerable());
 
+    // It is retrieved from cache, so using GetResult is not an issue.
     private string GetBaseThemeId() =>
-        // It'll be retrieved from cache, so it's not an issue.
         _mediaThemeStateStore.GetMediaThemeStateAsync().GetAwaiter().GetResult()?.BaseThemeId;
 }
