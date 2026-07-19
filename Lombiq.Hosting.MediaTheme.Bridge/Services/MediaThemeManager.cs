@@ -71,8 +71,8 @@ public class MediaThemeManager : IMediaThemeManager
                 feature.IsTheme() &&
                 feature.Id != FeatureNames.MediaTheme &&
                 !feature.Extension.Manifest.Tags.Any(tag =>
-                    tag.Equals("hidden", StringComparison.OrdinalIgnoreCase) ||
-                    tag.Equals(ManifestConstants.AdminTag, StringComparison.OrdinalIgnoreCase)) &&
+                    tag.EqualsOrdinalIgnoreCase("hidden") ||
+                    tag.EqualsOrdinalIgnoreCase(ManifestConstants.AdminTag)) &&
                 enabledFeatures.Any(enabledFeature => enabledFeature.Id == feature.Id))
             .Select(feature => (feature.Id, feature.Name));
     }
