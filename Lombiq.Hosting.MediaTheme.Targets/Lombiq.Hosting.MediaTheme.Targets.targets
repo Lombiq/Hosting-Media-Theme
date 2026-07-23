@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Empty target that can be used to hook into the build or to override it to change its dependencies. -->
   <Target Name="MediaThemeDeploymentBeforeTargets" BeforeTargets="BeforeBuild;EmbeddModuleAssets;OrchardCoreEmbedModuleAssets" />
-  <Target Name="MediaThemeDeploymentAfterTargets" AfterTargets="NpmDotnetPrebuild;AddGeneratedFilesToEmbeddedResourceList" />
+  <Target Name="MediaThemeDeploymentAfterTargets" AfterTargets="NpmDotnetPrebuild" />
 
   <Target Name="CheckFile" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Error Condition="!Exists('.config\dotnet-tools.json')"
@@ -84,6 +84,25 @@
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)"
           DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)" />
+    
+    <!-- EmbedGeneratedFiles -->
+    <ItemGroup>
+      <Content Include="Recipes\_MediaTheme\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <Pack>true</Pack>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+      <Content Include="Recipes\*.MediaTheme.recipe.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <Pack>true</Pack>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
+
+      <EmbeddedResource Include="Recipes\_MediaTheme\**" />
+      <EmbeddedResource Include="Recipes\*.MediaTheme.recipe.json" />
+    </ItemGroup>
 
     <!-- DeleteTempMediaThemeFolderAfter -->
     <Message Text="Deleting leftover $(DeploymentFolder) folder." />
