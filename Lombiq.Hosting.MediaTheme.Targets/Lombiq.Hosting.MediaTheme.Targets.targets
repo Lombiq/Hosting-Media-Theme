@@ -4,7 +4,7 @@
   <Target Name="MediaThemeDeploymentAfterTargets" AfterTargets="NpmDotnetPrebuild;AddGeneratedFilesToEmbeddedResourceList" />
 
   <Target Name="CheckFile" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Error Condition="Exists('$(MSBuildThisFileDirectory)\.config\dotnet-tools.json')"
+    <Error Condition="!Exists('.config\dotnet-tools.json')"
            Text="A dotnet-tools.json file should exists, read the documentation for more information." />
   </Target>
 
