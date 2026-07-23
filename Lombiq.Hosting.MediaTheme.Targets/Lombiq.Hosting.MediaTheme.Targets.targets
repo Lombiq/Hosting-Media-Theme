@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Empty target that can be used to hook into the build or to override it to change its dependencies. -->
-  <Target Name="MediaThemeDeploymentBeforeTargets" BeforeTargets="BeforeBuild" />
-  <Target Name="MediaThemeDeploymentAfterTargets" />
+  <Target Name="MediaThemeDeploymentBeforeTargets" BeforeTargets="BeforeBuild;EmbeddModuleAssets;OrchardCoreEmbedModuleAssets" />
+  <Target Name="MediaThemeDeploymentAfterTargets" AfterTargets="NpmDotnetPrebuild;AddGeneratedFilesToEmbeddedResourceList" />
 
   <Target Name="CheckFile" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
     <Error Condition="Exists('$(MSBuildThisFileDirectory)\.config\dotnet-tools.json')"
