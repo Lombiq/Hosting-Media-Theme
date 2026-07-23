@@ -100,8 +100,8 @@
         <PackageCopyToOutput>true</PackageCopyToOutput>
       </Content>
 
-      <EmbeddedResource Include="Recipes\_MediaTheme\**" />
-      <EmbeddedResource Include="Recipes\*.MediaTheme.recipe.json" />
+      <EmbeddedResource Include="Recipes\_MediaTheme\**" Exclude="@(EmbeddedResource)" />
+      <EmbeddedResource Include="Recipes\*.MediaTheme.recipe.json" Exclude="@(EmbeddedResource)" />
     </ItemGroup>
 
     <!-- DeleteTempMediaThemeFolderAfter -->
