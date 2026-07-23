@@ -11,9 +11,9 @@
   <!-- The mutex is necessary to prevent concurrent dotnet tool restore calls throwing "The process cannot access the
   file" IOExceptions due to them trying to write the same NuGet cache file simultaneously. -->
   <UsingTask
-    TaskName="MutexTask"
-    TaskFactory="RoslynCodeTaskFactory"
-    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+      TaskName="MutexTask"
+      TaskFactory="RoslynCodeTaskFactory"
+      AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <Action ParameterType="System.String" Required="true" />
       <TaskObjectKey ParameterType="System.String" Required="true" />
@@ -55,43 +55,38 @@
     <TaskObjectKey>$(MSBuildProjectFullPath).RestoreDotnetTool</TaskObjectKey>
   </PropertyGroup>
 
-  <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
+  <Target Name="MainMediaThemeTask" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets;CheckFile">
+    <!-- RestoreDotnetTool -->
     <MutexTask Action="Acquire" TaskObjectKey="$(TaskObjectKey)" />
     <Exec Command="dotnet tool restore" />
     <MutexTask Action="Release" TaskObjectKey="$(TaskObjectKey)" />
-  </Target>
 
-  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Message Text="Deleting already existing $(DeploymentFolder) folder."/>
-    <RemoveDir Directories="$(DeploymentFolder)"/>
-  </Target>
+    <!-- DeleteTempMediaThemeFolderBefore -->
+    <Message Text="Deleting already existing $(DeploymentFolder) folder." />
+    <RemoveDir Directories="$(DeploymentFolder)" />
 
-  <Target Name="RunMediaThemeDeployer" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
-  </Target>
+    <!-- RunMediaThemeDeployer -->
+    <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)" />
 
-  <Target Name="UnzipMediaTheme" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
+    <!-- UnzipMediaTheme -->
     <Unzip SourceFiles="$(DeploymentFolder)\$(MediaThemeRecipeFileName).zip"
            DestinationFolder="$(DeploymentFolder)" />
-  </Target>
 
-  <Target Name="MoveAndRenameRecipe" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Message Text="Moving Files $(RecipeToMove)"/>
+    <!-- MoveAndRenameRecipe -->
+    <Message Text="Moving Files $(RecipeToMove)" />
     <Move SourceFiles="$(RecipeToMove)"
           OverwriteReadOnlyFiles="true"
-          DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
-  </Target>
+          DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json" />
 
-  <Target Name="CopyMediaThemeFiles" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
+    <!-- CopyMediaThemeFiles -->
     <ItemGroup>
-      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*"/>
+      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)"
-          DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
-  </Target>
+          DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)" />
 
-  <Target Name="DeleteTempMediaThemeFolderAfter" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Message Text="Deleting leftover $(DeploymentFolder) folder."/>
-    <RemoveDir Directories="$(DeploymentFolder)"/>
+    <!-- DeleteTempMediaThemeFolderAfter -->
+    <Message Text="Deleting leftover $(DeploymentFolder) folder." />
+    <RemoveDir Directories="$(DeploymentFolder)" />
   </Target>
 </Project>
