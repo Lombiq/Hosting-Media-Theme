@@ -93,15 +93,9 @@
         <Pack>true</Pack>
         <PackageCopyToOutput>true</PackageCopyToOutput>
       </Content>
-      <Content Include="Recipes\*.MediaTheme.recipe.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        <Pack>true</Pack>
-        <PackageCopyToOutput>true</PackageCopyToOutput>
-      </Content>
 
-      <EmbeddedResource Include="Recipes\_MediaTheme\**" Exclude="@(EmbeddedResource)" />
-      <EmbeddedResource Include="Recipes\*.MediaTheme.recipe.json" Exclude="@(EmbeddedResource)" />
+      <EmbeddedResource Include="Recipes\_MediaTheme\**" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
+      <EmbeddedResource Include="Recipes\*.MediaTheme.recipe.json" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
     </ItemGroup>
 
     <!-- DeleteTempMediaThemeFolderAfter -->
