@@ -53,6 +53,7 @@
 
   <PropertyGroup>
     <TaskObjectKey>$(MSBuildProjectFullPath).RestoreDotnetTool</TaskObjectKey>
+    <MediaThemeRecipeFilePath>Recipes\$(MediaThemeRecipeFileName).recipe.json</MediaThemeRecipeFilePath>
   </PropertyGroup>
 
   <Target Name="MainMediaThemeTask" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets;CheckFile">
@@ -76,7 +77,7 @@
     <Message Text="Moving Files $(RecipeToMove)" />
     <Move SourceFiles="$(RecipeToMove)"
           OverwriteReadOnlyFiles="true"
-          DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json" />
+          DestinationFiles="$(MediaThemeRecipeFilePath)" />
 
     <!-- CopyMediaThemeFiles -->
     <ItemGroup>
@@ -95,11 +96,20 @@
       </Content>
 
       <EmbeddedResource Include="Recipes\_MediaTheme\**" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
-      <EmbeddedResource Include="Recipes\*.MediaTheme.recipe.json" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
+      <EmbeddedResource Include="$(MediaThemeRecipeFilePath)" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
     </ItemGroup>
 
     <!-- DeleteTempMediaThemeFolderAfter -->
     <Message Text="Deleting leftover $(DeploymentFolder) folder." />
     <RemoveDir Directories="$(DeploymentFolder)" />
+  </Target>
+  
+  <Target Name="VerifyGeneratedMediaThemeFiles" AfterTargets="Build">
+    <Message
+        Condition="Exists($(MediaThemeRecipeFilePath))"
+        Text="The Media Theme recipe file &quot;$(MediaThemeRecipeFilePath)&quot; was created." />
+    <Warning
+        Condition="!Exists($(MediaThemeRecipeFilePath))"
+        Text="The Media Theme recipe file &quot;$(MediaThemeRecipeFilePath)&quot; was not created." />
   </Target>
 </Project>
