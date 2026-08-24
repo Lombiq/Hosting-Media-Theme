@@ -1,19 +1,19 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Empty target that can be used to hook into the build or to override it to change its dependencies. -->
-  <Target Name="MediaThemeDeploymentBeforeTargets" BeforeTargets="BeforeBuild" />
-  <Target Name="MediaThemeDeploymentAfterTargets" />
+  <Target Name="MediaThemeDeploymentBeforeTargets" BeforeTargets="BeforeBuild;EmbeddModuleAssets;OrchardCoreEmbedModuleAssets" />
+  <Target Name="MediaThemeDeploymentAfterTargets" AfterTargets="NpmDotnetPrebuild" />
 
   <Target Name="CheckFile" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Error Condition="Exists('$(MSBuildThisFileDirectory)\.config\dotnet-tools.json')"
+    <Error Condition="!Exists('.config\dotnet-tools.json')"
            Text="A dotnet-tools.json file should exists, read the documentation for more information." />
   </Target>
 
   <!-- The mutex is necessary to prevent concurrent dotnet tool restore calls throwing "The process cannot access the
   file" IOExceptions due to them trying to write the same NuGet cache file simultaneously. -->
   <UsingTask
-    TaskName="MutexTask"
-    TaskFactory="RoslynCodeTaskFactory"
-    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+      TaskName="MutexTask"
+      TaskFactory="RoslynCodeTaskFactory"
+      AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <Action ParameterType="System.String" Required="true" />
       <TaskObjectKey ParameterType="System.String" Required="true" />
@@ -53,45 +53,63 @@
 
   <PropertyGroup>
     <TaskObjectKey>$(MSBuildProjectFullPath).RestoreDotnetTool</TaskObjectKey>
+    <MediaThemeRecipeFilePath>Recipes\$(MediaThemeRecipeFileName).recipe.json</MediaThemeRecipeFilePath>
   </PropertyGroup>
 
-  <Target Name="RestoreDotnetTool" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
+  <Target Name="MainMediaThemeTask" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets;CheckFile">
+    <!-- RestoreDotnetTool -->
     <MutexTask Action="Acquire" TaskObjectKey="$(TaskObjectKey)" />
     <Exec Command="dotnet tool restore" />
     <MutexTask Action="Release" TaskObjectKey="$(TaskObjectKey)" />
-  </Target>
 
-  <Target Name="DeleteTempMediaThemeFolderBefore" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Message Text="Deleting already existing $(DeploymentFolder) folder."/>
-    <RemoveDir Directories="$(DeploymentFolder)"/>
-  </Target>
+    <!-- DeleteTempMediaThemeFolderBefore -->
+    <Message Text="Deleting already existing $(DeploymentFolder) folder." />
+    <RemoveDir Directories="$(DeploymentFolder)" />
 
-  <Target Name="RunMediaThemeDeployer" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)"/>
-  </Target>
+    <!-- RunMediaThemeDeployer -->
+    <Exec Command="dotnet media-theme-deploy --path . --base-id $(MediaThemeBaseId) --clear true --deployment-path $(DeploymentFolder) --deployment-file-name $(MediaThemeRecipeFileName)" />
 
-  <Target Name="UnzipMediaTheme" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
+    <!-- UnzipMediaTheme -->
     <Unzip SourceFiles="$(DeploymentFolder)\$(MediaThemeRecipeFileName).zip"
            DestinationFolder="$(DeploymentFolder)" />
-  </Target>
 
-  <Target Name="MoveAndRenameRecipe" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Message Text="Moving Files $(RecipeToMove)"/>
+    <!-- MoveAndRenameRecipe -->
+    <Message Text="Moving Files $(RecipeToMove)" />
     <Move SourceFiles="$(RecipeToMove)"
           OverwriteReadOnlyFiles="true"
-          DestinationFiles="Recipes\$(MediaThemeRecipeFileName).recipe.json"/>
-  </Target>
+          DestinationFiles="$(MediaThemeRecipeFilePath)" />
 
-  <Target Name="CopyMediaThemeFiles" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
+    <!-- CopyMediaThemeFiles -->
     <ItemGroup>
-      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*"/>
+      <MySourceFiles Include="Deployment\_MediaTheme\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)"
-          DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)"/>
-  </Target>
+          DestinationFiles="Recipes\_MediaTheme\%(RecursiveDir)%(Filename)%(Extension)" />
+    
+    <!-- EmbedGeneratedFiles -->
+    <ItemGroup>
+      <Content Include="Recipes\_MediaTheme\**">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <Pack>true</Pack>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+      </Content>
 
-  <Target Name="DeleteTempMediaThemeFolderAfter" BeforeTargets="MediaThemeDeploymentBeforeTargets" AfterTargets="MediaThemeDeploymentAfterTargets">
-    <Message Text="Deleting leftover $(DeploymentFolder) folder."/>
-    <RemoveDir Directories="$(DeploymentFolder)"/>
+      <EmbeddedResource Include="Recipes\_MediaTheme\**" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
+      <EmbeddedResource Include="$(MediaThemeRecipeFilePath)" Exclude="@(EmbeddedResource)" CopyToPublishDirectory="Never" />
+    </ItemGroup>
+
+    <!-- DeleteTempMediaThemeFolderAfter -->
+    <Message Text="Deleting leftover $(DeploymentFolder) folder." />
+    <RemoveDir Directories="$(DeploymentFolder)" />
+  </Target>
+  
+  <Target Name="VerifyGeneratedMediaThemeFiles" AfterTargets="Build">
+    <Message
+        Condition="Exists($(MediaThemeRecipeFilePath))"
+        Text="The Media Theme recipe file &quot;$(MediaThemeRecipeFilePath)&quot; was created." />
+    <Warning
+        Condition="!Exists($(MediaThemeRecipeFilePath))"
+        Text="The Media Theme recipe file &quot;$(MediaThemeRecipeFilePath)&quot; was not created." />
   </Target>
 </Project>

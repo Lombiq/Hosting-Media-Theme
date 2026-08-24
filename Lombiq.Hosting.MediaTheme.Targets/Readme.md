@@ -21,7 +21,7 @@ Install the [NuGet package](https://www.nuget.org/packages/Lombiq.Hosting.MediaT
     <Import Project="path/to/Lombiq.Hosting.MediaTheme.Targets/Lombiq.Hosting.MediaTheme.Targets.targets" />
 ```
 
-Override the `MediaThemeRecipeFileName` property to modify the Recipe file name and the name property in the recipe.
+If your project name ends with `.Theme`, the recipe will automatically use the same name but ending with `.Mediatheme` instead. If it has a different suffix, override the `MediaThemeRecipeFileName` property to modify the Recipe file name and the name property in the recipe. (It should always end with `.Mediatheme` for successful deployment.)
 
 ```xml
 <PropertyGroup>
