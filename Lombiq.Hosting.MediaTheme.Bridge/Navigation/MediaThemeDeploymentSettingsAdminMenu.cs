@@ -18,7 +18,7 @@ public sealed class MediaThemeDeploymentSettingsAdminMenu : INavigationProvider
         if (!string.Equals(name, "admin", StringComparison.OrdinalIgnoreCase)) return ValueTask.CompletedTask;
 
         builder
-            .Add(T["Configuration"], configuration => configuration
+            .Add(T["Settings"], settings => settings
                 .Add(T["Media Theme"], T["Media Theme"].PrefixPosition(), entry => entry
                     .AddClass("mediatheme").Id("mediatheme")
                     .Action("Index", "Admin", new { area = FeatureNames.MediaThemeBridge })
