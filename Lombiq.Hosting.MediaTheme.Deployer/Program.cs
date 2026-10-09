@@ -294,7 +294,7 @@ internal static partial class Program
                     fileName);
             }
 
-            string targetFilePath = Path.Combine(destinationDirectory, fileName);
+            var targetFilePath = Path.Combine(destinationDirectory, fileName);
             file.CopyTo(targetFilePath);
         }
 
@@ -303,7 +303,7 @@ internal static partial class Program
         {
             foreach (var subDirectory in directories)
             {
-                string newDestinationDir = Path.Combine(destinationDirectory, subDirectory.Name);
+                var newDestinationDir = Path.Combine(destinationDirectory, subDirectory.Name);
                 CopyDirectory(subDirectory.FullName, newDestinationDir, areLiquidFiles);
             }
         }
